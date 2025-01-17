@@ -31,6 +31,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -56,7 +57,9 @@ public class RobotContainer {
     // cancelling on release.
 
     
-    m_driverController.rightBumper().whileTrue(new RunIntake(m_intake,false));
+    m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,false));
+    //TO/DO make proper outake preset and assign to LB
+    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake, true));
   }
 
   /**
