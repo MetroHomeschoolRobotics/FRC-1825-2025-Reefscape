@@ -13,6 +13,7 @@ import swervelib.SwerveInputStream;
 
 import java.io.File;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -55,8 +56,8 @@ public class RobotContainer {
    * Configure the driving types
    */
   private SwerveInputStream driveAngularVel = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-                                                                    ()->driveXbox.getLeftY() * -1, 
-                                                                    ()->driveXbox.getLeftX() * -1)
+                                                                    ()->driveXbox.getLeftX() * -1, 
+                                                                    ()->driveXbox.getLeftY() * -1)
                                                                     .withControllerRotationAxis(driveXbox::getRightX)
                                                                     .deadband(Constants.OperatorConstants.joystickDeadband)
                                                                     .scaleTranslation(0.8)
@@ -107,7 +108,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     Command driveFieldOrientedDirectAngle         = swerveSubsystem.driveFieldOriented(driveDirectAngle);
-    Command driveFieldOrientedAnglularVelocity    = swerveSubsystem.driveFieldOriented(driveAngularVel);
+    Command driveFieldOrientedAnglularVelocity    = swerveSubsystem.driveCommand(() -> MathUtil.applyDeadband(-driveXbox.getLeftY(), OperatorConstants.joystickDeadband), 
+                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getLeftX(), OperatorConstants.joystickDeadband), 
+                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getRightX(),OperatorConstants.joystickDeadband));//swerveSubsystem.driveFieldOriented(driveAngularVel);
     Command driveSetpointGen                      = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
     Command driveFieldOrientedDirectAngleSim      = swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
     Command driveFieldOrientedAnglularVelocitySim = swerveSubsystem.driveFieldOriented(driveAngularVelocitySim);
