@@ -2,13 +2,19 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkLowLevel;
 
 
 
 
 //subsystem for intake
 public class Intake extends SubsystemBase {
-    //TO/DO make motor object(s)
+    
+    SparkMax intakeMotor = new SparkMax(Constants.intakeDeviceID, SparkLowLevel.MotorType.kBrushless);
+    
     //TO/DO make beambreak object
     
   
@@ -27,19 +33,20 @@ public class Intake extends SubsystemBase {
     }  
   
     public void setSpeed(double speed) {
-      //this will use the .set(speed) method on the motor object
-      //TO/DO write above
+      
+      intakeMotor.set(speed);
+      //mayhaps this got changed since last year, stick with for now
+      
     }
   
-    //public double getDistance() {
-      
-        //this will use the .getEncoder().getPosition() 
-        //method on the motor object
-        //TO/DO write above
-    //}
+    public double getDistance() {
+        return intakeMotor.getEncoder().getPosition();
+        //I have no idea if we are using this
+        
+    }
   
-    //public double getSpeed() {
-        //this will use the .getEncoder().getVelocity()
-      //TO/DO write above
-    //}
+    public double getSpeed() {
+      return intakeMotor.getEncoder().getVelocity();
+        
+    }
   }
