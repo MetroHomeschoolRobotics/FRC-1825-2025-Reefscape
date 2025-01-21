@@ -13,8 +13,9 @@ import com.revrobotics.spark.SparkLowLevel;
 
 
 public class Elevator extends SubsystemBase {
-    //TO/DO objects for beambreak, gear ratio
-  
+    //TO/DO object for beambreak
+    
+    //code for encoders may or may not be broken idk
 
     SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
@@ -33,13 +34,18 @@ public class Elevator extends SubsystemBase {
     public void setSpeed(double speed, double distanceToLimit){
         //TO/DO MAKE SURE THE DISTANCE IS RIGHT BEFORE RUNNING, IT PROBABLY ISNT
         //!!!
-        if(speed <=0 && getDistance()>=-195 && distanceToLimit> Constants.distToLimOffset){
+        
+        if(speed <=0 && getDistance()>= -Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
+            
             elevatorMotor1.set(speed);
             elevatorMotor2.set(speed);
-        }else if(speed>0){//&& !beambreak.get() //TO/DO put left code in elif statement
+            
+        }else if(speed>=0){//&& !beambreak.get() //TO/DO put left code in elif statement
+            
             elevatorMotor1.set(speed);
             elevatorMotor2.set(speed);
         }else{
+            SmartDashboard.putBoolean("speed no changed", true);
             elevatorMotor1.set(0);
             elevatorMotor2.set(0);
         }

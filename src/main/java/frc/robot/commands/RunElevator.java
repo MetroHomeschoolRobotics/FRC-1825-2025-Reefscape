@@ -26,6 +26,15 @@ public class RunElevator extends Command {
     public void initialize() {}
 
     @Override
+    public void execute(){
+        //getDistance is measured in rotations, not cm figure out what da heck to do
+        
+        double distToLim = 183-elevator.getDistance();
+        elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
+        SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
+    }
+
+    @Override
     public void end(boolean interrupted){}
 
     @Override

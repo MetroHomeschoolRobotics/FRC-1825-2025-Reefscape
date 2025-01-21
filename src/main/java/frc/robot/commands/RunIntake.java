@@ -11,7 +11,9 @@ public class RunIntake extends Command {
     public RunIntake(Intake _intake, Boolean _reversed){
         addRequirements(_intake);
         
-        _intake = intake;
+        intake = _intake;
+        reversed = _reversed;
+        
     }
     @Override
     public void initialize() {}

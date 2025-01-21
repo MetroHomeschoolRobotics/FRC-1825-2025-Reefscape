@@ -19,7 +19,9 @@ public final class Constants {
   public static final int elevatorDeviceID1 = 8;
   public static final int elevatorDeviceID2 = 9;
 
+  public static final double shooterSpeed = 1;
+  public static final double elevatorMaxHeight = 183; //presuming cm, exact height of reef
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverControllerPort = 1;
   }
 }

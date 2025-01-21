@@ -35,6 +35,7 @@ public class Intake extends SubsystemBase {
     public void setSpeed(double speed) {
       
       intakeMotor.set(speed);
+      System.out.println(intakeMotor.get());
       //mayhaps this got changed since last year, stick with for now
       
     }
