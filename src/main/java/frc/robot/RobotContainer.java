@@ -8,7 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveDrive;
 import swervelib.SwerveInputStream;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   // Swerve subsystem
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+
 
 
 
@@ -52,40 +52,7 @@ public class RobotContainer {
 
   private SendableChooser<Command> developerModeChooser = new SendableChooser<>();
 
-  /*
-   * Configure the driving types
-   */
-  private SwerveInputStream driveAngularVel = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-                                                                    ()->driveXbox.getLeftX() * -1, 
-                                                                    ()->driveXbox.getLeftY() * -1)
-                                                                    .withControllerRotationAxis(driveXbox::getRightX)
-                                                                    .deadband(Constants.OperatorConstants.joystickDeadband)
-                                                                    .scaleTranslation(0.8)
-                                                                    .allianceRelativeControl(true);
-
-  private SwerveInputStream driveDirectAngle = driveAngularVel.copy()
-                                                      .withControllerHeadingAxis(driveXbox::getRightX, driveXbox::getRightY)
-                                                      .headingWhile(true);
-
-
-  private SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-                                                      () -> -driveXbox.getLeftY(),
-                                                      () -> -driveXbox.getLeftX())
-                                                  .withControllerRotationAxis(() -> driveXbox.getRawAxis(2))
-                                                  .deadband(Constants.OperatorConstants.joystickDeadband)
-                                                  .scaleTranslation(0.8)
-                                                  .allianceRelativeControl(true);
-
-  private SwerveInputStream driveDirectAngleSim = driveAngularVelocitySim.copy()
-                                                                         .withControllerHeadingAxis(() -> Math.sin(
-                                                                                                    driveXbox.getRawAxis(
-                                                                                                        2) * Math.PI) * (Math.PI * 2),
-                                                                                                () -> Math.cos(
-                                                                                                    driveXbox.getRawAxis(
-                                                                                                        2) * Math.PI) *
-                                                                                                      (Math.PI * 2))
-                                                                        .headingWhile(true);
-
+  
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,23 +74,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    Command driveFieldOrientedDirectAngle         = swerveSubsystem.driveFieldOriented(driveDirectAngle);
-    Command driveFieldOrientedAnglularVelocity    = swerveSubsystem.driveCommand(() -> MathUtil.applyDeadband(-driveXbox.getLeftY(), OperatorConstants.joystickDeadband), 
-                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getLeftX(), OperatorConstants.joystickDeadband), 
-                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getRightX(),OperatorConstants.joystickDeadband));//swerveSubsystem.driveFieldOriented(driveAngularVel);
-    Command driveSetpointGen                      = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
-    Command driveFieldOrientedDirectAngleSim      = swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
-    Command driveFieldOrientedAnglularVelocitySim = swerveSubsystem.driveFieldOriented(driveAngularVelocitySim);
-    Command driveSetpointGenSim = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
+    
 
-    if(developerMode) {
-      swerveSubsystem.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    } else {
-      swerveSubsystem.setDefaultCommand(driveFieldOrientedDirectAngle);
-    }
-
-
-    driveXbox.y().onTrue(Commands.runOnce(swerveSubsystem::zeroGyro));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   }
