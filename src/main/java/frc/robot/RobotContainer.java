@@ -108,9 +108,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     Command driveFieldOrientedDirectAngle         = swerveSubsystem.driveFieldOriented(driveDirectAngle);
-    Command driveFieldOrientedAnglularVelocity    = swerveSubsystem.driveCommand(() -> MathUtil.applyDeadband(-driveXbox.getLeftY(), OperatorConstants.joystickDeadband), 
-                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getLeftX(), OperatorConstants.joystickDeadband), 
-                                                                                 () -> MathUtil.applyDeadband(-driveXbox.getRightX(),OperatorConstants.joystickDeadband));//swerveSubsystem.driveFieldOriented(driveAngularVel);
+    Command driveFieldOrientedAnglularVelocity    = swerveSubsystem.driveFieldOriented(driveAngularVel);
     Command driveSetpointGen                      = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
     Command driveFieldOrientedDirectAngleSim      = swerveSubsystem.driveFieldOriented(driveDirectAngleSim);
     Command driveFieldOrientedAnglularVelocitySim = swerveSubsystem.driveFieldOriented(driveAngularVelocitySim);
