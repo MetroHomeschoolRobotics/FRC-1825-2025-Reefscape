@@ -18,7 +18,7 @@ public final class Constants {
     public static final double joystickDeadband = 0.05;
   }
   public static class DrivetrainConstants {
-    public static final double maxSpeed = 4;
+    public static final double maxSpeed = 5.5;
   }
 
   public static class MotorIDs {

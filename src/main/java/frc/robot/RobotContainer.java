@@ -56,8 +56,8 @@ public class RobotContainer {
    * Configure the driving types
    */
   private SwerveInputStream driveAngularVel = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-                                                                    ()->driveXbox.getLeftX() * -1, 
-                                                                    ()->driveXbox.getLeftY() * -1)
+                                                                     ()->driveXbox.getLeftY() * -1,
+                                                                     ()->driveXbox.getLeftX() * -1)
                                                                     .withControllerRotationAxis(driveXbox::getRightX)
                                                                     .deadband(Constants.OperatorConstants.joystickDeadband)
                                                                     .scaleTranslation(0.8)
