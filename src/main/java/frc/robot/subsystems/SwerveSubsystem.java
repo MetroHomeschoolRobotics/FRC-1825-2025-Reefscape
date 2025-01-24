@@ -128,10 +128,6 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
-    // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest) {
-      
-    }
     swerveDrive.updateOdometry();
   }
 
@@ -455,8 +451,7 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
-      //swerveDrive.driveFieldOriented(velocity.get());
-      swerveDrive.drive(velocity.get());
+      swerveDrive.driveFieldOriented(velocity.get());
     });
   }
 
