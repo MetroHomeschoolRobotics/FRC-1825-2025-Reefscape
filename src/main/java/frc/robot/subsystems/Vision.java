@@ -4,30 +4,35 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-  private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   private Transform3d cameraPosition;
 
   private PhotonCamera camera;
-  private PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(null, null, cameraPosition);
+  private PhotonPoseEstimator photonPoseEstimator;
 
   /** Creates a new Vision. */
   public Vision(String cameraName, Transform3d cameraTransform) {
     camera = new PhotonCamera(cameraName);
     cameraPosition = cameraTransform;
+    photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraPosition);
   }
 
   @Override
@@ -35,11 +40,19 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public List<PhotonPipelineResult> getAllUnreadResults() {
+    return camera.getAllUnreadResults();
+  }
+
   public PhotonPipelineResult getLatestResult() {
-    return camera.getAllUnreadResults().get(0);
+    return camera.getLatestResult(); // TODO remove the depricated function
   }
   public PhotonTrackedTarget getBestTarget() {
     return getLatestResult().getBestTarget();
+  }
+
+  public Boolean hasTargets() {
+    return getLatestResult().hasTargets();
   }
 
   public double getYaw() {
@@ -65,6 +78,14 @@ public class Vision extends SubsystemBase {
 
   public int getApriltagID() {
     return getBestTarget().getFiducialId();
+  }
+
+  public void getTagPose() {
+    aprilTagFieldLayout.getTagPose(getApriltagID());
+  }
+
+  public Optional<EstimatedRobotPose> getVisionBasedPose() {
+    return photonPoseEstimator.update(getLatestResult());
   }
 
 

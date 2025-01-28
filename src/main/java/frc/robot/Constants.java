@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 /**
@@ -28,10 +29,10 @@ public final class Constants {
   }
 
   public static class CameraPositions {
-    public static final Transform3d frontTranslation = new Transform3d();
-    public static final Transform3d backTranslation = new Transform3d();
-    public static final Transform3d leftTranslation = new Transform3d();
-    public static final Transform3d rightTranslation = new Transform3d();
+    public static final Transform3d frontTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
+    public static final Transform3d backTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
+    public static final Transform3d leftTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
+    public static final Transform3d rightTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
   }
 
 }

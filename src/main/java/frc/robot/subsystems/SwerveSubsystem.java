@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -46,6 +47,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.photonvision.EstimatedRobotPose;
+
 //import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -64,10 +67,8 @@ public class SwerveSubsystem extends SubsystemBase
    * Swerve drive object.
    */
   private final SwerveDrive swerveDrive;
-  /**
-   * Enable vision odometry updates while driving.
-   */
-  private final boolean visionDriveTest = false;
+
+  private final Vision yellowCamera = new Vision("Camera_Yellow", Constants.CameraPositions.frontTranslation);
 
 
 
@@ -124,7 +125,23 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    addVisionPose(yellowCamera);
+    
+
+
     swerveDrive.updateOdometry();
+  }
+
+
+
+  public void addVisionPose(Vision camera) {
+    Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
+
+    if(cameraPoseEstimator.isPresent() && cameraPoseEstimator != null && camera.hasTargets() && camera.getPoseAmbiguity() < 0.2) {
+      Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
+
+      swerveDrive.addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
+    }
   }
 
   @Override
