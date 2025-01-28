@@ -1,44 +1,40 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.system.plant.DCMotor;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
+
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkBase.PersistMode;
+
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import java.io.ObjectInputFilter.Config;
-
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.revrobotics.servohub.ServoHub.ResetMode;
-import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkLowLevel;
 
 
 public class Elevator extends SubsystemBase {
-    //TO/DO object for beambreak
+    
     
     //code for encoders may or may not be broken idk
 
-    SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
-    
+    private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
+    private DigitalInput beambreak = new DigitalInput(1);
+
     
     //90% sure those are the right motor objects(they were not)(they are now)
-    SparkBaseConfig config = new SparkMaxConfig().inverted(true);
+    private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
     
 
     public Elevator(){
-        //mayhaps idk
+        //mayhaps idk, if it doesnt work make the  motor1 speeds negative in setSpeed()
         elevatorMotor1.configure(
             config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
         //elevatorMotor1.setInverted(true);
-        //deprecated, calling it fine for now
+        
     }
 
     public void setSpeed(double speed, double distanceToLimit){
@@ -51,7 +47,7 @@ public class Elevator extends SubsystemBase {
             elevatorMotor2.set(speed);
             
             
-        }else if(speed>=0){//&& !beambreak.get() //TO/DO put left code in elif statement
+        }else if(speed>=0 && !beambreak.get()){
             
             elevatorMotor1.set(speed);
             elevatorMotor2.set(speed);
@@ -76,8 +72,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        return false;
-        //TO/DO return beambreak value
+        return beambreak.get();
+        
     }
     public void periodic(){
         SmartDashboard.putBoolean("elevator lowest", isLowest());

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
+
 import com.revrobotics.spark.SparkLowLevel;
 
 
@@ -13,9 +13,9 @@ import com.revrobotics.spark.SparkLowLevel;
 //subsystem for intake
 public class Intake extends SubsystemBase {
     
-    SparkMax intakeMotor = new SparkMax(Constants.intakeDeviceID, SparkLowLevel.MotorType.kBrushless);
-    
-    //TO/DO make beambreak object
+    private SparkMax intakeMotor = new SparkMax(Constants.intakeDeviceID, SparkLowLevel.MotorType.kBrushless);
+    private DigitalInput beambreak = new DigitalInput(0);
+   
     
   
     /** Creates a new Intake. */
@@ -28,15 +28,14 @@ public class Intake extends SubsystemBase {
     }
   
     public Boolean coralInIntake() {
-      return false;
-      //TO/DO assign this when beambreak is ready/other solution is ready
+      return beambreak.get();
+      
     }  
   
     public void setSpeed(double speed) {
       
       intakeMotor.set(speed);
-      System.out.println(intakeMotor.get());
-      //mayhaps this got changed since last year, stick with for now
+      
       
     }
   

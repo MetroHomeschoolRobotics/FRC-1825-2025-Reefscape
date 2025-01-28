@@ -18,7 +18,7 @@ public class RunOuttake extends Command {
     @Override
     public void execute(){
         if(shooter.coralInIntake()){
-            shooter.setSpeed(Constants.shooterSpeed); //TO/DO double check, arbitrary number
+            shooter.setSpeed(Constants.shooterSpeed); 
         }
         
     }

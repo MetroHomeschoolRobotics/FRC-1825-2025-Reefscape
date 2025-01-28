@@ -9,12 +9,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.Score;
+
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunElevator;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -76,6 +77,8 @@ public class RobotContainer {
     m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
     m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
     m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
+    
+
 
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
     
