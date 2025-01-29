@@ -30,6 +30,8 @@ public class Elevator extends SubsystemBase {
     
 
     public Elevator(){
+        
+
         //mayhaps idk, if it doesnt work make the  motor1 speeds negative in setSpeed()
         elevatorMotor1.configure(
             config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -63,7 +65,8 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         
-        return (elevatorMotor1.getEncoder().getPosition()+elevatorMotor2.getEncoder().getPosition())/2;
+        return ((elevatorMotor1.getEncoder().getPosition()*Constants.vortexcmConversion)+
+        (elevatorMotor2.getEncoder().getPosition()*Constants.vortexcmConversion))/2;
         
     }
     public void resetEncoders(){

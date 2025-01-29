@@ -22,78 +22,79 @@ public class Score extends Command {
     @Override
     public void initialize(){}
 
-    
-    
     @Override
     public void execute(){
-        //good luck
         double distToLim = 183-elevator.getDistance();
-        boolean isRun = false;
-        //check math on l3 and l2
-        //gets stuck in while loop forever cuz the encoders messed up(on sims at least)
-        if(level ==1 && elevator.isLowest()){
-            intake.setSpeed(Constants.shooterSpeed);
-            isRun = true;   
-            
-        }else if(level==4 && elevator.getDistance()>=Constants.elevatorMaxHeight){
-            intake.setSpeed(Constants.shooterSpeed);
-            isRun = true;   
-        }else if(level==3 && elevator.getDistance()>=((Constants.elevatorMaxHeight*2)/3)){
-            intake.setSpeed(Constants.shooterSpeed);
-            isRun = true;   
-        }else if(level ==2 && elevator.getDistance()>=(Constants.elevatorMaxHeight/2.25)){
-            intake.setSpeed(Constants.shooterSpeed);
-            isRun = true;   
-        }
-        if(!isRun){
-            if(level==1 &&!elevator.isLowest()){
-                while(!elevator.isLowest()){
-                    elevator.setSpeed(-1,distToLim);
-                }
-                elevator.setSpeed(0,183-elevator.getDistance());
+        
+        switch(level){
+            case 1:
+                if(level ==1 && elevator.isLowest()){
                 intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }else if(level==4 && elevator.getDistance()<Constants.elevatorMaxHeight){
-                while(elevator.getDistance()<Constants.elevatorMaxHeight){
-                    elevator.setSpeed(-1,distToLim);
+                
+                }else if(level==1 &&!elevator.isLowest()){
+                    while(!elevator.isLowest()){
+                        elevator.setSpeed(-1,distToLim);
+                    }
+                    elevator.setSpeed(0,183-elevator.getDistance());
+                    intake.setSpeed(Constants.shooterSpeed);
+                      
                 }
-                elevator.setSpeed(0,183-elevator.getDistance());
-                intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }else if(level==3 && elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
-                while(elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
-                    elevator.setSpeed(-1, distToLim);
+            case 4:
+                if(level==4 && elevator.getDistance()<=Constants.elevatorMaxHeight){
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+                }else if(level==4 && elevator.getDistance()>Constants.elevatorMaxHeight){
+                    while(elevator.getDistance()<Constants.elevatorMaxHeight){
+                        elevator.setSpeed(-1,distToLim);
+                    }
+                    elevator.setSpeed(0,183-elevator.getDistance());
+                    intake.setSpeed(Constants.shooterSpeed);
+                     
                 }
-                elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
-                intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }else if(level==2&&elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
-                while(elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
-                    elevator.setSpeed(-1, distToLim);
+            case 3:
+                if(level==3 && elevator.getDistance()>=((Constants.elevatorMaxHeight*2)/3)){
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+
+                }else if(level==3 && elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
+                    while(elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
+                        elevator.setSpeed(1, distToLim);
+                    }
+                    elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+                }else if(level==3 && elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
+                    while(elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
+                        elevator.setSpeed(-1, distToLim);
+                    }
+                    elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+
                 }
-                elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
-                intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }
-        }
-        if(!isRun){
-            if(level==3 && elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
-                while(elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
-                    elevator.setSpeed(1, distToLim);
+            case 2:
+                if(level ==2 && elevator.getDistance()==(Constants.elevatorMaxHeight/2.25)){
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+                }else if(level==2&&elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
+                    while(elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
+                        elevator.setSpeed(1, distToLim);
+                    }
+                    elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
+                }else if(level==2&&elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
+                    while(elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
+                        elevator.setSpeed(-1, distToLim);
+                    }
+                    elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
+                    intake.setSpeed(Constants.shooterSpeed);
+                    
                 }
-                elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
-                intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }else if(level==2&&elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
-                while(elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
-                    elevator.setSpeed(1, distToLim);
-                }
-                elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
-                intake.setSpeed(Constants.shooterSpeed);
-                isRun = true;   
-            }
         }
     }
+    
+   
 
     @Override
     public boolean isFinished(){
