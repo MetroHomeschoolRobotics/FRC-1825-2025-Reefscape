@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
@@ -18,6 +18,8 @@ public class Elevator extends SubsystemBase {
     
     
     //code for encoders may or may not be broken idk
+    private PIDController pid = new PIDController(1, 0, 0);
+    private double desiredposition = 0;
 
     private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
@@ -45,20 +47,22 @@ public class Elevator extends SubsystemBase {
         
         if(speed <=0 && getDistance()>= -Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
             
-            elevatorMotor1.set(speed);
-            elevatorMotor2.set(speed);
-            
+            //elevatorMotor1.set(speed);
+            //elevatorMotor2.set(speed);
+            desiredposition += speed;
+            pid.setSetpoint(desiredposition);
             
         }else if(speed>=0 && !beambreak.get()){
             
-            elevatorMotor1.set(speed);
-            elevatorMotor2.set(speed);
-            
+            //elevatorMotor1.set(speed);
+            //elevatorMotor2.set(speed);
+            desiredposition += speed;
+            pid.setSetpoint(desiredposition);
             
         }else{
             SmartDashboard.putBoolean("speed no changed", true);
-            elevatorMotor1.set(0);
-            elevatorMotor2.set(0);
+            //elevatorMotor1.set(0);
+            //elevatorMotor2.set(0);
             
         }
     }
@@ -78,9 +82,16 @@ public class Elevator extends SubsystemBase {
         return beambreak.get();
         
     }
+    public void setPID(double setPoint){
+        pid.setSetpoint(setPoint);
+    }
     public void periodic(){
         SmartDashboard.putBoolean("elevator lowest", isLowest());
         SmartDashboard.putNumber("elevator distance", getDistance());
+
+        double output = pid.calculate(elevatorMotor1.getEncoder().getPosition());
+        elevatorMotor1.set(output);
+        elevatorMotor2.set(output);
 
         if(isLowest()){
             resetEncoders();

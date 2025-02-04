@@ -24,6 +24,21 @@ public class Score extends Command {
 
     @Override
     public void execute(){
+        //mayhaps, perchance even
+        switch (level) {
+            case 1:
+                elevator.setPID(0);
+            case 2 :
+                elevator.setPID(Constants.elevatorMaxHeight/2.25);
+            case 3      :
+                elevator.setPID(Constants.elevatorMaxHeight*2/3);
+            case 4          :
+                elevator.setPID(Constants.elevatorMaxHeight);
+        
+            
+        }
+    }
+    public void eexecute(){
         double distToLim = 183-elevator.getDistance();
         
         switch(level){

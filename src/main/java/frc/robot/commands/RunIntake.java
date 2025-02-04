@@ -37,7 +37,7 @@ public class RunIntake extends Command {
     }
     @Override
     public boolean isFinished(){
-        return false;
-        //TO/DO change to !Intake.coralInIntake() when beambreak ready
+        return intake.coralInIntake();
+        
     }
 }
