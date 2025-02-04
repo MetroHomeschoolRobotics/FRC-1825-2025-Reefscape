@@ -13,6 +13,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final int algeaIntakeID = 13;
+  public static final int wristMotorID1 = 8;
+  public static final int wristMotorID2 = 9;
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
