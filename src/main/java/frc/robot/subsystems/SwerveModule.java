@@ -4,36 +4,42 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.ClosedLoopConfig;
 
+import static edu.wpi.first.units.Units.Amps;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants.SteerFeedbackType;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveModule extends SubsystemBase {
 
+  private static final ClosedLoopOutputType driveClosedLoopOutput = ClosedLoopOutputType.Voltage;
+  private static final ClosedLoopOutputType turnClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-  private SparkFlex driveMotor;
-  private SparkMax turnMotor;
-  private CANcoder absoluteEncoder;
+  private static final DriveMotorArrangement driveMotorType = DriveMotorArrangement.TalonFX_Integrated;
+  private static final SteerMotorArrangement turnMotorType = SteerMotorArrangement.TalonFX_Integrated;
 
-  private ClosedLoopConfig drivePIDF;
-  private ClosedLoopConfig turnPIDF;
+  // TODO find the correct Current Limit
+  public static final TalonFXConfiguration driveInitialConfig = new TalonFXConfiguration();
+  public static final TalonFXConfiguration turnInitialConfig = new TalonFXConfiguration();
+                                                      // .withCurrentLimits(
+                                                      //   new CurrentLimitsConfigs()
+                                                      //   .withStatorCurrentLimit(60)
+                                                      //   .withStatorCurrentLimitEnable(true)
+                                                      // );
+
+  private static final SteerFeedbackType turnEncoderType = SteerFeedbackType.RemoteCANcoder;
+  private static final CANcoderConfiguration encoderInitialConfig = new CANcoderConfiguration();
+  
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
-    driveMotor = new SparkFlex(driveMotorID, MotorType.kBrushless);
-    turnMotor = new SparkMax(turnMotorID, MotorType.kBrushless);
-    absoluteEncoder = new CANcoder(encoderID);
-
-    drivePIDF = new ClosedLoopConfig().pidf(encoderID, driveMotorID, turnMotorID, encoderID);
-    turnPIDF = new ClosedLoopConfig().pidf(encoderID, driveMotorID, turnMotorID, encoderID);
-
-    
-
-  }
+  public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {}
 
   @Override
   public void periodic() {
