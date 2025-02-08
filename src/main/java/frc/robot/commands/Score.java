@@ -28,18 +28,30 @@ public class Score extends Command {
         switch (level) {
             case 1:
                 elevator.setPID(0);
+                if(elevator.atSetpoint()){
+                    intake.setSpeed(Constants.shooterSpeed);
+                }
             case 2 :
                 elevator.setPID(Constants.elevatorMaxHeight/2.25);
+                if(elevator.atSetpoint()){
+                    intake.setSpeed(Constants.shooterSpeed);
+                }
             case 3      :
                 elevator.setPID(Constants.elevatorMaxHeight*2/3);
+                if(elevator.atSetpoint()){
+                    intake.setSpeed(Constants.shooterSpeed);
+                }
             case 4          :
                 elevator.setPID(Constants.elevatorMaxHeight);
+                if(elevator.atSetpoint()){
+                    intake.setSpeed(Constants.shooterSpeed);
+                }
         
             
         }
     }
     public void eexecute(){
-        double distToLim = 183-elevator.getDistance();
+        double distToLim = Constants.elevatorMaxHeight+elevator.getDistance();
         
         switch(level){
             case 1:

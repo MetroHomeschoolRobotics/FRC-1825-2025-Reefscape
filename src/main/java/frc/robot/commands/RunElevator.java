@@ -4,10 +4,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
-//TO/DO once CAD figures elevator stuff out make math utilities with 
-//measurements from the crescendo mathutils/geometryutils
 
 
 public class RunElevator extends Command {
@@ -27,9 +26,9 @@ public class RunElevator extends Command {
 
     @Override
     public void execute(){
-        //getDistance is measured in rotations, not cm figure out what da heck to do
         
-        double distToLim = 183-elevator.getDistance();
+        
+        double distToLim = Constants.elevatorMaxHeight+elevator.getDistance();
         elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }

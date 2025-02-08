@@ -24,8 +24,8 @@ public final class Constants {
 
   public static final double shooterSpeed = 1;
 
-  public static final double elevatorMaxHeight = 183; // height of reef in cm
-  //its not cm
+  public static final double elevatorMaxHeight = -183; // height of reef in cm
+  
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 1;
   }

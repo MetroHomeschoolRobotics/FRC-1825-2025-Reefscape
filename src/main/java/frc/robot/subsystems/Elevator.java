@@ -17,8 +17,8 @@ import com.revrobotics.spark.SparkLowLevel;
 public class Elevator extends SubsystemBase {
     
     
-    //code for encoders may or may not be broken idk
-    private PIDController pid = new PIDController(1, 0, 0);
+    
+    private PIDController pid = new PIDController(10, 0, 0);
     private double desiredposition = 0;
 
     private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
@@ -45,14 +45,14 @@ public class Elevator extends SubsystemBase {
         //TO/DO MAKE SURE THE DISTANCE IS RIGHT BEFORE RUNNING, IT PROBABLY ISNT
         //!!!
         
-        if(speed <=0 && getDistance()>= -Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
+        if(speed <=0 && getDistance()>= Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
             
             //elevatorMotor1.set(speed);
             //elevatorMotor2.set(speed);
             desiredposition += speed;
             pid.setSetpoint(desiredposition);
             
-        }else if(speed>=0 && !beambreak.get()){
+        }else if(speed>=0 && !beambreak.get() ){//!beambreak.get()
             
             //elevatorMotor1.set(speed);
             //elevatorMotor2.set(speed);
@@ -60,7 +60,7 @@ public class Elevator extends SubsystemBase {
             pid.setSetpoint(desiredposition);
             
         }else{
-            SmartDashboard.putBoolean("speed no changed", true);
+            
             //elevatorMotor1.set(0);
             //elevatorMotor2.set(0);
             
@@ -83,7 +83,11 @@ public class Elevator extends SubsystemBase {
         
     }
     public void setPID(double setPoint){
-        pid.setSetpoint(setPoint);
+        desiredposition = setPoint;
+        pid.setSetpoint(desiredposition);
+    }
+    public boolean atSetpoint(){
+        return pid.atSetpoint();
     }
     public void periodic(){
         SmartDashboard.putBoolean("elevator lowest", isLowest());
@@ -92,9 +96,10 @@ public class Elevator extends SubsystemBase {
         double output = pid.calculate(elevatorMotor1.getEncoder().getPosition());
         elevatorMotor1.set(output);
         elevatorMotor2.set(output);
-
+       System.out.println(desiredposition);
         if(isLowest()){
             resetEncoders();
+            
         }
     }
 }
