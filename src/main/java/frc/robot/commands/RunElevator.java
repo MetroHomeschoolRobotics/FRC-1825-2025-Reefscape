@@ -28,7 +28,7 @@ public class RunElevator extends Command {
     public void execute(){
         
         
-        double distToLim = Constants.elevatorMaxHeight+elevator.getDistance();
+        double distToLim = Constants.elevatorMaxHeight-elevator.getDistance();
         elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }

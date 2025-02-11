@@ -27,22 +27,24 @@ public class Score extends Command {
         //mayhaps, perchance even
         switch (level) {
             case 1:
-                elevator.setPID(0);
+                elevator.setPID(Constants.level1Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 2 :
-                elevator.setPID(Constants.elevatorMaxHeight/2.25);
+                
+                elevator.setPID(Constants.level2Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 3      :
-                elevator.setPID(Constants.elevatorMaxHeight*2/3);
+                
+                elevator.setPID(Constants.level3Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 4          :
-                elevator.setPID(Constants.elevatorMaxHeight);
+                elevator.setPID(Constants.level4Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
@@ -50,9 +52,11 @@ public class Score extends Command {
             
         }
     }
+
+    
     public void eexecute(){
-        double distToLim = Constants.elevatorMaxHeight+elevator.getDistance();
-        
+        double distToLim = Constants.elevatorMaxHeight-elevator.getDistance();
+        //deprecated, still here for posterity
         switch(level){
             case 1:
                 if(level ==1 && elevator.isLowest()){

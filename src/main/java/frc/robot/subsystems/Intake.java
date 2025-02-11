@@ -10,7 +10,7 @@ import com.revrobotics.spark.SparkLowLevel;
 
 
 
-//subsystem for intake
+
 public class Intake extends SubsystemBase {
     
     private SparkMax intakeMotor = new SparkMax(Constants.intakeDeviceID, SparkLowLevel.MotorType.kBrushless);

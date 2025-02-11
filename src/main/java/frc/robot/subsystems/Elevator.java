@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(10, 0, 0);
+    private PIDController pid = new PIDController(.01, 0, 0);
     private double desiredposition = 0;
 
     private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
@@ -42,10 +42,9 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setSpeed(double speed, double distanceToLimit){
-        //TO/DO MAKE SURE THE DISTANCE IS RIGHT BEFORE RUNNING, IT PROBABLY ISNT
-        //!!!
         
-        if(speed <=0 && getDistance()>= Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
+        
+        if(speed <=0 && desiredposition>= Constants.elevatorMaxHeight && distanceToLimit> Constants.distToLimOffset){
             
             //elevatorMotor1.set(speed);
             //elevatorMotor2.set(speed);
@@ -60,7 +59,7 @@ public class Elevator extends SubsystemBase {
             pid.setSetpoint(desiredposition);
             
         }else{
-            
+            pid.setSetpoint(desiredposition);
             //elevatorMotor1.set(0);
             //elevatorMotor2.set(0);
             
@@ -93,10 +92,10 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putBoolean("elevator lowest", isLowest());
         SmartDashboard.putNumber("elevator distance", getDistance());
 
-        double output = pid.calculate(elevatorMotor1.getEncoder().getPosition());
+        double output = pid.calculate(getDistance());
         elevatorMotor1.set(output);
         elevatorMotor2.set(output);
-       System.out.println(desiredposition);
+        System.out.println(desiredposition);
         if(isLowest()){
             resetEncoders();
             

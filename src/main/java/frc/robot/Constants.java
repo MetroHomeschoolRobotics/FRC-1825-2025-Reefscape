@@ -16,7 +16,7 @@ public final class Constants {
   public static final double vortexcmConversion=5*Math.PI;//neo vortex 50mm diameter
 
 
-  public final static double distToLimOffset = 1;
+  public final static double distToLimOffset = 3;
 
   public static final int intakeDeviceID = 12;
   public static final int elevatorDeviceID1 = 8;
@@ -24,7 +24,14 @@ public final class Constants {
 
   public static final double shooterSpeed = 1;
 
-  public static final double elevatorMaxHeight = -183; // height of reef in cm
+  public static final double elevatorMaxHeight = -190; // highest point on elevator to lowest point on
+  //elevator in cm
+
+  //reef height in cm
+  public static final double level4Height = -183;
+  public static final double level3Height = -121;
+  public static final double level2Height = -81;
+  public static final double level1Height = -33;
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 1;
