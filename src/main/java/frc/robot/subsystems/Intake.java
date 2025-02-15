@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel;
 
 
@@ -13,13 +15,17 @@ import com.revrobotics.spark.SparkLowLevel;
 
 public class Intake extends SubsystemBase {
     
-    private SparkMax intakeMotor = new SparkMax(Constants.intakeDeviceID, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax intakeMotor1 = new SparkMax(Constants.intakeDeviceID1, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax intakeMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(0);
    
-    
+    private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
   
     /** Creates a new Intake. */
-    public Intake() {}
+    public Intake() {
+      intakeMotor2.configure(
+            config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    }
     
     @Override
     public void periodic() {
@@ -34,19 +40,19 @@ public class Intake extends SubsystemBase {
   
     public void setSpeed(double speed) {
       
-      intakeMotor.set(speed);
-      
+      intakeMotor1.set(speed);
+      intakeMotor2.set(speed);
       
     }
   
     public double getDistance() {
-        return intakeMotor.getEncoder().getPosition();
+        return intakeMotor1.getEncoder().getPosition();
         //I have no idea if we are using this
         
     }
   
     public double getSpeed() {
-      return intakeMotor.getEncoder().getVelocity();
+      return intakeMotor1.getEncoder().getVelocity();
         
     }
   }

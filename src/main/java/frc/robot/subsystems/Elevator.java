@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 
 import com.revrobotics.spark.SparkBase;
 
+
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -24,7 +25,7 @@ public class Elevator extends SubsystemBase {
     private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(1);
-
+    
     
     //90% sure those are the right motor objects(they were not)(they are now)
     private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
@@ -34,7 +35,7 @@ public class Elevator extends SubsystemBase {
     public Elevator(){
         
 
-        //mayhaps idk, if it doesnt work make the  motor1 speeds negative in setSpeed()
+        //mayhaps idk, if it doesnt work make the  motor1 speeds negative in periodic()
         elevatorMotor1.configure(
             config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
         //elevatorMotor1.setInverted(true);

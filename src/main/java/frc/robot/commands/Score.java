@@ -31,19 +31,19 @@ public class Score extends Command {
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
-            case 2 :
+            case 2:
                 
                 elevator.setPID(Constants.level2Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
-            case 3      :
+            case 3:
                 
                 elevator.setPID(Constants.level3Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
-            case 4          :
+            case 4:
                 elevator.setPID(Constants.level4Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
@@ -54,76 +54,6 @@ public class Score extends Command {
     }
 
     
-    public void eexecute(){
-        double distToLim = Constants.elevatorMaxHeight-elevator.getDistance();
-        //deprecated, still here for posterity
-        switch(level){
-            case 1:
-                if(level ==1 && elevator.isLowest()){
-                intake.setSpeed(Constants.shooterSpeed);
-                
-                }else if(level==1 &&!elevator.isLowest()){
-                    while(!elevator.isLowest()){
-                        elevator.setSpeed(-1,distToLim);
-                    }
-                    elevator.setSpeed(0,183-elevator.getDistance());
-                    intake.setSpeed(Constants.shooterSpeed);
-                      
-                }
-            case 4:
-                if(level==4 && elevator.getDistance()<=Constants.elevatorMaxHeight){
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-                }else if(level==4 && elevator.getDistance()>Constants.elevatorMaxHeight){
-                    while(elevator.getDistance()<Constants.elevatorMaxHeight){
-                        elevator.setSpeed(-1,distToLim);
-                    }
-                    elevator.setSpeed(0,183-elevator.getDistance());
-                    intake.setSpeed(Constants.shooterSpeed);
-                     
-                }
-            case 3:
-                if(level==3 && elevator.getDistance()>=((Constants.elevatorMaxHeight*2)/3)){
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-
-                }else if(level==3 && elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
-                    while(elevator.getDistance()<((Constants.elevatorMaxHeight*2)/3)){
-                        elevator.setSpeed(1, distToLim);
-                    }
-                    elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-                }else if(level==3 && elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
-                    while(elevator.getDistance()>((Constants.elevatorMaxHeight*2)/3)){
-                        elevator.setSpeed(-1, distToLim);
-                    }
-                    elevator.setSpeed(0,(Constants.elevatorMaxHeight*2)/3);
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-
-                }
-            case 2:
-                if(level ==2 && elevator.getDistance()==(Constants.elevatorMaxHeight/2.25)){
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-                }else if(level==2&&elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
-                    while(elevator.getDistance()<(Constants.elevatorMaxHeight/2.25)){
-                        elevator.setSpeed(1, distToLim);
-                    }
-                    elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-                }else if(level==2&&elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
-                    while(elevator.getDistance()>(Constants.elevatorMaxHeight/2.25)){
-                        elevator.setSpeed(-1, distToLim);
-                    }
-                    elevator.setSpeed(0,(Constants.elevatorMaxHeight/2.25));
-                    intake.setSpeed(Constants.shooterSpeed);
-                    
-                }
-        }
-    }
     
    
 
