@@ -250,6 +250,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
+
+    /** 
+     * This gets the pathplanner auto command
+     * @param name The name of the pathplanner auto
+     * @return The pathplanner auto
+     */
     public Command getAutonomousCommand(String name) {
         return new PathPlannerAuto(name);
     }
@@ -258,8 +264,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Pose2d getRobotPose() {
         return this.getState().Pose;
     }
-    /** Get the field object. When sent to the SmartDashboard,
-     *  it shows the field image and the robot pose on the field 
+    /** 
+     * Get the field object. When sent to the SmartDashboard,
+     * it shows the field image and the robot pose on the field 
      */
     public Field2d getField2d() {
         return field;
@@ -268,6 +275,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void periodic() {
 
+        // TODO find out why field positions is laggy
         // update the field positions
         field.setRobotPose(getRobotPose());
 
@@ -290,8 +298,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         
+        
+        
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
+
+        //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
 
     }
 
@@ -318,6 +330,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    /** Random simulation stuffs that I will never use */
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 

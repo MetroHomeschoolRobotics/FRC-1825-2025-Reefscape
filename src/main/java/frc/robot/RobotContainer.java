@@ -111,7 +111,9 @@ public class RobotContainer {
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-        autoChooser.addOption("straight2Meters", drivetrain.getAutonomousCommand("Straight2Meter"));
+        autoChooser.addOption("straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
+        autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
+        autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
