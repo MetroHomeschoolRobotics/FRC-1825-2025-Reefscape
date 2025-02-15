@@ -14,7 +14,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.SparkLowLevel;
 
-
+//4.826cm diameter on shaft 62t driven by 2 8t
+//gear ratio 62/8
 public class Elevator extends SubsystemBase {
     
     
@@ -28,7 +29,7 @@ public class Elevator extends SubsystemBase {
     
     
     //90% sure those are the right motor objects(they were not)(they are now)
-    private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
+    //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
     
 
@@ -36,8 +37,8 @@ public class Elevator extends SubsystemBase {
         
 
         //mayhaps idk, if it doesnt work make the  motor1 speeds negative in periodic()
-        elevatorMotor1.configure(
-            config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+        //elevatorMotor1.configure(
+          //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
         //elevatorMotor1.setInverted(true);
         
     }
@@ -69,8 +70,8 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         
-        return ((elevatorMotor1.getEncoder().getPosition()*Constants.vortexcmConversion)+
-        (elevatorMotor2.getEncoder().getPosition()*Constants.vortexcmConversion))/2;
+        return ((elevatorMotor1.getEncoder().getPosition()*Constants.elevatorGearConversion)+
+        (elevatorMotor2.getEncoder().getPosition()*Constants.elevatorGearConversion))/2;
         
     }
     public void resetEncoders(){

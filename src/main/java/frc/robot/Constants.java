@@ -13,7 +13,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final double vortexcmConversion=5*Math.PI;//neo vortex 50mm diameter
+  public static final double elevatorGearRatio = 7.75;//62/8
+  public static final double elevatorGearConversion=(4.826*Math.PI)/elevatorGearRatio;//neo vortex 50mm diameter
 
 
   public final static double distToLimOffset = 4;
