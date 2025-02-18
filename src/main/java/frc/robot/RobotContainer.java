@@ -53,14 +53,35 @@ public class RobotContainer {
         
         if(developerMode){
             
+            // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
+            // and Y is defined as to the left according to WPILib convention.
+            drivetrain.setDefaultCommand(
+                // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driverXbox.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                                                    .withVelocityY(-driverXbox.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                                                    .withRotationalRate(-driverXbox.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                )
+            );
 
-        driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+            // Puts the wheels in an x
+            driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
 
-        driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
-        driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
+            // points the wheels without driving
+            driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+                point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
+            ));
+
+            // reset the field-centric heading on left bumper press
+            driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+            // Sysid buttons
+            // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+            // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+            // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+            // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+
+            // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
+            // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
 
         } else {
             // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
@@ -75,10 +96,6 @@ public class RobotContainer {
 
             // Puts the wheels in an x
             driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
-            // TODO press this button and find out what it does
-            driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-                point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
-            ));
 
             // reset the field-centric heading on left bumper press
             driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -94,6 +111,9 @@ public class RobotContainer {
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
+        autoChooser.addOption("straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
+        autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
+        autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
