@@ -67,7 +67,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
-    private final Vision FrontCamera = new Vision("Camera_Yellow (1)", Constants.CameraPositions.frontTranslation);
+    private final Vision FrontCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
 
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
