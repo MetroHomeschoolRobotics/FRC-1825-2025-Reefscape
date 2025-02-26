@@ -95,8 +95,13 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("desiredPos", desiredposition);
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
+        double output;
+        if(getDistance()>-5){
+            output = pid.calculate(getDistance())-feedforward.calculate(0);
+        }else{
+            output = pid.calculate(getDistance());
+        }
         
-        double output = pid.calculate(getDistance())-feedforward.calculate(0);
         SmartDashboard.putNumber("pid output", output);
         
         elevatorMotor1.setVoltage(-output*12);

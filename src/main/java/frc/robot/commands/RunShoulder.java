@@ -31,7 +31,7 @@ public class RunShoulder extends Command {
   @Override
   public void execute() {
     // TODO: Make it so that it doesn't go outside of starting perimeter
-    //shoulder.setSpeed(MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+    shoulder.setSpeed(MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
   }
 
   // Called once the command ends or is interrupted.

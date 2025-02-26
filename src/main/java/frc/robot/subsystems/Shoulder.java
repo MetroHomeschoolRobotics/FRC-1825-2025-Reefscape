@@ -17,7 +17,7 @@ public class Shoulder extends SubsystemBase {
   public Shoulder() {}
 
   public void setSpeed(double speed) {
-    
+    wristMotor1.getEncoder().getPosition();
     if (rotationEncoder.get() >= -8 && rotationEncoder.get() <= 45) {
       wristMotor1.set(speed);
      
