@@ -19,12 +19,12 @@ public class Intake extends SubsystemBase {
     private SparkMax intakeMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(0);
    
-    private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
+    //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
   
     /** Creates a new Intake. */
     public Intake() {
-      intakeMotor2.configure(
-            config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+     // intakeMotor2.configure(
+       //     config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     }
     
     @Override
@@ -34,12 +34,12 @@ public class Intake extends SubsystemBase {
     }
   
     public Boolean coralInIntake() {
-      return beambreak.get();
-      
+      //return beambreak.get();
+      return false
     }  
   
     public void setSpeed(double speed) {
-      
+      //check inverts
       intakeMotor1.set(speed);
       intakeMotor2.set(speed);
       

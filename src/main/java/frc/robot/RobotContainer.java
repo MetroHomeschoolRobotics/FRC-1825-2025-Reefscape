@@ -5,17 +5,21 @@
 package frc.robot;
 
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shoulder;
+
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
+import frc.robot.commands.RunShoulder;
 import frc.robot.commands.Score;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunElevator;
-import frc.robot.subsystems.ExampleSubsystem;
 
+import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,18 +37,19 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   
-
+  //private final Shoulder m_Shoulder = new Shoulder();
+  
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController m_manipulatorController = new CommandXboxController(0);
+  private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
 //TO/DO swap ports, ports swapped for testing purposes
 
-  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
-  
+ private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
+ //private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -62,6 +67,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    //m_elevator.setDefaultCommand(new RunElevator(m_elevator,m_manipulatorController));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));;;;;;;;;;;;;;;
@@ -70,16 +76,17 @@ public class RobotContainer {
     // cancelling on release.
     
 
-    m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
-    m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
+   // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
+    //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
 
     m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
     m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
     m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
     m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
+
+   
     
-
-
+   // CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
     
   }
@@ -92,5 +99,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
+  }
+  public void resetEncoders(){
+    m_elevator.resetEncoders();
+    m_elevator.setPID(0);
   }
 }

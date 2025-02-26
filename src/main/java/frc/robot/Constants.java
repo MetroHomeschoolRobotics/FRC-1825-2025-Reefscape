@@ -14,15 +14,16 @@ package frc.robot;
  */
 public final class Constants {
   public static final double elevatorGearRatio = 7.75;//62/8
-  public static final double elevatorGearConversion=(4.826*Math.PI)/elevatorGearRatio;//neo vortex 50mm diameter
+  public static final double elevatorGearConversion=190/10.08;
 
 
   public final static double distToLimOffset = 4;
 
   public static final int intakeDeviceID1 = 12;
   public static final int intakeDeviceID2 = 13;
-  public static final int elevatorDeviceID1 = 8;
-  public static final int elevatorDeviceID2 = 9;
+  public static final int elevatorDeviceID1 = 3;
+  public static final int elevatorDeviceID2 = 1;
+  public static final int wristMotorID1 = 5;
 
   public static final double shooterSpeed = 1;
 
@@ -30,12 +31,12 @@ public final class Constants {
   //elevator in cm
 
   //reef height in cm(rough, plz adjust)
-  public static final double level4Height = -178;
-  public static final double level3Height = -116;
-  public static final double level2Height = -76;
-  public static final double level1Height = -28;
+  public static final double level4Height = -165;
+  public static final double level3Height = -101;
+  public static final double level2Height = -60;
+  public static final double level1Height = -7;
   
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 1;
+    public static final int kDriverControllerPort = 0;
   }
 }

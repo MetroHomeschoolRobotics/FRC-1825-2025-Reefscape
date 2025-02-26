@@ -9,6 +9,7 @@ import frc.robot.subsystems.Elevator;
 
 
 
+
 public class RunElevator extends Command {
 
     private CommandXboxController xboxController;
@@ -22,19 +23,24 @@ public class RunElevator extends Command {
         xboxController = _xboxController;
     }
     @Override
-    public void initialize() {}
+    public void initialize() {
+        elevator.resetEncoders();
+    }
 
     @Override
     public void execute(){
         
-        
         double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
+        //double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
         elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
-        SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
+        
+        //SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }
 
     @Override
-    public void end(boolean interrupted){}
+    public void end(boolean interrupted){
+        
+    }
 
     @Override
     public boolean isFinished(){
