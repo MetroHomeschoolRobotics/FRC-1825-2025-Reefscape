@@ -17,7 +17,7 @@ public class RunShoulder extends Command {
   /** Creates a new RunShoulder. */
   public RunShoulder(Shoulder _shoulder, CommandXboxController _xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //addRequirements(_shoulder);
+    addRequirements(_shoulder);
 
     shoulder = _shoulder;
     xboxcontroller = _xboxController;
@@ -31,6 +31,7 @@ public class RunShoulder extends Command {
   @Override
   public void execute() {
     // TODO: Make it so that it doesn't go outside of starting perimeter
+    
     shoulder.setSpeed(MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
   }
 

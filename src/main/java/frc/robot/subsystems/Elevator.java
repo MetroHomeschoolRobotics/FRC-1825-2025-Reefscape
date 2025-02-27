@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         
-        return (elevatorMotor2.getEncoder().getPosition()*Constants.elevatorGearConversion);
+        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorGearConversion);
         
     }
     public void resetEncoders(){
@@ -96,7 +96,7 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
         double output;
-        if(getDistance()>-5){
+        if(getDistance()<-5){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());
@@ -104,8 +104,8 @@ public class Elevator extends SubsystemBase {
         
         SmartDashboard.putNumber("pid output", output);
         
-        elevatorMotor1.setVoltage(-output*12);
-        elevatorMotor2.setVoltage(output*12);
+        elevatorMotor1.setVoltage(output*12);
+        elevatorMotor2.setVoltage(-output*12);
         
         if(isLowest()){
             resetEncoders();

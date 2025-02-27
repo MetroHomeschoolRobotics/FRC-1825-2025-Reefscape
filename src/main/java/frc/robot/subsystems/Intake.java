@@ -16,7 +16,7 @@ import com.revrobotics.spark.SparkLowLevel;
 public class Intake extends SubsystemBase {
     
     private SparkMax intakeMotor1 = new SparkMax(Constants.intakeDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    private SparkMax intakeMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax intakeMotor2 = new SparkMax(Constants.intakeDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(0);
    
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
@@ -35,7 +35,7 @@ public class Intake extends SubsystemBase {
   
     public Boolean coralInIntake() {
       //return beambreak.get();
-      return false
+      return false;
     }  
   
     public void setSpeed(double speed) {

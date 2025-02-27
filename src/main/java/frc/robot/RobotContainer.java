@@ -34,10 +34,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Intake m_intake = new Intake();
+  //private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   
-  //private final Shoulder m_Shoulder = new Shoulder();
+  private final Shoulder m_Shoulder = new Shoulder();
   
 
 
@@ -46,10 +46,10 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
-//TO/DO swap ports, ports swapped for testing purposes
+
 
  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
- //private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
+ private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -79,14 +79,14 @@ public class RobotContainer {
    // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
     //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
 
-    m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
-    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
+    // m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
+    // m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
+    // m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
+    // m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
 
    
     
-   // CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
+    CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
     
   }

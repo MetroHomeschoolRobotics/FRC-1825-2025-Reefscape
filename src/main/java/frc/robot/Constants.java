@@ -13,7 +13,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final int cancoderID = 1;
+  public static final int cancoderID = 0;
 
   public static final double elevatorGearRatio = 7.75;//62/8
   public static final double elevatorGearConversion=190/10.08;
@@ -23,9 +23,10 @@ public final class Constants {
 
   public static final int intakeDeviceID1 = 12;
   public static final int intakeDeviceID2 = 13;
-  public static final int elevatorDeviceID1 = 3;
-  public static final int elevatorDeviceID2 = 1;
-  public static final int wristMotorID1 = 5;
+  public static final int elevatorDeviceID1 = 10;
+  public static final int elevatorDeviceID2 = 9;
+  public static final int wristMotorID1 = 11;
+  public static final int wristMotorID2 = 7;
 
 
   public static final double shooterSpeed = 1;
