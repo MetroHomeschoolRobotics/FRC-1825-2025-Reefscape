@@ -19,9 +19,20 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunElevator;
 
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveSubsystem;
+import swervelib.SwerveInputStream;
+
+import java.io.File;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -32,6 +43,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  public boolean developerMode = true;
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   //private final Intake m_intake = new Intake();
@@ -42,7 +56,6 @@ public class RobotContainer {
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
@@ -55,6 +68,9 @@ public class RobotContainer {
     // Configure the trigger bindings
     
     configureBindings();
+    setDeveloperMode();
+
+    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**
@@ -72,6 +88,8 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));;;;;;;;;;;;;;;
 
+
+    driveXbox.y().onTrue(Commands.runOnce(swerveSubsystem::zeroGyro));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     
@@ -88,8 +106,29 @@ public class RobotContainer {
     
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
-    
   }
+
+  private void setDeveloperModeTrue() {
+    developerMode = true;
+  }
+  private void setDeveloperModeFalse() {
+    developerMode = false;
+  }
+  private void setDeveloperMode() {
+    developerModeChooser.addOption("Developer Mode", Commands.runOnce(this::setDeveloperModeTrue));
+    developerModeChooser.addOption("Driver Mode", Commands.runOnce(this:: setDeveloperModeFalse));
+
+    SmartDashboard.putData(developerModeChooser);
+  }
+
+
+
+  private void configureAutos() {
+
+  }
+
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -42,5 +42,13 @@ public final class Constants {
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final double joystickDeadband = 0.05;
+  }
+  public static class DrivetrainConstants {
+    public static final double maxSpeed = 5.5;
+  }
+
+  public static class MotorIDs {
+    
   }
 }
