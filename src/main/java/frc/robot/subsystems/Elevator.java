@@ -15,8 +15,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.SparkLowLevel;
 
-//4.826cm diameter on shaft 62t driven by 2 8t
-//gear ratio 62/8
+//78 cm high at base
+//190 cm high at apex
 public class Elevator extends SubsystemBase {
     
     
@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         
-        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorGearConversion);
+        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConversion)-71;
         
     }
     public void resetEncoders(){
@@ -96,7 +96,7 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
         double output;
-        if(getDistance()<-5){
+        if(getDistance()<-76){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());

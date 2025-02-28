@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
     public void setSpeed(double speed) {
       //check inverts
       intakeMotor1.set(speed);
-      intakeMotor2.set(speed);
+      intakeMotor2.set(-speed);
       
     }
   

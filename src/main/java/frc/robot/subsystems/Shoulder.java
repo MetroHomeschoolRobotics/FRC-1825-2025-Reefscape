@@ -13,7 +13,7 @@ public class Shoulder extends SubsystemBase {
 
   private SparkMax wristMotor1 = new SparkMax(Constants.wristMotorID1, MotorType.kBrushless);
   
-  private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
+ // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
   // private DutyCycleEncoder rotationEncoder = new DutyCycleEncoder(3);
 
@@ -28,12 +28,12 @@ public class Shoulder extends SubsystemBase {
     // }else if (getAbsoluteAngle() >= -35 && speed>0) {
     //   wristMotor1.set(speed/4);
 
-     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -35 && speed>0)) {
+     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -45 && speed>0)) {
       wristMotor1.set(speed);
-      wristMotor2.set(-speed);
+      //wristMotor2.set(-speed);
     }else{
       wristMotor1.set(0);
-      wristMotor2.set(0);
+      //wristMotor2.set(0);
     }
 
   }

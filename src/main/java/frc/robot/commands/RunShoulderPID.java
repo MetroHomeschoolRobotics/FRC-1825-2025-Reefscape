@@ -1,21 +1,15 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.ShoulderPID;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RunShoulder extends Command {
-
-  private Shoulder shoulder;
+public class RunShoulderPID extends Command {
+    private ShoulderPID shoulder;
   private CommandXboxController xboxcontroller;
   
   /** Creates a new RunShoulder. */
-  public RunShoulder(Shoulder _shoulder, CommandXboxController _xboxController) {
+  public RunShoulderPID(ShoulderPID _shoulder, CommandXboxController _xboxController) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_shoulder);
 
@@ -32,7 +26,7 @@ public class RunShoulder extends Command {
   public void execute() {
     // TO/DO: Make it so that it doesn't go outside of starting perimeter
     
-    shoulder.setSpeed(MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+    shoulder.incrementPID(MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
   }
 
   // Called once the command ends or is interrupted.

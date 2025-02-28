@@ -102,6 +102,6 @@ public class RobotContainer {
   }
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    m_elevator.setPID(0);
+    m_elevator.setPID(-71);
   }
 }
