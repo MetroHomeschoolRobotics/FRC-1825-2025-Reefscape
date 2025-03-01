@@ -11,12 +11,12 @@ public class Score extends Command {
     Intake intake;
     int level;
 
-    public Score(Elevator _elevator,Intake _intake,int _level){
+    public Score(Elevator _elevator,int _level){//re-add intake
         addRequirements(_elevator);
-        addRequirements(_intake);
+        //addRequirements(_intake);
 
         elevator = _elevator;
-        intake = _intake;
+        //intake = _intake;
         level = _level;
     }
     @Override
@@ -25,33 +25,19 @@ public class Score extends Command {
     @Override
     public void execute(){
         //mayhaps, perchance even
-        switch (level) {
-            case 1:
-                elevator.setPID(Constants.level1Height);
-                if(elevator.atSetpoint()){
-                    intake.setSpeed(Constants.shooterSpeed);
-                }
-            case 2:
-                
-                elevator.setPID(Constants.level2Height);
-                if(elevator.atSetpoint()){
-                    intake.setSpeed(Constants.shooterSpeed);
-                }
-            case 3:
-                
-                elevator.setPID(Constants.level3Height);
-                if(elevator.atSetpoint()){
-                    intake.setSpeed(Constants.shooterSpeed);
-                }
-            case 4:
-                elevator.setPID(Constants.level4Height);
-                if(elevator.atSetpoint()){
-                    intake.setSpeed(Constants.shooterSpeed);
-                }
-        
+        if(level==1){
+            elevator.setPID(Constants.level1Height);
+        }else if(level==2){
+            elevator.setPID(Constants.level2Height);
+        }else if(level==3){
+            System.out.println("level 3");
+            elevator.setPID(Constants.level3Height);
+        }else if(level==4){
+            elevator.setPID(Constants.level4Height);
+        }
             
         }
-    }
+    
 
     
     
@@ -59,11 +45,12 @@ public class Score extends Command {
 
     @Override
     public boolean isFinished(){
-        return !intake.coralInIntake();
+       // return !intake.coralInIntake();
+        return false;
     }
     @Override
     public void end(boolean interrupted){
-        intake.setSpeed(0);
+        //intake.setSpeed(0);
         elevator.setSpeed(0,2);
         
     }

@@ -79,10 +79,10 @@ public class RobotContainer {
    // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
     //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
 
-    // m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
-    // m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
+     m_manipulatorController.y().whileTrue(new Score(m_elevator, 4));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator, 3));
     // m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
-    // m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator, 1));
 
    
     
@@ -102,6 +102,6 @@ public class RobotContainer {
   }
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    m_elevator.setPID(-71);
+    m_elevator.setPID(-93.66);
   }
 }
