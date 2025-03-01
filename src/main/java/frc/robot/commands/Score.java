@@ -46,13 +46,14 @@ public class Score extends Command {
     @Override
     public boolean isFinished(){
        // return !intake.coralInIntake();
-        return false;
+        return elevator.atSetpoint();
+
     }
     @Override
     public void end(boolean interrupted){
         //intake.setSpeed(0);
-        elevator.setSpeed(0,2);
-        
+        //elevator.setSpeed(0,2);
+        System.out.println("all done");
     }
 
 }

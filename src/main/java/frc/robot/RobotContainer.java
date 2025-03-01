@@ -6,14 +6,17 @@ package frc.robot;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
-
+import frc.robot.subsystems.ShoulderPID;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.RunShoulder;
+import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
+import frc.robot.commands.ResetElevatorEncoders;
 
 import frc.robot.Constants.OperatorConstants;
+
 import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -61,7 +64,7 @@ public class RobotContainer {
   //private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   
-  private final Shoulder m_Shoulder = new Shoulder();
+  private final ShoulderPID m_Shoulder = new ShoulderPID();
   
 
 
@@ -73,7 +76,7 @@ public class RobotContainer {
 
 
  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
- private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
+ private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -165,7 +168,7 @@ public class RobotContainer {
     // m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
     m_manipulatorController.a().whileTrue(new Score(m_elevator, 1));
 
-   
+    m_manipulatorController.povDown().whileTrue(new ResetElevatorEncoders(m_elevator));
     
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
@@ -180,6 +183,7 @@ public class RobotContainer {
   public void resetEncoders(){
     m_elevator.resetEncoders();
     m_elevator.setPID(-93.66);
+    m_Shoulder.setPID(0);
   }
 
     private void createAutoChooser() {

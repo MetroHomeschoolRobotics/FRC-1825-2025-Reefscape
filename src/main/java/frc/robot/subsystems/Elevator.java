@@ -21,8 +21,8 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.005, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.025, 0);
+    private PIDController pid = new PIDController(.008, 0, 0);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
@@ -74,6 +74,9 @@ public class Elevator extends SubsystemBase {
         return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConversion)-93.66;
         
     }
+    public double getEncoder(){
+        return elevatorMotor1.getEncoder().getPosition();
+    }
     public void resetEncoders(){
         
         elevatorMotor1.getEncoder().setPosition(0);
@@ -87,7 +90,7 @@ public class Elevator extends SubsystemBase {
     public void setPID(double setPoint){
         desiredposition = setPoint;
         pid.setSetpoint(desiredposition);
-        System.out.println("Pid set");
+        System.out.println("Pid set to"+ pid.getSetpoint());
     }
     public boolean atSetpoint(){
         return pid.atSetpoint();
@@ -96,7 +99,8 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("desiredPos", desiredposition);
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
-        
+        SmartDashboard.putNumber("encoderValue", getEncoder());
+
         if(getDistance()<highestGetDistance){
             highestGetDistance = getDistance();
         }

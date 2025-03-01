@@ -15,18 +15,18 @@ public class ShoulderPID extends SubsystemBase {
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
   
-  private PIDController pid = new PIDController(0.001, 0, 0);
-  private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.1, 0);
+  private PIDController pid = new PIDController(0.008, 0.001, 0);
+  private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
-  // private DutyCycleEncoder rotationEncoder = new DutyCycleEncoder(3);
+  
 
   /** Creates a new Shoulder. */
   public ShoulderPID() {}
   
   public void incrementPID(double speed) {
-     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -35 && speed>0)) {
+     if ((desiredposition<=8 && speed >0) || (desiredposition >= -35 && speed<0)) {
       desiredposition+=speed;
-      
+      pid.setSetpoint(desiredposition);
     }
 
   }
@@ -54,15 +54,13 @@ public class ShoulderPID extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Absolute Angle", getAbsoluteAngle());
-    double output;
-    if(getAbsoluteAngle()>-3 || getAbsoluteAngle()<3){
-        output = pid.calculate(getAbsoluteAngle());
-    }else if(getAbsoluteAngle()>3){
-        output = pid.calculate(getAbsoluteAngle())-feedforward.calculate(0);
-    }else{
-        output = pid.calculate(getAbsoluteAngle())+feedforward.calculate(desiredposition);
-    }
-    wristMotor1.setVoltage(output*12);
+    SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
+    SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
+    double output = pid.calculate(getAbsoluteAngle());
+  
+    
+    SmartDashboard.putNumber("shoulder output ", -output);
+    wristMotor1.set(-output);
     //wristMotor2.setVoltage(output*12)
   }
 }
