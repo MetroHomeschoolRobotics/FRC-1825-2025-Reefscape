@@ -41,12 +41,13 @@ public class Intake extends SubsystemBase {
     public void setSpeed(double speed) {
       //check inverts
       intakeMotor1.set(speed);
-      intakeMotor2.set(-speed);
+      intakeMotor2.set(speed);
       
     }
   
     public double getDistance() {
         return intakeMotor1.getEncoder().getPosition();
+        
         //I have no idea if we are using this
         
     }

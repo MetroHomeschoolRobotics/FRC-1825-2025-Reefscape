@@ -58,7 +58,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   
-  //private final Intake m_intake = new Intake();
+  private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   
   private final Shoulder m_Shoulder = new Shoulder();
@@ -157,8 +157,8 @@ public class RobotContainer {
     // cancelling on release.
     
 
-   // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
-    //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
+    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake,false));
 
     // m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
     // m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
