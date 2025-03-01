@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
+//invert shoulder motor
 public class Shoulder extends SubsystemBase {
 
   private SparkMax wristMotor1 = new SparkMax(Constants.wristMotorID1, MotorType.kBrushless);
@@ -28,7 +28,7 @@ public class Shoulder extends SubsystemBase {
     // }else if (getAbsoluteAngle() >= -35 && speed>0) {
     //   wristMotor1.set(speed/4);
 
-     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -45 && speed>0)) {
+     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -40 && speed>0)) {
       wristMotor1.set(speed);
       //wristMotor2.set(-speed);
     }else{

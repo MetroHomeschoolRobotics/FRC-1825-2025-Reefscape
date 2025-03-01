@@ -20,8 +20,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final int cancoderID = 0;
 
-  public static final double elevatorGearRatio = 7.75;//62/8
-  public static final double elevatorConversion=(190-71)/10.08;
+  public static final double elevatorGearRatio = 7.75;
+  public static final double elevatorConversion=(207-93.66)/20.16;//elevator max to floor - elevator min to floor / encoder val at max height
 
 
   public final static double distToLimOffset = 4;
@@ -36,14 +36,14 @@ public final class Constants {
 
   public static final double shooterSpeed = 1;
 
-  public static final double elevatorMaxHeight = -190; // highest point on elevator to lowest point on
+  public static final double elevatorMaxHeight = -192; // highest point on elevator to lowest point on
   //elevator in cm
 
   //reef height in cm(rough, plz adjust)
-  public static final double level4Height = -165;
-  public static final double level3Height = -101;
-  public static final double level2Height = -60;
-  public static final double level1Height = -7;
+  public static final double level4Height = -140;//182.88
+  public static final double level3Height = -120;
+  public static final double level2Height = -93.66;
+  public static final double level1Height = -93.66;
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
