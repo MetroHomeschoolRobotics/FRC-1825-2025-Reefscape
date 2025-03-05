@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
 
     public void setSpeed(double speed, double distanceToLimit){
         
-       speed*=1;//scalar TO//DO tune this
+       speed*=1.5;//scalar TO//DO tune this
         if(speed <=0 && desiredposition>= Constants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
             
             desiredposition += speed;
@@ -90,7 +90,7 @@ public class Elevator extends SubsystemBase {
     public void setPID(double setPoint){
         desiredposition = setPoint;
         pid.setSetpoint(desiredposition);
-        System.out.println("Pid set to"+ pid.getSetpoint());
+        
     }
     public boolean atSetpoint(){
         return pid.atSetpoint();
@@ -110,6 +110,10 @@ public class Elevator extends SubsystemBase {
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());
+        }
+        
+        if(output>0.2){
+            output=0.2;
         }
         
         SmartDashboard.putNumber("pid output", output);

@@ -13,6 +13,7 @@ import frc.robot.commands.RunOuttake;
 import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
+import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.ResetElevatorEncoders;
 
 import frc.robot.Constants.OperatorConstants;
@@ -45,7 +46,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -61,7 +62,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   
-  //private final Intake m_intake = new Intake();
+  private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   
   private final ShoulderPID m_Shoulder = new ShoulderPID();
@@ -160,15 +161,17 @@ public class RobotContainer {
     // cancelling on release.
     
 
-   // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
-    //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake,false));
 
-     m_manipulatorController.y().whileTrue(new Score(m_elevator, 4));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator, 3));
-    // m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator, 1));
+     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder, 4));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder, 3));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder, 2));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder, 1));
 
+    m_manipulatorController.povUp().whileTrue(new shoulderToIntake());
     m_manipulatorController.povDown().whileTrue(new ResetElevatorEncoders(m_elevator));
+    m_manipulatorController.leftTrigger().whileTrue(new RunIntake(m_intake,true));
     
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);

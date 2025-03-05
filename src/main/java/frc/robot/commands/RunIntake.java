@@ -21,12 +21,12 @@ public class RunIntake extends Command {
     @Override
     public void execute(){
         if(reversed){
-            intake.setSpeed(-1);
+            intake.setSpeed(0.7);
         }else{
             if(intake.coralInIntake()){
-                intake.setSpeed(0);
+                //intake.setSpeed(0.4);
             }else{
-                intake.setSpeed(1);
+                intake.setSpeed(-0.15);
             }
         }
     }

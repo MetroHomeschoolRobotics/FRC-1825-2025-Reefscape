@@ -24,7 +24,7 @@ public class RunElevator extends Command {
     }
     @Override
     public void initialize() {
-        elevator.resetEncoders();
+        
     }
 
     @Override

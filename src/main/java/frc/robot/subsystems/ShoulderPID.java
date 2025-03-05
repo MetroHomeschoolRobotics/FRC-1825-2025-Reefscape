@@ -15,7 +15,7 @@ public class ShoulderPID extends SubsystemBase {
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
   
-  private PIDController pid = new PIDController(0.008, 0.001, 0);
+  private PIDController pid = new PIDController(0.008, 0, 0);
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
   
@@ -24,7 +24,7 @@ public class ShoulderPID extends SubsystemBase {
   public ShoulderPID() {}
   
   public void incrementPID(double speed) {
-     if ((desiredposition<=8 && speed >0) || (desiredposition >= -35 && speed<0)) {
+     if ((desiredposition<=8 && speed >0) || (desiredposition >= -40 && speed<0)) {
       desiredposition+=speed;
       pid.setSetpoint(desiredposition);
     }
