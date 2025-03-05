@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -79,5 +81,12 @@ public final class Constants {
     public static final int wristMotorID1 = 7;
     public static final int wristMotorID2 = 11;
 
+  }
+
+  public static class FieldSetpoints {
+    public static final Pose2d reefJ = new Pose2d(4.992, 5.253, new Rotation2d(Units.degreesToRadians(-118)));
+    public static final Pose2d reefI = new Pose2d(5.353, 5.019, new Rotation2d(Units.degreesToRadians(120)));
+    public static final Pose2d reefK = new Pose2d(3.978, 5.224, new Rotation2d(Units.degreesToRadians(-118)));
+    public static final Pose2d reefL = new Pose2d(3.715, 5.039, new Rotation2d(Units.degreesToRadians(120)));
   }
 }
