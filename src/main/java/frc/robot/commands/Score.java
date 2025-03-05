@@ -27,24 +27,24 @@ public class Score extends Command {
         //mayhaps, perchance even
         switch (level) {
             case 1:
-                elevator.setPID(Constants.level1Height);
+                elevator.setPID(Constants.fieldConstants.level1Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 2:
                 
-                elevator.setPID(Constants.level2Height);
+                elevator.setPID(Constants.fieldConstants.level2Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 3:
                 
-                elevator.setPID(Constants.level3Height);
+                elevator.setPID(Constants.fieldConstants.level3Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }
             case 4:
-                elevator.setPID(Constants.level4Height);
+                elevator.setPID(Constants.fieldConstants.level4Height);
                 if(elevator.atSetpoint()){
                     intake.setSpeed(Constants.shooterSpeed);
                 }

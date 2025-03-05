@@ -37,50 +37,44 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
- private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity TODO check this
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
+
+  // drive constants
+  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity TODO check this
+
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
-    public final SendableChooser<Command> autoChooser = new SendableChooser<>();
-
-    public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
-
-
-  // The robot's subsystems and commands are defined here...
-  
-  //private final Intake m_intake = new Intake();
-  private final Elevator m_elevator = new Elevator();
-  
-  private final Shoulder m_Shoulder = new Shoulder();
-  
-
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-  private final CommandXboxController driverXbox =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // Controllers
+  private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
+    
+  // The robot's subsystems and commands are defined here
+  //private final Intake m_intake = new Intake();
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  private final Elevator m_elevator = new Elevator();
+  private final Shoulder m_Shoulder = new Shoulder();
 
+  // command initializations
+  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
+  private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
+  
+  // Pose Stuffs
+  private final Telemetry logger = new Telemetry(MaxSpeed);
 
- private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
- private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
+  // Auto Chooser
+  public final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-
     createAutoChooser();
-
-    
     configureBindings();
   }
 
@@ -94,8 +88,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-        
         if(developerMode){
             
             // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
@@ -146,6 +138,8 @@ public class RobotContainer {
             driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         }
         
+        CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
+        CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -167,8 +161,7 @@ public class RobotContainer {
 
    
     
-    CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
-    CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
+    
     
   }
 

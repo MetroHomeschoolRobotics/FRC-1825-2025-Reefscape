@@ -11,10 +11,10 @@ import frc.robot.Constants;
 
 public class Shoulder extends SubsystemBase {
 
-  private SparkMax wristMotor1 = new SparkMax(Constants.wristMotorID1, MotorType.kBrushless);
+  private SparkMax wristMotor1 = new SparkMax(Constants.MotorIDs.wristMotorID1, MotorType.kBrushless);
   
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
-  private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
+  private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   // private DutyCycleEncoder rotationEncoder = new DutyCycleEncoder(3);
 
   /** Creates a new Shoulder. */
