@@ -7,12 +7,15 @@ package frc.robot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
+import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.ResetElevatorEncoders;
 
@@ -64,7 +67,7 @@ public class RobotContainer {
   
   private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
-  
+  private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   
 
@@ -162,16 +165,17 @@ public class RobotContainer {
     
 
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
-    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake,false));
+    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
-     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder, 4));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder, 3));
-    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder, 2));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder, 1));
+     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1));
 
-    m_manipulatorController.povUp().whileTrue(new shoulderToIntake());
+    m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
     m_manipulatorController.povDown().whileTrue(new ResetElevatorEncoders(m_elevator));
-    m_manipulatorController.leftTrigger().whileTrue(new RunIntake(m_intake,true));
+    m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);

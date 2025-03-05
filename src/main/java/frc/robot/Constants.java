@@ -45,7 +45,7 @@ public final class Constants {
   public static final double level2Height = -104;//angle 3.8
   public static final double level1Height = -93.66;
 
-  public static final double level4Angle = 1.5;
+  public static final double level4Angle = 1;
   public static final double level3Angle = 2.9;
   public static final double level2Angle = 3.8;
   

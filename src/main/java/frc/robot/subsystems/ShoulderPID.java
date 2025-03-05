@@ -15,13 +15,15 @@ public class ShoulderPID extends SubsystemBase {
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
   
-  private PIDController pid = new PIDController(0.008, 0, 0);
+  private PIDController pid = new PIDController(0.04, 0, 0);
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
   
 
   /** Creates a new Shoulder. */
-  public ShoulderPID() {}
+  public ShoulderPID() {
+    pid.setTolerance(1);
+  }
   
   public void incrementPID(double speed) {
      if ((desiredposition<=8 && speed >0) || (desiredposition >= -40 && speed<0)) {
@@ -31,12 +33,10 @@ public class ShoulderPID extends SubsystemBase {
 
   }
   public void setPID(double value){
-    if(value>-45 && value<8){
+  
         desiredposition = value;
         pid.setSetpoint(desiredposition);
-    }else{
-        System.out.println("PID Setpoint out of range");
-    }
+      
   }
   public double getAbsoluteAngle() {
     //-141.4 straight up
@@ -49,7 +49,9 @@ public class ShoulderPID extends SubsystemBase {
     return output;
     
   }
-
+  public boolean atSetpoint(){
+    return pid.atSetpoint();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
