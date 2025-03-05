@@ -34,8 +34,8 @@ public class Intake extends SubsystemBase {
     }
   
     public Boolean coralInIntake() {
-      //return beambreak.get();
-      return false;
+      return !beambreak.get();
+      
     }  
   
     public void setSpeed(double speed) {

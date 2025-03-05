@@ -17,9 +17,9 @@ public class RunOuttake extends Command {
     }
     @Override
     public void execute(){
-        if(shooter.coralInIntake()){
-            shooter.setSpeed(Constants.shooterSpeed); 
-        }
+        
+        shooter.setSpeed(Constants.shooterSpeed); 
+        
         
     }
     @Override
@@ -28,6 +28,7 @@ public class RunOuttake extends Command {
     }
     @Override
     public boolean isFinished(){
-        return !shooter.coralInIntake();
+        //return !shooter.coralInIntake();
+        return false;
     }
 }

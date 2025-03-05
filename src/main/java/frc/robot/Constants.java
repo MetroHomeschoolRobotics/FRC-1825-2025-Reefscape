@@ -34,16 +34,20 @@ public final class Constants {
   public static final int wristMotorID2 = 11;
 
 
-  public static final double shooterSpeed = 1;
+  public static final double shooterSpeed = -0.5;
 
-  public static final double elevatorMaxHeight = -192; // highest point on elevator to lowest point on
+  public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on
   //elevator in cm
 
   //reef height in cm(rough, plz adjust)
-  public static final double level4Height = -140;//182.88
-  public static final double level3Height = -120;
-  public static final double level2Height = -93.66;
+  public static final double level4Height = -205;// angle: 1.5
+  public static final double level3Height = -146;//angle 2.9
+  public static final double level2Height = -104;//angle 3.8
   public static final double level1Height = -93.66;
+
+  public static final double level4Angle = 1;
+  public static final double level3Angle = 2.9;
+  public static final double level2Angle = 3.8;
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
