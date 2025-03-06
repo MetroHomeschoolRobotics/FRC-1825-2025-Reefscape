@@ -316,6 +316,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
+        SmartDashboard.putNumber("PoseX", getRobotPose().getX());
+        SmartDashboard.putNumber("PoseY", getRobotPose().getY());
+        SmartDashboard.putNumber("PoseRotation", getRobotPose().getRotation().getDegrees());
 
         //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
     }
@@ -323,7 +326,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
 
-        if(cameraPoseEstimator.isPresent() && cameraPoseEstimator != null && camera.hasTargets() && camera.getPoseAmbiguity() < 0.2) {
+        if(camera.hasTargets() && cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && camera.getBestTarget() != null && camera.getPoseAmbiguity() < 0.2) {
         Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
         addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());

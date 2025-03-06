@@ -26,8 +26,8 @@ public class Elevator extends SubsystemBase {
     //
     private double desiredposition = 0;
     private double highestGetDistance;
-    private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    private SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
     //private DigitalInput beambreak = new DigitalInput(1);
     
@@ -51,7 +51,7 @@ public class Elevator extends SubsystemBase {
     public void setSpeed(double speed, double distanceToLimit){
         
        speed*=1.5;//scalar TO//DO tune this
-        if(speed <=0 && desiredposition>= Constants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
+        if(speed <=0 && desiredposition>= Constants.elevatorConstants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
             
             desiredposition += speed;
             pid.setSetpoint(desiredposition);
@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         //113.44 / 20.16 between
-        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConversion)-93.66;
+        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConstants.elevatorConversion)-93.66;
         
     }
     public double getEncoder(){

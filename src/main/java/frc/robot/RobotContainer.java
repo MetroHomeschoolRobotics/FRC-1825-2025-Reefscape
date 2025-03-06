@@ -125,6 +125,7 @@ public class RobotContainer {
             // reset the field-centric heading on left bumper press
             driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+            driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
             // Sysid buttons
             // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
             // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
@@ -168,8 +169,7 @@ public class RobotContainer {
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
-
-     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
+    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
     m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3));
     m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1));
