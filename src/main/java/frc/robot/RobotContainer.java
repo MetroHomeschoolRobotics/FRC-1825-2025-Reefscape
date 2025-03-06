@@ -6,14 +6,21 @@ package frc.robot;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
-
+import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.RunShoulder;
+import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
+import frc.robot.commands.rundeAlgae;
+import frc.robot.commands.shoulderToIntake;
+import frc.robot.commands.ResetElevatorEncoders;
 
 import frc.robot.Constants.OperatorConstants;
+
 import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -46,24 +53,31 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
+
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-  // Controllers
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+
+  // The robot's subsystems and commands are defined here...
+  
+  private final Intake m_intake = new Intake();
+  private final Elevator m_elevator = new Elevator();
+  private final deAlgae m_deAlgae = new deAlgae();
+  private final ShoulderPID m_Shoulder = new ShoulderPID();
+  
+
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
-    
-  // The robot's subsystems and commands are defined here
-  //private final Intake m_intake = new Intake();
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-  private final Elevator m_elevator = new Elevator();
-  private final Shoulder m_Shoulder = new Shoulder();
-
-  // command initializations
+  
+  // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
-  private final RunShoulder runShoulder = new RunShoulder(m_Shoulder, m_manipulatorController);
+  private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController);
   
   // Pose Stuffs
   private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -151,15 +165,19 @@ public class RobotContainer {
     // cancelling on release.
     
 
-   // m_manipulatorController.rightBumper().whileTrue(new RunIntake(m_intake,true));
-    //m_manipulatorController.leftBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
-    // m_manipulatorController.y().whileTrue(new Score(m_elevator, m_intake, 4));
-    // m_manipulatorController.x().whileTrue(new Score(m_elevator, m_intake, 3));
-    // m_manipulatorController.b().whileTrue(new Score(m_elevator, m_intake, 2));
-    // m_manipulatorController.a().whileTrue(new Score(m_elevator, m_intake, 1));
 
-   
+     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1));
+
+    m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
+    m_manipulatorController.povDown().whileTrue(new ResetElevatorEncoders(m_elevator));
+    m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
     
     
@@ -172,7 +190,8 @@ public class RobotContainer {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    m_elevator.setPID(-71);
+    m_elevator.setPID(-93.66);
+    m_Shoulder.setPID(0);
   }
 
     private void createAutoChooser() {

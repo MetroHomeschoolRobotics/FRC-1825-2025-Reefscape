@@ -10,17 +10,16 @@ import frc.robot.subsystems.Elevator;
 
 
 
-public class RunElevator extends Command {
+public class ResetElevatorEncoders extends Command {
 
-    private CommandXboxController xboxController;
     private Elevator elevator;
 
 
-    public RunElevator(Elevator _elevator,CommandXboxController _xboxController){
+    public ResetElevatorEncoders(Elevator _elevator){
         addRequirements(_elevator);
 
         elevator = _elevator;
-        xboxController = _xboxController;
+        
     }
     @Override
     public void initialize() {
@@ -29,12 +28,8 @@ public class RunElevator extends Command {
 
     @Override
     public void execute(){
+        elevator.resetEncoders();
         
-        double distToLim = (-Constants.elevatorConstants.elevatorMaxHeight)-elevator.getDistance();
-        //double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
-        elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
-        
-        //SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }
 
     @Override

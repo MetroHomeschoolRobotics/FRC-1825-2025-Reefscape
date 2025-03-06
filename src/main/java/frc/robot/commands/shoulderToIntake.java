@@ -1,20 +1,31 @@
 package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
 
-public class RunShoulderPID extends Command {
-    private ShoulderPID shoulder;
-  private CommandXboxController xboxcontroller;
+public class shoulderToIntake extends Command {
+
+
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+
+
+  private ShoulderPID shoulder;
+  private Elevator elevator;
   
   /** Creates a new RunShoulder. */
-  public RunShoulderPID(ShoulderPID _shoulder, CommandXboxController _xboxController) {
+  public shoulderToIntake(ShoulderPID _shoulder,Elevator _elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_shoulder);
+    addRequirements(_elevator);
 
     shoulder = _shoulder;
-    xboxcontroller = _xboxController;
+    elevator = _elevator;
   }
 
   // Called when the command is initially scheduled.
@@ -25,8 +36,8 @@ public class RunShoulderPID extends Command {
   @Override
   public void execute() {
     // TO/DO: Make it so that it doesn't go outside of starting perimeter
-    
-    shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+    elevator.setPID(-93.66);
+    shoulder.setPID(-33);
   }
 
   // Called once the command ends or is interrupted.
@@ -39,3 +50,5 @@ public class RunShoulderPID extends Command {
     return false;
   }
 }
+
+

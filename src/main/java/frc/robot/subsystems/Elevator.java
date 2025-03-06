@@ -21,13 +21,13 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.004, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.1, 0);
+    private PIDController pid = new PIDController(.008, 0, 0);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
     //
     private double desiredposition = 0;
-
-    private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
+    private double highestGetDistance;
+    private SparkMax elevatorMotor1 = new SparkMax(Constants.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax elevatorMotor2 = new SparkMax(Constants.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
     //private DigitalInput beambreak = new DigitalInput(1);
     
@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     public Elevator(){
         
         resetEncoders();
-        
+        pid.setTolerance(3);
         //mayhaps idk, if it doesnt work make the  motor1 speeds negative in periodic()
         //elevatorMotor1.configure(
           //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -50,13 +50,13 @@ public class Elevator extends SubsystemBase {
 
     public void setSpeed(double speed, double distanceToLimit){
         
-       speed*=1;//scalar TO//DO tune this
-        if(speed <=0 && desiredposition>= Constants.elevatorConstants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
+       speed*=1.5;//scalar TO//DO tune this
+        if(speed <=0 && desiredposition>= Constants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
             
             desiredposition += speed;
             pid.setSetpoint(desiredposition);
             
-        } else if(speed>=0 && desiredposition <0  ){//!beambreak.get()
+        } else if(speed>=0 && desiredposition <-93.66  ){//!beambreak.get()
             
              desiredposition += speed;
              pid.setSetpoint(desiredposition);
@@ -70,9 +70,12 @@ public class Elevator extends SubsystemBase {
     }
 
     public double getDistance(){
+        //113.44 / 20.16 between
+        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConversion)-93.66;
         
-        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConstants.elevatorConversion)-71;
-        
+    }
+    public double getEncoder(){
+        return elevatorMotor1.getEncoder().getPosition();
     }
     public void resetEncoders(){
         
@@ -87,6 +90,7 @@ public class Elevator extends SubsystemBase {
     public void setPID(double setPoint){
         desiredposition = setPoint;
         pid.setSetpoint(desiredposition);
+        
     }
     public boolean atSetpoint(){
         return pid.atSetpoint();
@@ -95,11 +99,21 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("desiredPos", desiredposition);
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
+        SmartDashboard.putNumber("encoderValue", getEncoder());
+
+        if(getDistance()<highestGetDistance){
+            highestGetDistance = getDistance();
+        }
+        SmartDashboard.putNumber("highestGetDistance", highestGetDistance);
         double output;
-        if(getDistance()<-76){
+        if(getDistance()<-98.66){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());
+        }
+        
+        if(output>0.2){
+            output=0.2;
         }
         
         SmartDashboard.putNumber("pid output", output);
