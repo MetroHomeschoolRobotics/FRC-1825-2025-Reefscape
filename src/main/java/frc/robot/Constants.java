@@ -23,13 +23,27 @@ public final class Constants {
 
   public final static double distToLimOffset = 4;
 
-  public static final double shooterSpeed = 1;
+
+  public static final int intakeDeviceID1 = 12;
+  public static final int intakeDeviceID2 = 13;
+  public static final int elevatorDeviceID1 = 10;
+  public static final int elevatorDeviceID2 = 9;
+  public static final int wristMotorID1 = 7;
+  public static final int wristMotorID2 = 11;
+  public static final int deAlgaeMotorId = 14;
+  public static final int climberMotorId = 15;
+
+  public static final double shooterSpeed = -0.5;
+
 
   public static class elevatorConstants {
     public static final double elevatorGearRatio = 7.75;//62/8
     public static final double elevatorConversion=(207-93.66)/20.16;//elevator max to floor - elevator min to floor / encoder val at max height
     public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on elevator in cm
   }
+
+
+
   
   
   public static class fieldConstants {

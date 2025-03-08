@@ -28,7 +28,7 @@ public class Shoulder extends SubsystemBase {
     // }else if (getAbsoluteAngle() >= -35 && speed>0) {
     //   wristMotor1.set(speed/4);
 
-     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -40 && speed>0)) {
+     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -50 && speed>0)) {
       wristMotor1.set(speed);
       //wristMotor2.set(-speed);
     }else{
