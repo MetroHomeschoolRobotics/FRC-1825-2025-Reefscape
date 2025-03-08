@@ -25,8 +25,12 @@ public class RunShoulderPID extends Command {
   @Override
   public void execute() {
     // TO/DO: Make it so that it doesn't go outside of starting perimeter
+    if(shoulder.getClimb() == true){
+      shoulder.runDirectly(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+    }else{
+      shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+    }
     
-    shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
   }
 
   // Called once the command ends or is interrupted.

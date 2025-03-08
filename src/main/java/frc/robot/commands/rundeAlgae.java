@@ -5,10 +5,12 @@ import frc.robot.subsystems.deAlgae;
 
 public class rundeAlgae extends Command {
     private deAlgae deAlgae;
+    
     public rundeAlgae(deAlgae _deAlgae){
         addRequirements(_deAlgae);
         deAlgae = _deAlgae;
     }
+    public void initialize(){}
     public void execute(){
         deAlgae.runDeAlgae();
     }

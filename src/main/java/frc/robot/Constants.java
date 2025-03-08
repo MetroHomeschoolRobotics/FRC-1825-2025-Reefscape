@@ -32,7 +32,8 @@ public final class Constants {
   public static final int elevatorDeviceID2 = 9;
   public static final int wristMotorID1 = 7;
   public static final int wristMotorID2 = 11;
-
+  public static final int deAlgaeMotorId = 14;
+  public static final int climberMotorId = 15;
 
   public static final double shooterSpeed = -0.5;
 
@@ -42,7 +43,7 @@ public final class Constants {
   //reef height in cm(rough, plz adjust)
   public static final double level4Height = -205;// angle: 1.5
   public static final double level3Height = -146;//angle 2.9
-  public static final double level2Height = -104;//angle 3.8
+  public static final double level2Height = -107;//angle 3.8
   public static final double level1Height = -93.66;
 
   public static final double level4Angle = 1;

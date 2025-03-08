@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     public Elevator(){
         
         resetEncoders();
-        pid.setTolerance(3);
+        pid.setTolerance(20);
         //mayhaps idk, if it doesnt work make the  motor1 speeds negative in periodic()
         //elevatorMotor1.configure(
           //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -100,6 +100,7 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
         SmartDashboard.putNumber("encoderValue", getEncoder());
+        SmartDashboard.putBoolean("atSetpoint", atSetpoint());
 
         if(getDistance()<highestGetDistance){
             highestGetDistance = getDistance();

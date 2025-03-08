@@ -31,25 +31,30 @@ public class Score extends Command {
         if(level==1){
             elevator.setPID(Constants.level1Height);
         }else if(level==2){
+            
             elevator.setPID(Constants.level2Height);
-            shoulder.setPID(Constants.level2Angle);
+            shoulder.setPID(-5);
+            if(elevator.atSetpoint()){
+                shoulder.setPID(Constants.level2Angle);
+            }
+            
         }else if(level==3){
             //System.out.println("level 3");
             elevator.setPID(Constants.level3Height);
-            
-            shoulder.setPID(Constants.level3Angle);
-            if(elevator.atSetpoint()&& shoulder.atSetpoint()){
-                intake.setSpeed(Constants.shooterSpeed);
+            shoulder.setPID(-5);
+            if(elevator.atSetpoint()){
+                shoulder.setPID(Constants.level3Angle);
             }
+           
         
             
         }else if(level==4){
             elevator.setPID(Constants.level4Height);
-            shoulder.setPID(Constants.level4Angle);
+            shoulder.setPID(-5);
             if(elevator.atSetpoint()){
-                intake.setSpeed(Constants.shooterSpeed);
-                
+                shoulder.setPID(Constants.level4Angle);
             }
+            
         }
             
         }
@@ -62,7 +67,7 @@ public class Score extends Command {
     @Override
     public boolean isFinished(){
        // return !intake.coralInIntake();
-        return elevator.atSetpoint();
+        return false;
 
     }
     @Override
