@@ -129,7 +129,7 @@ public class RobotContainer {
             // reset the field-centric heading on left bumper press
             driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-            driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
+            driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
             // Sysid buttons
             // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
             // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
@@ -211,6 +211,8 @@ public class RobotContainer {
         autoChooser.addOption("straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
         autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
         autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
+        autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto"));
+        autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
