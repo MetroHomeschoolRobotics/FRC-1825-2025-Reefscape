@@ -23,7 +23,9 @@ public class Score extends Command {
         level = _level;
     }
     @Override
-    public void initialize(){}
+    public void initialize(){
+        shoulder.setPID(-5);
+    }
 
     @Override
     public void execute(){
@@ -31,25 +33,41 @@ public class Score extends Command {
         if(level==1){
             elevator.setPID(Constants.fieldConstants.level1Height);
         }else if(level==2){
-            elevator.setPID(Constants.fieldConstants.level2Height);
-            shoulder.setPID(Constants.fieldConstants.level2Angle);
+            
+            
+            
+            if(shoulder.atSetpoint()){
+                elevator.setPID(Constants.fieldConstants.level2Height);
+                if(elevator.atSetpoint()){
+                    shoulder.setPID(Constants.fieldConstants.level2Angle);
+                }
+            }
+            
+            
         }else if(level==3){
             //System.out.println("level 3");
-            elevator.setPID(Constants.fieldConstants.level3Height);
             
-            shoulder.setPID(Constants.fieldConstants.level3Angle);
-            if(elevator.atSetpoint()&& shoulder.atSetpoint()){
-                intake.setSpeed(Constants.shooterSpeed);
+            
+            if(shoulder.atSetpoint()){
+                elevator.setPID(Constants.fieldConstants.level3Height);
+                if(elevator.atSetpoint()){
+                    shoulder.setPID(Constants.fieldConstants.level3Angle);
+                }
             }
+            
+           
         
             
         }else if(level==4){
-            elevator.setPID(Constants.fieldConstants.level4Height);
-            shoulder.setPID(Constants.fieldConstants.level4Angle);
-            if(elevator.atSetpoint()){
-                intake.setSpeed(Constants.shooterSpeed);
-                
+            
+            if(shoulder.atSetpoint()){
+                elevator.setPID(Constants.fieldConstants.level4Height);
+                if(elevator.atSetpoint()){
+                    shoulder.setPID(Constants.fieldConstants.level4Angle);
+                }
             }
+            
+            
         }
             
         }
@@ -62,7 +80,7 @@ public class Score extends Command {
     @Override
     public boolean isFinished(){
        // return !intake.coralInIntake();
-        return elevator.atSetpoint();
+        return false;
 
     }
     @Override

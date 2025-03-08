@@ -7,18 +7,21 @@ package frc.robot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.climber;
 import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
+import frc.robot.commands.RunOuttakeSideways;
 import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
+import frc.robot.commands.testClimberPID;
 import frc.robot.commands.ResetElevatorEncoders;
-
+import frc.robot.commands.RunClimb;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.RunElevator;
@@ -38,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
@@ -68,7 +72,7 @@ public class RobotContainer {
   private final Elevator m_elevator = new Elevator();
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
-  
+  private final climber m_climber = new climber();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -175,7 +179,9 @@ public class RobotContainer {
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1));
 
     m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
-    m_manipulatorController.povDown().whileTrue(new ResetElevatorEncoders(m_elevator));
+    m_manipulatorController.povDown().whileTrue(new RunClimb(m_climber, m_Shoulder));
+    m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
+    m_manipulatorController.povRight().whileTrue(new RunOuttakeSideways(m_intake));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
@@ -190,8 +196,10 @@ public class RobotContainer {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
+    m_climber.resetEncoders();
+    m_climber.openClimber();
     m_elevator.setPID(-93.66);
-    m_Shoulder.setPID(0);
+    m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }
 
     private void createAutoChooser() {
