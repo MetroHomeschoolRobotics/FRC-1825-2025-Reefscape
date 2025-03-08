@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     public Elevator(){
         
         resetEncoders();
-        pid.setTolerance(20);
+        pid.setTolerance(35);
         //mayhaps idk, if it doesnt work make the  motor1 speeds negative in periodic()
         //elevatorMotor1.configure(
           //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
