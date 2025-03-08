@@ -169,6 +169,7 @@ public class RobotContainer {
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
+
      m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
     m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3));
     m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));
