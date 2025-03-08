@@ -29,30 +29,30 @@ public class Score extends Command {
     public void execute(){
         //mayhaps, perchance even
         if(level==1){
-            elevator.setPID(Constants.level1Height);
+            elevator.setPID(Constants.fieldConstants.level1Height);
         }else if(level==2){
             
-            elevator.setPID(Constants.level2Height);
+            elevator.setPID(Constants.fieldConstants.level2Height);
             shoulder.setPID(-5);
             if(elevator.atSetpoint()){
-                shoulder.setPID(Constants.level2Angle);
+                shoulder.setPID(Constants.fieldConstants.level2Angle);
             }
             
         }else if(level==3){
             //System.out.println("level 3");
-            elevator.setPID(Constants.level3Height);
+            elevator.setPID(Constants.fieldConstants.level3Height);
             shoulder.setPID(-5);
             if(elevator.atSetpoint()){
-                shoulder.setPID(Constants.level3Angle);
+                shoulder.setPID(Constants.fieldConstants.level3Angle);
             }
            
         
             
         }else if(level==4){
-            elevator.setPID(Constants.level4Height);
+            elevator.setPID(Constants.fieldConstants.level4Height);
             shoulder.setPID(-5);
             if(elevator.atSetpoint()){
-                shoulder.setPID(Constants.level4Angle);
+                shoulder.setPID(Constants.fieldConstants.level4Angle);
             }
             
         }

@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShoulderPID extends SubsystemBase {
-    private SparkMax wristMotor1 = new SparkMax(Constants.wristMotorID1, MotorType.kBrushless);
+
+    private SparkMax wristMotor1 = new SparkMax(Constants.MotorIDs.wristMotorID1, MotorType.kBrushless);
     private boolean isClimbing = false;
+
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
-  private CANcoder rotationCANcoder = new CANcoder(Constants.cancoderID);
+  private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   
   private PIDController pid = new PIDController(0.04, 0, 0);
   

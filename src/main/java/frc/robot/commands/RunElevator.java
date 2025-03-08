@@ -30,7 +30,7 @@ public class RunElevator extends Command {
     @Override
     public void execute(){
         
-        double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
+        double distToLim = (-Constants.elevatorConstants.elevatorMaxHeight)-elevator.getDistance();
         //double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
         elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         

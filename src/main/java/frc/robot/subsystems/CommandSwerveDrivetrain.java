@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +27,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -276,6 +278,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return field;
     }
 
+    public Command driveToPose(Pose2d TargetPose, double maxPathSpeed, double maxPathAccel, double maxAngularSpeed, double maxAngularAccel) {
+        PathConstraints constraints = new PathConstraints(
+                maxPathSpeed, maxPathAccel, 
+                Units.degreesToRadians(maxAngularSpeed), 
+                Units.degreesToRadians(maxAngularAccel));
+
+        return AutoBuilder.pathfindToPose(TargetPose, constraints, 0);
+    }
+
     @Override
     public void periodic() {
 
@@ -305,6 +316,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
+        SmartDashboard.putNumber("PoseX", getRobotPose().getX());
+        SmartDashboard.putNumber("PoseY", getRobotPose().getY());
+        SmartDashboard.putNumber("PoseRotation", getRobotPose().getRotation().getDegrees());
 
         //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
     }
@@ -312,7 +326,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
 
-        if(cameraPoseEstimator.isPresent() && cameraPoseEstimator != null && camera.hasTargets() && camera.getPoseAmbiguity() < 0.2) {
+        if(camera.hasTargets() && cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && camera.getBestTarget() != null && camera.getPoseAmbiguity() < 0.2) {
         Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
         addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());

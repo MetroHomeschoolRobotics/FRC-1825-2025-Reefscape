@@ -15,8 +15,8 @@ import com.revrobotics.spark.SparkLowLevel;
 
 public class Intake extends SubsystemBase {
     
-    private SparkMax intakeMotor1 = new SparkMax(Constants.intakeDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    private SparkMax intakeMotor2 = new SparkMax(Constants.intakeDeviceID2, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax intakeMotor1 = new SparkMax(Constants.MotorIDs.intakeDeviceID1, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax intakeMotor2 = new SparkMax(Constants.MotorIDs.intakeDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(0);
    
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
