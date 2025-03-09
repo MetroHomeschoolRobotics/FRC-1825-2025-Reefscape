@@ -106,68 +106,61 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-        if(developerMode){
+    if(developerMode){
             
-            // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
-            // and Y is defined as to the left according to WPILib convention.
-            drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
-                                                    .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
-                                                    .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
-                )
-            );
+        // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
+        // and Y is defined as to the left according to WPILib convention.
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
+                                                .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
+                                                .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
 
-            // // Puts the wheels in an x
-            driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // Puts the wheels in an x
+        driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
 
-            // points the wheels without driving
-            driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-                point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
-            ));
+        // points the wheels without driving
+        driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
+        ));
 
-            // reset the field-centric heading on left bumper press
-            driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        // reset the field-centric heading on left bumper press
+        driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-            driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
-            // Sysid buttons
-            // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-            // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-            // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-            // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
+        // Sysid buttons
+        // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
+        // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
 
-            // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
-            // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
+    } else {
+        // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
+        // and Y is defined as to the left according to WPILib convention.
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() -> drive.withVelocityX(-driverXbox.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                                                .withVelocityY(-driverXbox.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                                                .withRotationalRate(-driverXbox.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
 
-        } else {
-            // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
-            // and Y is defined as to the left according to WPILib convention.
-            drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driverXbox.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                                                    .withVelocityY(-driverXbox.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                                                    .withRotationalRate(-driverXbox.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-                )
-            );
+        // Puts the wheels in an x
+        driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
 
-            // Puts the wheels in an x
-            driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
-
-            // reset the field-centric heading on left bumper press
-            driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        }
+        // reset the field-centric heading on left bumper press
+        driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    }
         
-        CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
-        CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
+    CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
+    CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
-        drivetrain.registerTelemetry(logger::telemeterize);
-
-
-    //m_elevator.setDefaultCommand(new RunElevator(m_elevator,m_manipulatorController));
-
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    driverXbox.povLeft().whileTrue(drivetrain.driveToLeftBranch());
+    driverXbox.povRight().whileTrue(drivetrain.driveToRightBranch());
     
 
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
@@ -185,7 +178,7 @@ public class RobotContainer {
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
-    
+    drivetrain.registerTelemetry(logger::telemeterize);
     
   }
 

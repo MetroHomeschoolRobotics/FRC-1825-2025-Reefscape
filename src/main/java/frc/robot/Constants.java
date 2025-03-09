@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 
@@ -22,16 +25,6 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public final static double distToLimOffset = 4;
-
-
-  public static final int intakeDeviceID1 = 12;
-  public static final int intakeDeviceID2 = 13;
-  public static final int elevatorDeviceID1 = 10;
-  public static final int elevatorDeviceID2 = 9;
-  public static final int wristMotorID1 = 7;
-  public static final int wristMotorID2 = 11;
-  public static final int deAlgaeMotorId = 14;
-  public static final int climberMotorId = 15;
 
   public static final double shooterSpeed = -0.5;
 
@@ -86,7 +79,7 @@ public final class Constants {
   
   public static class MotorIDs {
     public static final int cancoderID = 0; // shoulder cancoder
-  
+
     public static final int intakeDeviceID1 = 12;
     public static final int intakeDeviceID2 = 13;
 
@@ -96,9 +89,15 @@ public final class Constants {
     public static final int wristMotorID1 = 7;
     public static final int wristMotorID2 = 11;
 
+    public static final int deAlgaeMotorId = 14;
+    public static final int climberMotorId = 15;
+
   }
 
   public static class FieldSetpoints {
+
+    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
     public static class BlueAlliance {
       public static final Pose2d reefA = new Pose2d(3.3004125, 4.273064708, new Rotation2d(Units.degreesToRadians(0)));
       public static final Pose2d reefB = new Pose2d(3.3004125, 3.94378975, new Rotation2d(Units.degreesToRadians(0)));
@@ -117,9 +116,8 @@ public final class Constants {
       
       public static final Pose2d reefK = new Pose2d(4.06204268, 5.262992979, new Rotation2d(Units.degreesToRadians(-60)));
       public static final Pose2d reefL = new Pose2d(3.776892903, 5.098361685, new Rotation2d(Units.degreesToRadians(-60)));
-
-
     }
+    
     public static class RedAlliance{
       public static final Pose2d reefA = new Pose2d(14.282, 3.867, new Rotation2d(Units.degreesToRadians(180)));
       public static final Pose2d reefB = new Pose2d(14.282, 3.867, new Rotation2d(Units.degreesToRadians(180)));
@@ -138,9 +136,37 @@ public final class Constants {
 
       public static final Pose2d reefK = new Pose2d(13.58461296, 2.953850125, new Rotation2d(Units.degreesToRadians(120)));
       public static final Pose2d reefL = new Pose2d(13.86976472, 3.118482587, new Rotation2d(Units.degreesToRadians(120)));
-
-
     }
     
+    public static final Pose2d[] rightReefBranches = {
+      BlueAlliance.reefB, 
+      BlueAlliance.reefD, 
+      BlueAlliance.reefF, 
+      BlueAlliance.reefH, 
+      BlueAlliance.reefJ, 
+      BlueAlliance.reefL,
+      RedAlliance.reefB, 
+      RedAlliance.reefD, 
+      RedAlliance.reefF, 
+      RedAlliance.reefH, 
+      RedAlliance.reefJ, 
+      RedAlliance.reefL
+    };
+
+    public static final Pose2d[] leftReefBranches = {
+      BlueAlliance.reefA,
+      BlueAlliance.reefC,
+      BlueAlliance.reefE,
+      BlueAlliance.reefG,
+      BlueAlliance.reefI,
+      BlueAlliance.reefK,
+      RedAlliance.reefA,
+      RedAlliance.reefC,
+      RedAlliance.reefE,
+      RedAlliance.reefG,
+      RedAlliance.reefI,
+      RedAlliance.reefK,
+    };
+
   }
 }
