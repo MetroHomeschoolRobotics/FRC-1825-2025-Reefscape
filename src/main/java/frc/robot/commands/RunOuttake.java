@@ -28,7 +28,7 @@ public class RunOuttake extends Command {
     }
     @Override
     public boolean isFinished(){
-        //return !shooter.coralInIntake();
-        return false;
+        return !shooter.coralInIntake();
+        //return false;
     }
 }

@@ -17,7 +17,8 @@ import frc.robot.commands.RunOuttakeSideways;
 import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
-import frc.robot.commands.rundeAlgae;
+import frc.robot.commands.SetShoulderAngle;
+import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.ResetElevatorEncoders;
@@ -119,17 +120,18 @@ public class RobotContainer {
         );
 
         // Puts the wheels in an x
-        driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // points the wheels without driving
-        driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
-        ));
+        // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
+        // ));
 
         // reset the field-centric heading on left bumper press
-        driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driverXbox.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
+        //driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
+
         // Sysid buttons
         // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
@@ -166,14 +168,16 @@ public class RobotContainer {
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
-    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3));
-    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1));
+    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4)); //.andThen(new RunOuttake(m_intake)).andThen(new SetShoulderAngle(m_Shoulder, -10)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3)); //.andThen(new RunOuttake(m_intake)).andThen(new SetShoulderAngle(m_Shoulder, -10)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));//.andThen(new RunOuttake(m_intake)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1)); //.andThen(new RunOuttakeSideways(m_intake)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
 
-    m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
+    m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
+
     m_manipulatorController.povDown().whileTrue(new RunClimb(m_climber, m_Shoulder));
     m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
+    
     m_manipulatorController.povRight().whileTrue(new RunOuttakeSideways(m_intake));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
@@ -197,11 +201,16 @@ public class RobotContainer {
 
     private void createAutoChooser() {
         // Create the named commands
-        //NamedCommands.registerCommand("CommandNameHere", RandomCommandFunction());
+        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, 1));
+        NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
+        NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
+        NamedCommands.registerCommand("Intake", new RunIntake(m_intake));
+        NamedCommands.registerCommand("ShoulderBackABit", new SetShoulderAngle(m_Shoulder, -5));
+        NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-        autoChooser.addOption("straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
+        autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
         autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
         autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto"));

@@ -5,9 +5,53 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right To F"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right To F"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderAngleToL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Outtake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderBackABit"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              }
+            ]
           }
         },
         {
@@ -17,9 +61,59 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "RightLoad To E"
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightLoad To E"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderAngleToL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Outtake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderBackABit"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              }
+            ]
           }
         },
         {
@@ -29,9 +123,59 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "RightLoad To D"
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightLoad To D"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderAngleToL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Outtake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderBackABit"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,9 +185,59 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "RightLoad To C"
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightLoad To C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderAngleToL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Outtake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderBackABit"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              }
+            ]
           }
         }
       ]

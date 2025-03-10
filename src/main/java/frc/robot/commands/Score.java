@@ -80,7 +80,8 @@ public class Score extends Command {
     @Override
     public boolean isFinished(){
        // return !intake.coralInIntake();
-        return false;
+       return shoulder.atSetpoint() && elevator.atSetpoint();
+        //return false;
 
     }
     @Override
