@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldSetpoints;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -70,6 +71,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
     private final Vision FrontCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+
+    private int[] reefApriltagIDs = {6, 7, 8, 9, 10,11,  // red
+                                     17,18,19,20,21,22   // blue
+                                    };
 
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
@@ -278,6 +283,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return field;
     }
 
+    /** This Command uses the Pathplanner Auto builder to generate a path to a pose on the fly.
+     * 
+     * @param TargetPose
+     * @param maxPathSpeed
+     * @param maxPathAccel
+     * @param maxAngularSpeed
+     * @param maxAngularAccel
+     * @return A command to pathfind to a pose
+     */
     public Command driveToPose(Pose2d TargetPose, double maxPathSpeed, double maxPathAccel, double maxAngularSpeed, double maxAngularAccel) {
         PathConstraints constraints = new PathConstraints(
                 maxPathSpeed, maxPathAccel, 
@@ -285,6 +299,73 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 Units.degreesToRadians(maxAngularAccel));
 
         return AutoBuilder.pathfindToPose(TargetPose, constraints, 0);
+    }
+
+    /**
+     * This command calculates the distance between each of the leftmost reef branches and 
+     * drives to the closest one.
+     * @return driveToPose command
+     */
+    public Command driveToLeftBranch() {
+
+        Pose2d closestBranch = FieldSetpoints.leftReefBranches[0];
+
+        Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
+        // find the closest reef branch
+        for(Pose2d branches : leftBranches) {
+
+            double apriltag1Dist = distanceToPose(closestBranch);
+            double apriltag2Dist = distanceToPose(branches);
+      
+            if(apriltag1Dist > apriltag2Dist) {
+              closestBranch = branches;
+            }
+          }
+      
+          return driveToPose(closestBranch, 2, 2,180,360);
+
+    }
+
+    /**
+     * This command calculates the distance between each of the rightmost reef branches and 
+     * drives to the closest one.
+     * @return driveToPose command
+     */
+    public Command driveToRightBranch() {
+        Pose2d closestBranch = FieldSetpoints.rightReefBranches[0];
+
+        Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
+
+        // find the closest branch
+        for(Pose2d branches : rightBranches) {
+
+            double apriltag1Dist = distanceToPose(closestBranch);
+            double apriltag2Dist = distanceToPose(branches);
+      
+            if(apriltag1Dist > apriltag2Dist) {
+              closestBranch = branches;
+            }
+          }
+      
+          return driveToPose(closestBranch, 2, 2,180,360);
+    }
+
+    /**
+     * This Command uses the distance formula to get the distance from the robot's pose to another pose.
+     * We will be using this to determine which reef section we are closest too.
+     * @param pose
+     * @return the distance between the robot's pose and the apriltag's pose
+     */
+    public double distanceToPose(Pose2d pose) {
+
+        // difference in x and y
+        double XDir = pose.getX() - getRobotPose().getX();
+        double yDir = pose.getY() - getRobotPose().getY();
+
+        // This uses the distance formula to get the distance
+        double distance = Math.sqrt(Math.pow(XDir, 2) + Math.pow(yDir, 2)); 
+
+        return distance;
     }
 
     @Override

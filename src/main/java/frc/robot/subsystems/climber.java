@@ -10,7 +10,7 @@ import frc.robot.Constants;
 
 public class climber extends SubsystemBase {
     private PIDController pid = new PIDController(0.05, 0, 0);
-    private SparkMax climber = new SparkMax(Constants.climberMotorId, SparkLowLevel.MotorType.kBrushless);
+    private SparkMax climber = new SparkMax(Constants.MotorIDs.climberMotorId, SparkLowLevel.MotorType.kBrushless);
     public climber(){
         pid.setTolerance(0.5);
         pid.setSetpoint(0);

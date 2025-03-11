@@ -24,7 +24,7 @@ public class RunIntake extends Command {
             if(intake.coralInIntake()){
                 //intake.setSpeed(0.4);
             }else{
-                intake.setSpeed(-0.15);
+                intake.setSpeed(-0.1);
             }
         }
     
