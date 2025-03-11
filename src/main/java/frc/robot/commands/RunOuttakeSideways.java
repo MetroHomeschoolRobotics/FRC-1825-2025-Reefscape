@@ -18,7 +18,7 @@ public class RunOuttakeSideways extends Command {
     @Override
     public void execute(){
         
-        shooter.setSpeedSideways(Constants.shooterSpeed); 
+        shooter.setSpeedSideways(-0.15); 
         
         
     }

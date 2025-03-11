@@ -25,7 +25,7 @@ public class ShoulderPID extends SubsystemBase {
 
   /** Creates a new Shoulder. */
   public ShoulderPID() {
-    pid.setTolerance(1);
+    pid.setTolerance(0.75);
     setClimb(false);
   }
   
@@ -50,6 +50,9 @@ public class ShoulderPID extends SubsystemBase {
         desiredposition = value;
         pid.setSetpoint(desiredposition);
       
+  }
+  public double getSetpoint(){
+    return pid.getSetpoint();
   }
   public double getAbsoluteAngle() {
     //-141.4 straight up
