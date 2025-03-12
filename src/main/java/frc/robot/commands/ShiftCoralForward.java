@@ -3,12 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class RunIntakeBackwards extends Command {
+public class ShiftCoralForward extends Command {
 
     private Intake intake;
     
 
-    public RunIntakeBackwards(Intake _intake){
+    public ShiftCoralForward(Intake _intake){
         addRequirements(_intake);
         
         intake = _intake;
@@ -21,7 +21,7 @@ public class RunIntakeBackwards extends Command {
     @Override
     public void execute(){
         
-            intake.setSpeed(0.3);
+            intake.setSpeed(-0.1);
     
     }
     @Override
