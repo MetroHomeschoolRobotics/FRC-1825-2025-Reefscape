@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.pathplanner.lib.events.TriggerEvent;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,7 +24,7 @@ public class DriveToBranch extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private String LeftOrRightBranch;
 
-  private Pose2d closestBranch = FieldSetpoints.leftReefBranches[6];
+  private Pose2d closestBranch = new Pose2d(1000, 1000, new Rotation2d());
 
   private Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
   private Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
@@ -49,25 +50,21 @@ public class DriveToBranch extends Command {
         if(apriltag1Dist > apriltag2Dist) {
           closestBranch = branches;
         }
-      }
+      }      
+    }
 
-      if(LeftOrRightBranch == "R") {
-        // find the closest left reef branch
+    if(LeftOrRightBranch == "R") {
+        // find the closest right reef branch
         for(Pose2d branches : rightBranches) {
           double apriltag1Dist = drivetrain.distanceToPose(closestBranch);
           double apriltag2Dist = drivetrain.distanceToPose(branches);
-  
           if(apriltag1Dist > apriltag2Dist) {
             closestBranch = branches;
           }
         }
-      }
-
-      
-      drivetrain.driveToPose(closestBranch, 2, 2,180,360).schedule();
     }
     
-
+    drivetrain.driveToPose(closestBranch, 2, 2,180,360).schedule();
 
   }
 
