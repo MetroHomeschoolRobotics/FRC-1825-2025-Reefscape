@@ -25,13 +25,23 @@ public class Score extends Command {
     @Override
     public void initialize(){
         shoulder.setPID(-5);
+        if(level == 4 || level == 3){
+            shoulder.setPID(-8);
+        }
     }
 
     @Override
     public void execute(){
         //mayhaps, perchance even
         if(level==1){
-            elevator.setPID(Constants.fieldConstants.level1Height);
+            if(shoulder.atSetpoint()){
+                elevator.setPID(Constants.fieldConstants.level1Height);
+                if(elevator.atSetpoint()){
+                    shoulder.setPID(Constants.fieldConstants.level1Angle);
+                }
+            }
+            
+
         }else if(level==2){
             
             
@@ -80,15 +90,15 @@ public class Score extends Command {
     @Override
     public boolean isFinished(){
        // return !intake.coralInIntake();
-       return shoulder.atSetpoint() && elevator.atSetpoint();
         //return false;
-
+        if(shoulder.getSetpoint() != -5 && shoulder.getSetpoint() != -8){
+            return (elevator.atSetpoint() && shoulder.atSetpoint());
+        }
+        return false;
     }
     @Override
     public void end(boolean interrupted){
-        intake.setSpeed(0);
-        //elevator.setSpeed(0,2);
-        //System.out.println("all done");
+        
     }
 
 }

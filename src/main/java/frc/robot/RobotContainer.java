@@ -22,12 +22,20 @@ import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.ResetElevatorEncoders;
+import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.RunElevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import static edu.wpi.first.units.Units.*;
+
+import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -77,6 +85,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
+  private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
@@ -166,10 +175,10 @@ public class RobotContainer {
     m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
-    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4)); //.andThen(new RunOuttake(m_intake)).andThen(new SetShoulderAngle(m_Shoulder, -10)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3)); //.andThen(new RunOuttake(m_intake)).andThen(new SetShoulderAngle(m_Shoulder, -10)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
-    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder,m_intake, 2));//.andThen(new RunOuttake(m_intake)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1)); //.andThen(new RunOuttakeSideways(m_intake)).andThen(new shoulderToIntake(m_Shoulder, m_elevator)));
+    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
 
     m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
 
@@ -180,7 +189,7 @@ public class RobotContainer {
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
-    drivetrain.registerTelemetry(logger::telemeterize);
+    
     
   }
 
