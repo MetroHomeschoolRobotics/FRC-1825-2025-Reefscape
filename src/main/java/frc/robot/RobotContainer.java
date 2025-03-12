@@ -171,7 +171,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
     driverXbox.povLeft().whileTrue(new DriveToBranch("L", drivetrain));
-    // driverXbox.povRight().whileTrue(drivetrain.driveToRightBranch());
+    driverXbox.povRight().whileTrue(new DriveToBranch("R", drivetrain));
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
