@@ -11,11 +11,11 @@ public class deAlgae extends SubsystemBase {
     public deAlgae(){}
     public void runDeAlgae(){
         deAlgae.set(1);
-        System.out.println("deAlgae set to 1");
+        
     }
     public void stopDeAlgae(){
         deAlgae.set(0);
-        System.out.println("deAlgae set to 0");
+        
     }
     public void periodic(){}
 }

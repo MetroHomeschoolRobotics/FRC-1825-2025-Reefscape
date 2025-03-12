@@ -18,6 +18,8 @@ import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
 import frc.robot.commands.SetShoulderAngle;
+import frc.robot.commands.ShiftCoralForward;
+import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
@@ -169,10 +171,10 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
     driverXbox.povLeft().whileTrue(new DriveToBranch("L", drivetrain));
-    driverXbox.povRight().whileTrue(new DriveToBranch("R", drivetrain));
+    // driverXbox.povRight().whileTrue(drivetrain.driveToRightBranch());
     
 
-    m_manipulatorController.rightBumper().whileTrue(new RunOuttake(m_intake));
+    m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
 
     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
@@ -185,9 +187,9 @@ public class RobotContainer {
     m_manipulatorController.povDown().whileTrue(new RunClimb(m_climber, m_Shoulder));
     m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
     
-    m_manipulatorController.povRight().whileTrue(new RunOuttakeSideways(m_intake));
+    m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
-    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator).andThen(new RunIntake(m_intake)));
     
     
     
