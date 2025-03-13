@@ -90,7 +90,7 @@ public class RobotContainer {
   private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
-  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
+  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController);
   
   // Pose Stuffs
@@ -189,7 +189,7 @@ public class RobotContainer {
     
     m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
-    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator).andThen(new RunIntake(m_intake)));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
     
     
     

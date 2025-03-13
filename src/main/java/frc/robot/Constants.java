@@ -52,7 +52,7 @@ public final class Constants {
     public static final double level1Angle = 1;
 
     public static final double UpperAlgaeAngle = 2;
-    public static final double UpperAlgaeHeight = -117;
+    public static final double UpperAlgaeHeight = -125;
 
 
   }
