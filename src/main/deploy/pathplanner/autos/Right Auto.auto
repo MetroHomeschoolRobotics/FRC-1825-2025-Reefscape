@@ -42,22 +42,29 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderBackABit"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShoulderToLoadingAngle"
+                  "name": "RetractElevator"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "F To RightLoad"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "F To RightLoad"
+                }
+              }
+            ]
           }
         },
         {
@@ -104,22 +111,29 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderBackABit"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShoulderToLoadingAngle"
+                  "name": "RetractElevator"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "E To RightLoad"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "E To RightLoad"
+                }
+              }
+            ]
           }
         },
         {
@@ -166,22 +180,29 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderBackABit"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShoulderToLoadingAngle"
+                  "name": "RetractElevator"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "D To RightLoad"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderToLoadingAngle"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "D To RightLoad"
+                }
+              }
+            ]
           }
         },
         {
@@ -228,13 +249,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderBackABit"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShoulderToLoadingAngle"
+                  "name": "RetractElevator"
                 }
               }
             ]

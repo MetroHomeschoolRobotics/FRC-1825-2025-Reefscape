@@ -43,6 +43,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -189,7 +190,7 @@ public class RobotContainer {
     
     m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
-    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator).andThen(new RunIntake(m_intake)));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));//.andThen(new RunIntake(m_intake)));
     
     
     
@@ -214,8 +215,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
         NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
         NamedCommands.registerCommand("Intake", new RunIntake(m_intake));
-        NamedCommands.registerCommand("ShoulderBackABit", new SetShoulderAngle(m_Shoulder, -5));
+        NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
         NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
+        NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
@@ -224,6 +226,8 @@ public class RobotContainer {
         autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
+        autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
+        autoChooser.addOption("Right To D Test", drivetrain.getAutonomousCommand("RightToD"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
