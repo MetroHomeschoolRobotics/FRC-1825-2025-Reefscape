@@ -26,6 +26,8 @@ import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
 import frc.robot.commands.LowerAlgaePreset;
+import frc.robot.commands.DriveToSource;
+import frc.robot.commands.PIDToPose;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
@@ -46,12 +48,15 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -76,7 +81,7 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
 
   // The robot's subsystems and commands are defined here...
@@ -134,7 +139,7 @@ public class RobotContainer {
         );
 
         // Puts the wheels in an x
-        driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // points the wheels without driving
         // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
@@ -144,6 +149,7 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         driverXbox.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
         //driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
 
         // Sysid buttons
@@ -176,7 +182,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
     driverXbox.povLeft().whileTrue(new DriveToBranch("L", drivetrain));
-    driverXbox.povRight().whileTrue(new DriveToBranch("R",drivetrain));
+    driverXbox.povRight().whileTrue(new DriveToBranch("R", drivetrain));
+    driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
@@ -268,8 +275,9 @@ if (ally.isPresent()) {
         NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
         NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
         NamedCommands.registerCommand("Intake", new RunIntake(m_intake));
-        NamedCommands.registerCommand("ShoulderBackABit", new SetShoulderAngle(m_Shoulder, -5));
+        NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
         NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
+        NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
@@ -278,6 +286,8 @@ if (ally.isPresent()) {
         autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
+        autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
+        autoChooser.addOption("Right To D Test", drivetrain.getAutonomousCommand("RightToD"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

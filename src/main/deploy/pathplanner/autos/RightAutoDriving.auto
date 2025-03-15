@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To F"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F To RightLoad"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightLoad To E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E To RightLoad"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightLoad To D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D To RightLoad"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightLoad To C"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
