@@ -15,6 +15,7 @@ public class RetractElevator extends Command {
 
     public RetractElevator(Elevator _elevator, ShoulderPID _shoulder){
         addRequirements(_elevator);
+        addRequirements(_shoulder);
         
 
         elevator = _elevator;

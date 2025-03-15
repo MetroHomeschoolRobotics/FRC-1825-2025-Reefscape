@@ -19,16 +19,19 @@ import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
 import frc.robot.commands.SetShoulderAngle;
 import frc.robot.commands.ShiftCoralForward;
+import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
 import frc.robot.commands.PIDToPose;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
+import frc.robot.commands.RunClimbPiston;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.RunElevator;
@@ -59,6 +62,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
@@ -87,6 +91,7 @@ public class RobotContainer {
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
+  private final ClimbPiston m_piston = new ClimbPiston();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -95,9 +100,9 @@ public class RobotContainer {
   private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
-  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController);
+  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController);
-  
+ 
   // Pose Stuffs
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -182,7 +187,7 @@ public class RobotContainer {
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
-    m_manipulatorController.leftBumper().whileTrue(new RunIntake(m_intake));
+    m_manipulatorController.leftBumper().whileTrue(new StaggerMotors(m_intake));
 
     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
@@ -191,13 +196,62 @@ public class RobotContainer {
 
     m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
 
-    m_manipulatorController.povDown().whileTrue(new RunClimb(m_climber, m_Shoulder));
-    m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
+    //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
+   
+    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
     
     m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
-    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));//.andThen(new RunIntake(m_intake)));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
+
+    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
+    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
+    m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
+
     
+    Optional<Alliance> ally = DriverStation.getAlliance();
+
+ 
+
+if (ally.isPresent()) {
+ 
+
+    if (ally.get() == Alliance.Red) {
+      //left facing the whatever reef it goes to
+       m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefK, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefI, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefG, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefE, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefC, 2, 2,180,360));
+      //right facing whatever reef it goes to
+      m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefB, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefJ, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefH, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefF, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefD, 2, 2,180,360));
+    }
+ 
+
+    if (ally.get() == Alliance.Blue) {
+        //left facing the whatever reef it goes to
+       m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefA, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefK, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefI, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefG, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefE, 2, 2,180,360));
+       m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefC, 2, 2,180,360));
+       //right facing whatever reef it goes to
+      m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefB, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefL, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefJ, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefH, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefF, 2, 2,180,360));
+      m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefD, 2, 2,180,360));
+    }
+
+}
     
     
   }
