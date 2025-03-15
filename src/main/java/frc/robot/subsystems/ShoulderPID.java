@@ -17,7 +17,7 @@ public class ShoulderPID extends SubsystemBase {
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   
-  private PIDController pid = new PIDController(0.04, 0, 0);
+  private PIDController pid = new PIDController(0.035, 0, 0);
   
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;

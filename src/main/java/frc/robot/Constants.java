@@ -46,7 +46,7 @@ public final class Constants {
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 1;
+    public static final double level4Angle = 0.5;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
     public static final double level1Angle = 1;
@@ -140,7 +140,7 @@ public final class Constants {
       public static final Pose2d reefI = new Pose2d(12.34645115, 3.11850227, new Rotation2d(Units.degreesToRadians(60))); 
       public static final Pose2d reefJ = new Pose2d(12.63163608, 2.953850684, new Rotation2d(Units.degreesToRadians(60)));
 
-      public static final Pose2d reefK = new Pose2d(13.58461296, 2.953850125, new Rotation2d(Units.degreesToRadians(120))); 
+      public static final Pose2d reefK = new Pose2d(13.53648389, 2.94683796305, new Rotation2d(Units.degreesToRadians(120))); 
       public static final Pose2d reefL = new Pose2d(13.86976472, 3.118482587, new Rotation2d(Units.degreesToRadians(120))); 
     }
     

@@ -48,6 +48,10 @@ public class Intake extends SubsystemBase {
       intakeMotor1.set(speed);
       intakeMotor2.set(0);
     }
+    public void setSpeedSideways2(double speed){
+      intakeMotor1.set(0);
+      intakeMotor2.set(speed);
+    }
     public double getDistance() {
         return intakeMotor1.getEncoder().getPosition();
         

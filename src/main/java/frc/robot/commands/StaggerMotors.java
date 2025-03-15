@@ -4,23 +4,36 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-public class RunOuttake extends Command {
+public class StaggerMotors extends Command {
     private Intake shooter;
     private int timer;
-    public RunOuttake(Intake _shooter){
+    private boolean isLeftMotor;
+    public StaggerMotors(Intake _shooter){
         addRequirements(_shooter);
         shooter = _shooter;
     }
     @Override
     public void initialize(){
         timer = 0;
+        isLeftMotor = false;
     }
     @Override
     public void execute(){
+        if(timer %15 == 0){
+            if(isLeftMotor ==true){
+                isLeftMotor=false;
+            }else{
+                isLeftMotor=true;
+            }
+        }
+        if(isLeftMotor){
+            shooter.setSpeedSideways(-0.4); 
+        }else{
+            shooter.setSpeedSideways2(-0.4); 
+        }
         
-        shooter.setSpeed(Constants.shooterSpeed); 
+        
         timer+=1;
-        
     }
     @Override
     public void end(boolean interrupted){
@@ -28,10 +41,7 @@ public class RunOuttake extends Command {
     }
     @Override
     public boolean isFinished(){
-        if(timer>=30){
-            return !shooter.coralInIntake();
-        }
-        return false;
+        return shooter.coralInIntake();
         
     }
 }

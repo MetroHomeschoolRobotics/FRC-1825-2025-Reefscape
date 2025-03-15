@@ -16,7 +16,9 @@ public class RunElevator extends Command {
     private CommandXboxController xboxController;
     private Elevator elevator;
     private ShoulderPID angle;
-
+    private double frameToPivot;
+    private double elevatorPID;
+    public boolean isLegal = true;
     public RunElevator(Elevator _elevator,CommandXboxController _xboxController,ShoulderPID _angle){
         addRequirements(_elevator);
 
@@ -34,10 +36,17 @@ public class RunElevator extends Command {
         
         double distToLim = (-Constants.elevatorConstants.elevatorMaxHeight)-elevator.getDistance();
         //double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
+        //elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
-        if((angle.getAbsoluteAngle()<-20 && elevator.getSetpoint() <-130) ){
-            elevator.setPID(-93.66);
-        }   
+        
+       
+        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*-elevator.getDistance()-16.58<18*2.54)
+        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*-elevator.getDistance()-49.23<18*2.54)){
+            isLegal = true;
+        }else{
+            isLegal = false;
+        }
+        SmartDashboard.putBoolean("elevator legal", isLegal );
         //SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }
 
