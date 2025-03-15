@@ -24,6 +24,7 @@ import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToSource;
 import frc.robot.commands.PIDToPose;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
@@ -133,7 +134,7 @@ public class RobotContainer {
         );
 
         // Puts the wheels in an x
-        driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // points the wheels without driving
         // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
@@ -177,6 +178,7 @@ public class RobotContainer {
 
     driverXbox.povLeft().whileTrue(new DriveToBranch("L", drivetrain));
     driverXbox.povRight().whileTrue(new DriveToBranch("R", drivetrain));
+    driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));

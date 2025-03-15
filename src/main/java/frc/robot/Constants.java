@@ -145,38 +145,69 @@ public final class Constants {
     }
     
     public static class sourcePositions {
-      public static final Pose2d blue1 = new Pose2d(0.61087, 1.37541, new Rotation2d(-126));
-      public static final Pose2d blue2 = new Pose2d(0.77546, 1.25603, new Rotation2d(-126));//
-      public static final Pose2d blue3 = new Pose2d(0.93980, 1.13665, new Rotation2d(-126));
-      public static final Pose2d blue4 = new Pose2d(1.10414, 1.01727, new Rotation2d(-126));
-      public static final Pose2d blue5 = new Pose2d(1.26848, 0.89789, new Rotation2d(-126));
-      public static final Pose2d blue6 = new Pose2d(1.43307, 0.77851, new Rotation2d(-126));
-      public static final Pose2d blue7 = new Pose2d(1.59741, 0.65913, new Rotation2d(-126));
+      public static final Pose2d blue1 = new Pose2d(0.61087, 1.37541, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d blue2 = new Pose2d(0.77546, 1.25603, new Rotation2d(Units.degreesToRadians(54)));//
+      public static final Pose2d blue3 = new Pose2d(0.93980, 1.13665, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d blue4 = new Pose2d(1.10414, 1.01727, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d blue5 = new Pose2d(1.26848, 0.89789, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d blue6 = new Pose2d(1.43307, 0.77851, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d blue7 = new Pose2d(1.59741, 0.65913, new Rotation2d(Units.degreesToRadians(54)));
 
-      public static final Pose2d blue8 = new Pose2d(0.61087, 6.77520, new Rotation2d(126));
-      public static final Pose2d blue9 = new Pose2d(0.77546, 6.89458, new Rotation2d(126));
-      public static final Pose2d blue10 = new Pose2d(0.93980, 7.01396, new Rotation2d(126));
-      public static final Pose2d blue11 = new Pose2d(1.10414, 7.13334, new Rotation2d(126));
-      public static final Pose2d blue12 = new Pose2d(1.26848, 7.25297, new Rotation2d(126));
-      public static final Pose2d blue13 = new Pose2d(1.43307, 7.37235, new Rotation2d(126));
-      public static final Pose2d blue14 = new Pose2d(1.59741, 7.49173, new Rotation2d(126));
+      public static final Pose2d blue8 = new Pose2d(0.61087, 6.77520, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue9 = new Pose2d(0.77546, 6.89458, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue10 = new Pose2d(0.93980, 7.01396, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue11 = new Pose2d(1.10414, 7.13334, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue12 = new Pose2d(1.26848, 7.25297, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue13 = new Pose2d(1.43307, 7.37235, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue14 = new Pose2d(1.59741, 7.49173, new Rotation2d(Units.degreesToRadians(-126)));
 
-      public static final Pose2d red1 = new Pose2d(16.9817, 1.37541, new Rotation2d(-54));
-      public static final Pose2d red2 = new Pose2d(16.8166, 1.25603, new Rotation2d(-54));
-      public static final Pose2d red3 = new Pose2d(16.9070, 1.13665, new Rotation2d(-54));
-      public static final Pose2d red4 = new Pose2d(16.4884, 1.01727, new Rotation2d(-54));
-      public static final Pose2d red5 = new Pose2d(16.3241, 0.89789, new Rotation2d(-54));
-      public static final Pose2d red6 = new Pose2d(16.1597, 0.77851, new Rotation2d(-54));
-      public static final Pose2d red7 = new Pose2d(15.9951, 0.65913, new Rotation2d(-54));
+      public static final Pose2d red1 = new Pose2d(16.9817, 1.37541, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red2 = new Pose2d(16.8166, 1.25603, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red3 = new Pose2d(16.9070, 1.13665, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red4 = new Pose2d(16.4884, 1.01727, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red5 = new Pose2d(16.3241, 0.89789, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red6 = new Pose2d(16.1597, 0.77851, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red7 = new Pose2d(15.9951, 0.65913, new Rotation2d(Units.degreesToRadians(54)));
 
-      public static final Pose2d red8 = new Pose2d(16.9817, 6.77520, new Rotation2d(54));
-      public static final Pose2d red9 = new Pose2d(16.8166, 6.89458, new Rotation2d(54));
-      public static final Pose2d red10 = new Pose2d(16.9070, 7.01396, new Rotation2d(54));
-      public static final Pose2d red11 = new Pose2d(16.4884, 7.13334, new Rotation2d(54));
-      public static final Pose2d red12 = new Pose2d(16.3241, 7.25297, new Rotation2d(54));
-      public static final Pose2d red13 = new Pose2d(16.1597, 7.37235, new Rotation2d(54));
-      public static final Pose2d red14 = new Pose2d(15.9951, 17.49173, new Rotation2d(54));
+      public static final Pose2d red8 = new Pose2d(16.9817, 6.77520, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red9 = new Pose2d(16.8166, 6.89458, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red10 = new Pose2d(16.9070, 7.01396, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red11 = new Pose2d(16.4884, 7.13334, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red12 = new Pose2d(16.3241, 7.25297, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red13 = new Pose2d(16.1597, 7.37235, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d red14 = new Pose2d(15.9951, 17.49173, new Rotation2d(Units.degreesToRadians(-126)));
     }
+
+    public static final Pose2d[] sourcePoses = {
+      sourcePositions.blue1,
+      sourcePositions.blue2, 
+      sourcePositions.blue3,
+      sourcePositions.blue4,
+      sourcePositions.blue5,
+      sourcePositions.blue6,
+      sourcePositions.blue7,
+      sourcePositions.blue8,
+      sourcePositions.blue9,
+      sourcePositions.blue10,
+      sourcePositions.blue11,
+      sourcePositions.blue12,
+      sourcePositions.blue13,
+      sourcePositions.blue14,
+      sourcePositions.red1,
+      sourcePositions.red2,
+      sourcePositions.red3,
+      sourcePositions.red4,
+      sourcePositions.red5,
+      sourcePositions.red6,
+      sourcePositions.red7,
+      sourcePositions.red8,
+      sourcePositions.red9,
+      sourcePositions.red10,
+      sourcePositions.red11,
+      sourcePositions.red12,
+      sourcePositions.red13,
+      sourcePositions.red14
+    };
 
     public static final Pose2d[] rightReefBranches = {
       BlueAlliance.reefB, 

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -13,8 +14,8 @@ public class DriveToSource extends Command {
 
 
 
-  private Pose2d closestSource;
-  private Pose2d[] sources;
+  private Pose2d closestSource = Constants.FieldSetpoints.sourcePoses[0];
+  private Pose2d[] sources = Constants.FieldSetpoints.sourcePoses;
 
   private CommandSwerveDrivetrain drivetrain;
 
@@ -42,7 +43,7 @@ public class DriveToSource extends Command {
       }
 
 
-
+      drivetrain.driveToPose(closestSource, 2, 2,180,360).schedule();
 
   }
 
@@ -52,7 +53,9 @@ public class DriveToSource extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.driveToPose(closestSource, 0, 0, 0, 0).cancel();
+  }
 
   // Returns true when the command should end.
   @Override
