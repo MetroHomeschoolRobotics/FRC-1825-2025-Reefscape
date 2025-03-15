@@ -25,6 +25,7 @@ import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
 import frc.robot.commands.PIDToPose;
@@ -271,13 +272,15 @@ if (ally.isPresent()) {
 
     private void createAutoChooser() {
         // Create the named commands
-        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, 1));
+        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
         NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
         NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
-        NamedCommands.registerCommand("Intake", new RunIntake(m_intake));
+        NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
         NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
         NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
         NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
+        NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
+        NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));

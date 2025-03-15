@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -70,12 +71,15 @@ public class DriveToBranchPID extends Command {
   @Override
   public void execute() {
     pidToPose.execute();
+
+    SmartDashboard.putBoolean("AtPose :)", pidToPose.isFinished());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     pidToPose.cancel();
+    System.out.println("AtPose :)");
   }
 
   // Returns true when the command should end.
