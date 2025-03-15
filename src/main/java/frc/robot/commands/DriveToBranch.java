@@ -29,10 +29,14 @@ public class DriveToBranch extends Command {
   private Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
   private Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
 
+  private PIDToPose pidToPose;
+
   /** Creates a new DriveToBranch. */
   public DriveToBranch(String _LOrRBranch, CommandSwerveDrivetrain _drivetrain) {
     drivetrain = _drivetrain;
     LeftOrRightBranch = _LOrRBranch;
+
+    
 
     addRequirements(_drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -63,8 +67,13 @@ public class DriveToBranch extends Command {
           }
         }
     }
+
+    pidToPose = new PIDToPose(drivetrain, closestBranch);
     
-    drivetrain.driveToPose(closestBranch, 2, 2,180,360).schedule();
+    pidToPose.initialize();
+
+
+    //drivetrain.driveToPose(closestBranch, 2, 2,180,360).schedule();
 
   }
 
@@ -72,16 +81,18 @@ public class DriveToBranch extends Command {
   @Override
   public void execute() {
 
-    
+    pidToPose.execute();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    pidToPose.cancel();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return pidToPose.isFinished();
   }
 }

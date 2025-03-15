@@ -355,7 +355,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
 
-        if(camera.hasTargets() && cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && camera.getBestTarget() != null && camera.getPoseAmbiguity() < 0.2) {
+        if(camera.hasTargets() && camera.getBestTarget() != null && cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && camera.getPoseAmbiguity() < 0.2) {
         Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
         addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());

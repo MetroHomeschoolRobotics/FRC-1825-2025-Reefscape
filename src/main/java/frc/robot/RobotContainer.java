@@ -24,6 +24,7 @@ import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.testClimberPID;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.PIDToPose;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
@@ -45,11 +46,13 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -73,7 +76,7 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
 
   // The robot's subsystems and commands are defined here...
@@ -140,6 +143,7 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         driverXbox.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
         //driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
 
         // Sysid buttons
