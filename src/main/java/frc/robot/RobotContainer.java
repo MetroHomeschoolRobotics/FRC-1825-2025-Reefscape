@@ -148,9 +148,9 @@ public class RobotContainer {
         // ));
 
         // reset the field-centric heading on left bumper press
-        driverXbox.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
+        // driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
         //driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
 
         // Sysid buttons
@@ -182,8 +182,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
 
-    driverXbox.povLeft().whileTrue(new DriveToBranch("L", drivetrain));
-    driverXbox.povRight().whileTrue(new DriveToBranch("R", drivetrain));
+    driverXbox.leftBumper().whileTrue(new DriveToBranch("L", drivetrain));
+    driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     
 
