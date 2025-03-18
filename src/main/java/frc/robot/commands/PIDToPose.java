@@ -32,8 +32,8 @@ public class PIDToPose extends Command {
 
   private Pose2d destinationPose;
 
-  private PIDController xPID = new PIDController(1, 0, 0.07);
-  private PIDController yPID = new PIDController(1, 0, 0.07);
+  private PIDController xPID = new PIDController(1.2, 0, 0.07);
+  private PIDController yPID = new PIDController(1.2, 0, 0.07);
   private PIDController thetaPID = new PIDController(0.03, 0, 0);
 
   /** Creates a new PIDToPose. */
@@ -81,6 +81,6 @@ public class PIDToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint();
+    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint() || drivetrain.getState().Speeds.vxMetersPerSecond <= 0.01 && drivetrain.getState().Speeds.vyMetersPerSecond <= 0.01 && drivetrain.getState().Speeds.omegaRadiansPerSecond <= 0.01;
   }
 }

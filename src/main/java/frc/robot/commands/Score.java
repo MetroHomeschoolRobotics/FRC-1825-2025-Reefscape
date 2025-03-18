@@ -72,7 +72,7 @@ public class Score extends Command {
             
             if(shoulder.atSetpoint()){
                 elevator.setPID(Constants.fieldConstants.level4Height);
-                if(elevator.atSetpoint()){
+                if(elevator.getDistance() < -146){
                     shoulder.setPID(Constants.fieldConstants.level4Angle);
                 }
             }
