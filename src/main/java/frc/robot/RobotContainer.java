@@ -92,7 +92,7 @@ public class RobotContainer {
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
-  private final ClimbPiston m_piston = new ClimbPiston();
+  //private final ClimbPiston m_piston = new ClimbPiston();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -102,7 +102,7 @@ public class RobotContainer {
   
   // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
-  private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController);
+  private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController,m_elevator);
  
   // Pose Stuffs
   private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -200,14 +200,19 @@ public class RobotContainer {
     //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
    
     m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
-    
+
+//Starting config
+    m_manipulatorController.povDown().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
+
+
+
     m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
-    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
-    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
-    m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
+    //m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
+   // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
+    //m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
 
     
     Optional<Alliance> ally = DriverStation.getAlliance();
