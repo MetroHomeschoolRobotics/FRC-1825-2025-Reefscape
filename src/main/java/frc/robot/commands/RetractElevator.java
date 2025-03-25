@@ -31,7 +31,7 @@ public class RetractElevator extends Command {
     public void execute(){
         //mayhaps, perchance even
         
-        if(shoulder.getAbsoluteAngle()<=-2){
+        if(shoulder.getAbsoluteAngle()<=-7){
             elevator.setPID(-93.66);
         }
 

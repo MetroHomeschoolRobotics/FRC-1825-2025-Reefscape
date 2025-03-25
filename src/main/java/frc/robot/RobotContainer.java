@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.climber;
 import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.Elevator;
@@ -92,9 +93,8 @@ public class RobotContainer {
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
-  //private final ClimbPiston m_piston = new ClimbPiston();
-
-
+  private final ClimbPiston m_piston = new ClimbPiston();
+  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
@@ -195,24 +195,24 @@ public class RobotContainer {
     m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
 
-    m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
+   // m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
 
     //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
    
-    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
+   // m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
 
 //Starting config
-    m_manipulatorController.povDown().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
+    driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
 
 
-    m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+    //m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
-    //m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
-   // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
-    //m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
+    m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
+    m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
+    m_manipulatorController.povRight().whileTrue(new RunClimb( m_Shoulder));
 
     
     Optional<Alliance> ally = DriverStation.getAlliance();
@@ -269,11 +269,12 @@ if (ally.isPresent()) {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    m_climber.resetEncoders();
-    m_climber.openClimber();
+    //m_climber.resetEncoders();
+    //m_climber.openClimber();
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }
+ 
 
     private void createAutoChooser() {
         // Create the named commands

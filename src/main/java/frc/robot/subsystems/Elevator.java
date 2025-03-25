@@ -21,7 +21,7 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.008, 0, 0);
+    private PIDController pid = new PIDController(.01, 0, 0);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
     //
     private double desiredposition = 0;
@@ -116,8 +116,14 @@ public class Elevator extends SubsystemBase {
             output = pid.calculate(getDistance());
         }
         
-        if(output>0.2){
+        if(pid.getError()<35 && output>0.2){
             output=0.2;
+        }
+
+        if(output>1){
+            output=1;
+        }else if(output<-1){
+            output = -1;
         }
         
         SmartDashboard.putNumber("pid output", output);
