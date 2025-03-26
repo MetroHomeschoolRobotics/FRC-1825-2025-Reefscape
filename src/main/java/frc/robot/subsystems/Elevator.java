@@ -116,8 +116,8 @@ public class Elevator extends SubsystemBase {
             output = pid.calculate(getDistance());
         }
         
-        if(pid.getError()<35 && output>0.2){
-            output=0.2;
+        if(output>0.18){
+            output=0.18;
         }
 
         if(output>1){
