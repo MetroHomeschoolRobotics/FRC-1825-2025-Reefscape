@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -19,6 +20,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +28,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -35,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldSetpoints;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -67,8 +71,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
-    private final Vision FrontCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
-
+    private final Vision FrontCamera = new Vision("Camera_Yellow", Constants.CameraPositions.frontLeftTranslation);
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -276,6 +279,44 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return field;
     }
 
+    /** This Command uses the Pathplanner Auto builder to generate a path to a pose on the fly.
+     * 
+     * @param TargetPose
+     * @param maxPathSpeed
+     * @param maxPathAccel
+     * @param maxAngularSpeed
+     * @param maxAngularAccel
+     * @return A command to pathfind to a pose
+     */
+    public Command driveToPose(Pose2d TargetPose, double maxPathSpeed, double maxPathAccel, double maxAngularSpeed, double maxAngularAccel) {
+        PathConstraints constraints = new PathConstraints(
+                maxPathSpeed, maxPathAccel, 
+                Units.degreesToRadians(maxAngularSpeed), 
+                Units.degreesToRadians(maxAngularAccel));
+
+        return AutoBuilder.pathfindToPose(TargetPose, constraints, 0);
+    }
+
+    /**
+     * This Command uses the distance formula to get the distance from the robot's pose to another pose.
+     * We will be using this to determine which reef section we are closest too.
+     * @param pose
+     * @return the distance between the robot's pose and the apriltag's pose
+     */
+    public double distanceToPose(Pose2d pose) {
+
+        // difference in x and y
+        double XDir = pose.getX() - getRobotPose().getX();
+        double yDir = pose.getY() - getRobotPose().getY();
+
+        //System.out.println("X robot: " + getRobotPose().getX() + ", X stalk: " + pose.getX());
+        // This uses the distance formula to get the distance
+        double distance = Math.sqrt(Math.pow(XDir, 2) + Math.pow(yDir, 2)); 
+        distance = pose.getTranslation().getDistance(getRobotPose().getTranslation());
+
+        return distance;
+    }
+
     @Override
     public void periodic() {
 
@@ -305,19 +346,31 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
+        SmartDashboard.putNumber("PoseX", getRobotPose().getX());
+        SmartDashboard.putNumber("PoseY", getRobotPose().getY());
+        SmartDashboard.putNumber("PoseRotation", getRobotPose().getRotation().getDegrees());
 
         //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
     }
 
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
+        try {
+            PhotonTrackedTarget bestTarget = camera.getBestTarget();
+            // if(camera.getApriltagDistance() <= 3){
+                if(camera.hasTargets() && bestTarget != null){
+                    if(cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && bestTarget.getPoseAmbiguity() < 0.3) {
+                    Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
-        if(cameraPoseEstimator.isPresent() && cameraPoseEstimator != null && camera.hasTargets() && camera.getPoseAmbiguity() < 0.2) {
-        Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
+                    addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
 
-        addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
-
-        }
+                    }
+                }
+            // }
+            
+           
+        } catch(Error resultingError) {}
+        
     }
 
 

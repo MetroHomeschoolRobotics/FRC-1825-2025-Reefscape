@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6185000000000003,
+        "y": 0.6319999999999993
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9351713473440384,
+        "y": 1.8331600158433603
+      },
+      "isLocked": false,
+      "linkedName": "RightLoad"
+    },
+    {
+      "anchor": {
+        "x": 4.085167845,
+        "y": 2.921781414
+      },
+      "prevControl": {
+        "x": 3.073506141680659,
+        "y": 2.0225611057917847
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef D Pathplanner"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 54.0
+  },
+  "useDefaultConstraints": true
+}

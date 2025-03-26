@@ -6,13 +6,13 @@ import frc.robot.subsystems.Intake;
 public class RunIntake extends Command {
 
     private Intake intake;
-    private boolean reversed;
+    
 
-    public RunIntake(Intake _intake, Boolean _reversed){
+    public RunIntake(Intake _intake){
         addRequirements(_intake);
         
         intake = _intake;
-        reversed = _reversed;
+        
         
     }
     @Override
@@ -20,16 +20,14 @@ public class RunIntake extends Command {
 
     @Override
     public void execute(){
-        if(reversed){
-            intake.setSpeed(-1);
-        }else{
+        
             if(intake.coralInIntake()){
-                intake.setSpeed(0);
+                //intake.setSpeed(0.4);
             }else{
-                intake.setSpeed(1);
+                intake.setSpeed(-0.1);
             }
         }
-    }
+    
 
     @Override
     public void end(boolean interrupted){
