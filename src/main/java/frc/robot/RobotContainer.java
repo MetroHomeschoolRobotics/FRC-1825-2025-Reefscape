@@ -91,14 +91,14 @@ public class RobotContainer {
   private final Elevator m_elevator = new Elevator();
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
-  private final climber m_climber = new climber();
-  private final ClimbPiston m_piston = new ClimbPiston();
+  //private final climber m_climber = new climber();
+  //private final ClimbPiston m_piston = new ClimbPiston();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
-  private final CommandXboxController m_streamdeck = new CommandXboxController(2);
+  // private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
@@ -185,6 +185,7 @@ public class RobotContainer {
     driverXbox.leftBumper().whileTrue(new DriveToBranch("L", drivetrain));
     driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
+    driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
@@ -205,57 +206,57 @@ public class RobotContainer {
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
-    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
-    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
-    m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
+   // m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
+    //m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
+   // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
 
     
     Optional<Alliance> ally = DriverStation.getAlliance();
 
  
 
-if (ally.isPresent()) {
+// if (ally.isPresent()) {
  
 
-    if (ally.get() == Alliance.Red) {
-      //left facing the whatever reef it goes to
-       m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefK, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefI, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefG, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefE, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefC, 2, 2,180,360));
-      //right facing whatever reef it goes to
-      m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefB, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefJ, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefH, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefF, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefD, 2, 2,180,360));
-    }
+//     if (ally.get() == Alliance.Red) {
+//       //left facing the whatever reef it goes to
+//        m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefK, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefI, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefG, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefE, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefC, 2, 2,180,360));
+//       //right facing whatever reef it goes to
+//       m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefB, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefJ, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefH, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefF, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefD, 2, 2,180,360));
+//     }
  
 
-    if (ally.get() == Alliance.Blue) {
-        //left facing the whatever reef it goes to
-       m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefA, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefK, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefI, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefG, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefE, 2, 2,180,360));
-       m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefC, 2, 2,180,360));
-       //right facing whatever reef it goes to
-      m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefB, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefL, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefJ, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefH, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefF, 2, 2,180,360));
-      m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefD, 2, 2,180,360));
-    }
+//     if (ally.get() == Alliance.Blue) {
+//         //left facing the whatever reef it goes to
+//        m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefA, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefK, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefI, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefG, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefE, 2, 2,180,360));
+//        m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefC, 2, 2,180,360));
+//        //right facing whatever reef it goes to
+//       m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefB, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefL, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefJ, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefH, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefF, 2, 2,180,360));
+//       m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefD, 2, 2,180,360));
+//     }
 
 }
     
     
-  }
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -264,8 +265,8 @@ if (ally.isPresent()) {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    m_climber.resetEncoders();
-    m_climber.openClimber();
+   // m_climber.resetEncoders();
+   // m_climber.openClimber();
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }
@@ -287,15 +288,19 @@ if (ally.isPresent()) {
         autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
         autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
         autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
-        autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto"));
+        autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
         autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
-        autoChooser.addOption("Right To D Test", drivetrain.getAutonomousCommand("RightToD"));
+        autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
+        autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("TestAuto"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
+
+
+      
         return autoChooser.getSelected();
     }
 }

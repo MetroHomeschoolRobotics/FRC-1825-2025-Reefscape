@@ -28,7 +28,7 @@ public class RunOuttake extends Command {
     }
     @Override
     public boolean isFinished(){
-        if(timer>=30){
+        if(timer>=35){
             return !shooter.coralInIntake();
         }
         return false;

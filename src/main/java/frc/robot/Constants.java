@@ -46,13 +46,13 @@ public final class Constants {
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 0.3;
+    public static final double level4Angle = 0.5;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
     public static final double level1Angle = 1;
 
     public static final double UpperAlgaeAngle = 2; 
-    public static final double UpperAlgaeHeight = -125;
+    public static final double UpperAlgaeHeight = -139;
 
 
   }
@@ -105,43 +105,43 @@ public final class Constants {
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     public static class BlueAlliance {
-      public static final Pose2d reefA = new Pose2d(3.296, 4.181, new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d reefB = new Pose2d(3.296, 3.859, new Rotation2d(Units.degreesToRadians(0)));
+      public static final Pose2d reefA = new Pose2d(3.32272355, 4.1856333, new Rotation2d(Units.degreesToRadians(0)));
+      public static final Pose2d reefB = new Pose2d(3.311527669, 3.81707825, new Rotation2d(Units.degreesToRadians(0)));
 
-      public static final Pose2d reefC = new Pose2d(3.764, 3.089, new Rotation2d(Units.degreesToRadians(60)));
-      public static final Pose2d reefD = new Pose2d(4.046, 2.933, new Rotation2d(Units.degreesToRadians(60)));
+      public static final Pose2d reefC = new Pose2d(3.7737811326, 3.0893695, new Rotation2d(Units.degreesToRadians(60)));
+      public static final Pose2d reefD = new Pose2d(4.085167845, 2.921781414, new Rotation2d(Units.degreesToRadians(60)));
       
-      public static final Pose2d reefE = new Pose2d(4.924, 2.993, new Rotation2d(Units.degreesToRadians(120)));
-      public static final Pose2d reefF = new Pose2d(5.226, 3.079, new Rotation2d(Units.degreesToRadians(120)));
+      public static final Pose2d reefE = new Pose2d(4.969947888, 2.941575528, new Rotation2d(Units.degreesToRadians(120))); //x far from J
+      public static final Pose2d reefF = new Pose2d(5.261939688, 3.159151296, new Rotation2d(Units.degreesToRadians(120)));
       
-      public static final Pose2d reefG = new Pose2d(5.26868619, 3.943789217, new Rotation2d(Units.degreesToRadians(180)));
-      public static final Pose2d reefH = new Pose2d(5.77668619, 4.273053328, new Rotation2d(Units.degreesToRadians(180)));
+      public static final Pose2d reefG = new Pose2d(5.6696601894, 3.883143764, new Rotation2d(Units.degreesToRadians(180)));
+      public static final Pose2d reefH = new Pose2d(5.6696601894, 4.2403208877, new Rotation2d(Units.degreesToRadians(180))); // x far from rA, bB, bG
       
-      public static final Pose2d reefI = new Pose2d(5.300198239, 5.098366054, new Rotation2d(Units.degreesToRadians(-120)));
-      public static final Pose2d reefJ = new Pose2d(5.01507219, 5.262983657, new Rotation2d(Units.degreesToRadians(-120)));
+      public static final Pose2d reefI = new Pose2d(5.214398024350, 4.9613547, new Rotation2d(Units.degreesToRadians(-120)));
+      public static final Pose2d reefJ = new Pose2d(4.8514365201, 5.1208748116, new Rotation2d(Units.degreesToRadians(-120)));// x far from E
       
-      public static final Pose2d reefK = new Pose2d(4.06204268, 5.262992979, new Rotation2d(Units.degreesToRadians(-60)));
-      public static final Pose2d reefL = new Pose2d(3.776892903, 5.098361685, new Rotation2d(Units.degreesToRadians(-60)));
+      public static final Pose2d reefK = new Pose2d(4.022437138, 5.114805594, new Rotation2d(Units.degreesToRadians(-60)));
+      public static final Pose2d reefL = new Pose2d(3.795782721, 4.94210006, new Rotation2d(Units.degreesToRadians(-60)));
     }
     
     public static class RedAlliance{
       public static final Pose2d reefA = new Pose2d(14.23268407, 3.866290216, new Rotation2d(Units.degreesToRadians(180)));
-      public static final Pose2d reefB = new Pose2d(14.23268407, 4.24394024, new Rotation2d(Units.degreesToRadians(180))); 
+      public static final Pose2d reefB = new Pose2d(14.23268407, 4.1856333, new Rotation2d(Units.degreesToRadians(180))); 
 
-      public static final Pose2d reefC = new Pose2d(13.76958, 4.946058, new Rotation2d(Units.degreesToRadians(-120))); 
-      public static final Pose2d reefD = new Pose2d(13.480737, 5.1194531, new Rotation2d(Units.degreesToRadians(-120)));
+      public static final Pose2d reefC = new Pose2d(13.77766223, 4.9712731, new Rotation2d(Units.degreesToRadians(-120))); // X far from L
+      public static final Pose2d reefD = new Pose2d(13.5107708, 5.1666442, new Rotation2d(Units.degreesToRadians(-120))); 
 
-      public static final Pose2d reefE = new Pose2d(12.6158606522, 5.1208488444, new Rotation2d(Units.degreesToRadians(-60))); 
-      public static final Pose2d reefF = new Pose2d(12.3728402, 4.9967453547, new Rotation2d(Units.degreesToRadians(-60))); 
+      public static final Pose2d reefE = new Pose2d(12.604619238, 5.12713342, new Rotation2d(Units.degreesToRadians(-60))); 
+      public static final Pose2d reefF = new Pose2d(12.30841787, 4.9500127808, new Rotation2d(Units.degreesToRadians(-60))); 
 
-      public static final Pose2d reefG = new Pose2d(11.899349076, 4.1559300311, new Rotation2d(Units.degreesToRadians(0))); 
-      public static final Pose2d reefH = new Pose2d(11.899349076, 3.821292, new Rotation2d(Units.degreesToRadians(0))); 
+      public static final Pose2d reefG = new Pose2d(11.8889482155, 4.15331787199, new Rotation2d(Units.degreesToRadians(0))); 
+      public static final Pose2d reefH = new Pose2d(11.8885273585, 3.819012489, new Rotation2d(Units.degreesToRadians(0))); 
 
-      public static final Pose2d reefI = new Pose2d(12.34645115, 3.11850227, new Rotation2d(Units.degreesToRadians(60))); 
-      public static final Pose2d reefJ = new Pose2d(12.63163608, 2.953850684, new Rotation2d(Units.degreesToRadians(60)));
+      public static final Pose2d reefI = new Pose2d(12.339160148, 3.084600667, new Rotation2d(Units.degreesToRadians(60))); // Y same as L
+      public static final Pose2d reefJ = new Pose2d(12.64003212, 2.9146532387, new Rotation2d(Units.degreesToRadians(60)));
 
-      public static final Pose2d reefK = new Pose2d(13.53648389, 2.94683796305, new Rotation2d(Units.degreesToRadians(120))); 
-      public static final Pose2d reefL = new Pose2d(13.86976472, 3.118482587, new Rotation2d(Units.degreesToRadians(120))); 
+      public static final Pose2d reefK = new Pose2d(13.5123083, 2.92800257, new Rotation2d(Units.degreesToRadians(120))); 
+      public static final Pose2d reefL = new Pose2d(13.77766223, 3.084600667, new Rotation2d(Units.degreesToRadians(120))); // X far from C, Y same as I
     }
     
     public static class sourcePositions {
@@ -153,21 +153,21 @@ public final class Constants {
       public static final Pose2d blue6 = new Pose2d(1.43307, 0.77851, new Rotation2d(Units.degreesToRadians(54)));
       public static final Pose2d blue7 = new Pose2d(1.59741, 0.65913, new Rotation2d(Units.degreesToRadians(54)));
 
-      public static final Pose2d blue8 = new Pose2d(0.61087, 6.77520, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue9 = new Pose2d(0.77546, 6.89458, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue10 = new Pose2d(0.93980, 7.01396, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue11 = new Pose2d(1.10414, 7.13334, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue12 = new Pose2d(1.26848, 7.25297, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue13 = new Pose2d(1.43307, 7.37235, new Rotation2d(Units.degreesToRadians(-126)));
-      public static final Pose2d blue14 = new Pose2d(1.59741, 7.49173, new Rotation2d(Units.degreesToRadians(-126)));
+      public static final Pose2d blue8 = new Pose2d(0.61087, 6.77520, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue9 = new Pose2d(0.77546, 6.89458, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue10 = new Pose2d(0.93980, 7.01396, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue11 = new Pose2d(1.10414, 7.13334, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue12 = new Pose2d(1.26848, 7.25297, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue13 = new Pose2d(1.43307, 7.37235, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d blue14 = new Pose2d(1.59741, 7.49173, new Rotation2d(Units.degreesToRadians(-54)));
 
-      public static final Pose2d red1 = new Pose2d(16.9817, 1.37541, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red2 = new Pose2d(16.8166, 1.25603, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red3 = new Pose2d(16.9070, 1.13665, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red4 = new Pose2d(16.4884, 1.01727, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red5 = new Pose2d(16.3241, 0.89789, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red6 = new Pose2d(16.1597, 0.77851, new Rotation2d(Units.degreesToRadians(54)));
-      public static final Pose2d red7 = new Pose2d(15.9951, 0.65913, new Rotation2d(Units.degreesToRadians(54)));
+      public static final Pose2d red1 = new Pose2d(16.9817, 1.37541, new Rotation2d(Units.degreesToRadians(126 )));
+      public static final Pose2d red2 = new Pose2d(16.8166, 1.25603, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d red3 = new Pose2d(16.9070, 1.13665, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d red4 = new Pose2d(16.4884, 1.01727, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d red5 = new Pose2d(16.3241, 0.89789, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d red6 = new Pose2d(16.1597, 0.77851, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d red7 = new Pose2d(15.9951, 0.65913, new Rotation2d(Units.degreesToRadians(126)));
 
       public static final Pose2d red8 = new Pose2d(16.9817, 6.77520, new Rotation2d(Units.degreesToRadians(-126)));
       public static final Pose2d red9 = new Pose2d(16.8166, 6.89458, new Rotation2d(Units.degreesToRadians(-126)));
