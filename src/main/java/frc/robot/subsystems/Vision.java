@@ -17,7 +17,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -40,6 +42,7 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // SmartDashboard.putNumber("ApriltagDistance", getApriltagDistance());
     // This method will be called once per scheduler run
   }
 
@@ -73,6 +76,20 @@ public class Vision extends SubsystemBase {
 
   public Transform3d getRobotTransform() {
     return getBestTarget().getBestCameraToTarget();
+  }
+
+  public double getApriltagDistance() {
+    double tagDist = 100000;
+    if(hasTargets() && getBestTarget() != null) {
+      double xDir = getRobotTransform().getX();
+      double yDir = getRobotTransform().getY();
+
+      tagDist = Math.sqrt(Math.pow(xDir, 2) + Math.pow(yDir, 2));
+      
+    }
+
+    return tagDist;
+
   }
 
   public double getPoseAmbiguity() {

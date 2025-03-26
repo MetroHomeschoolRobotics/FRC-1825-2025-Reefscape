@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -354,13 +355,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
+        try {
+            PhotonTrackedTarget bestTarget = camera.getBestTarget();
+            // if(camera.getApriltagDistance() <= 3){
+                if(camera.hasTargets() && bestTarget != null){
+                    if(cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && bestTarget.getPoseAmbiguity() < 0.3) {
+                    Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
-        if(camera.hasTargets() && camera.getBestTarget() != null && cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && camera.getPoseAmbiguity() < 0.2) {
-        Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
+                    addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
 
-        addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
-
-        }
+                    }
+                }
+            // }
+            
+           
+        } catch(Error resultingError) {}
+        
     }
 
 
