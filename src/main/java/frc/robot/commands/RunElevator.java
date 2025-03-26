@@ -37,19 +37,23 @@ public class RunElevator extends Command {
         double distToLim = (-Constants.elevatorConstants.elevatorMaxHeight)-elevator.getDistance();
         //double distToLim = (-Constants.elevatorMaxHeight)-elevator.getDistance();
         //elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
-        elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
+        
         
        
-        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<18*2.54)
-        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<18*2.54)){
+        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<15*2.54)
+        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<15*2.54)){
             isLegal = true;
+            elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         }else{
             isLegal = false;
-            if(angle.getAbsoluteAngle()>0){
-                elevator.setPID(-(16.58+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));
-            }else{
-                elevator.setPID((49.23+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));
+            if(xboxController.getRightY()>0){
+                elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
             }
+            // if(angle.getAbsoluteAngle()>0){
+            //     elevator.setPID(-(16.58+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));
+            // }else{
+            //     elevator.setPID((49.23+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));
+            // }
             
         }
         SmartDashboard.putBoolean("elevator legal", isLegal );
