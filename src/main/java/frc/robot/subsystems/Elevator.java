@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -116,16 +117,16 @@ public class Elevator extends SubsystemBase {
             output = pid.calculate(getDistance());
         }
         
-        if(output>0.18){
-            output=0.18;
-        }
+        // if(output>0.18){
+        //     output=0.18;
+        // }
 
-        if(output>1){
-            output=1;
-        }else if(output<-1){
-            output = -1;
-        }
-        
+        // if(output>1){
+        //     output=1;
+        // }else if(output<-1){
+        //     output = -1;
+        // }
+        MathUtil.clamp(output,-1,0.18);
         SmartDashboard.putNumber("pid output", output);
         
         elevatorMotor1.setVoltage(output*12);

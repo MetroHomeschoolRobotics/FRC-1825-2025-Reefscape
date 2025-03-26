@@ -102,7 +102,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
-  // private final CommandXboxController m_streamdeck = new CommandXboxController(2);
+  private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
@@ -200,27 +200,25 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
 
-   // m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
-
-    //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
-   
-   // m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
+   m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
+   m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+   m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
 
 //Starting config
     driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
 
 
-    //m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+    
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
    
-    m_manipulatorController.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));
-    m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
-    m_manipulatorController.povRight().whileTrue(new ClimberMotorBackwards(m_climber));
-    m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
-    //m_manipulatorController.povRight().whileTrue(new RunClimb( m_Shoulder));
+    m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
+    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
+    m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
+    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));//actuactor forward
+   
 
     
     Optional<Alliance> ally = DriverStation.getAlliance();
