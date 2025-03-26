@@ -14,9 +14,7 @@ public class RunClimb extends Command {
         
         addRequirements(_shoulder);
         
-        shoulder = _shoulder;
-        
-        
+        shoulder = _shoulder;        
         
     }
     public void initialize(){}

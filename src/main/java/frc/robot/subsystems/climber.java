@@ -15,13 +15,10 @@ public class climber extends SubsystemBase {
         pid.setTolerance(0.5);
         pid.setSetpoint(0);
     }
-    public void openClimber(){
-        pid.setSetpoint(0);
+    public void setClimber(double setpoint){
+        pid.setSetpoint(setpoint);
     }
-    public void closeClimber(){
-        pid.setSetpoint(-13.5);
-        //22 abs max
-    }
+   
     public void stopClimber(){
         climber.set(0);
     }

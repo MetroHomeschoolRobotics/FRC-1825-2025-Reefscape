@@ -269,8 +269,8 @@ if (ally.isPresent()) {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    //m_climber.resetEncoders();
-    //m_climber.openClimber();
+    m_climber.resetEncoders();
+    m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }
