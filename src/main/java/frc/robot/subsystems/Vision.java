@@ -49,6 +49,7 @@ public class Vision extends SubsystemBase {
   public List<PhotonPipelineResult> getAllUnreadResults() {
     return camera.getAllUnreadResults();
   }
+  
 
   public PhotonPipelineResult getLatestResult() {
     return camera.getLatestResult(); // TODO remove the depricated function
