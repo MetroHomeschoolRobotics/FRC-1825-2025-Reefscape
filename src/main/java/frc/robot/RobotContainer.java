@@ -24,7 +24,9 @@ import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
+import frc.robot.commands.stopclimber;
 import frc.robot.commands.testClimberPID;
+import frc.robot.commands.ClimberMotorBackwards;
 import frc.robot.commands.DriveToBranch;
 import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
@@ -35,6 +37,7 @@ import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
 import frc.robot.commands.RunClimbPiston;
+import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.RunElevator;
@@ -94,13 +97,13 @@ public class RobotContainer {
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
 
-  // private final climber m_climber = new climber();
-  // private final ClimbPiston m_piston = new ClimbPiston();
+ private final climber m_climber = new climber();
+private final ClimbPiston m_piston = new ClimbPiston();
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
-  // private final CommandXboxController m_streamdeck = new CommandXboxController(2);
+  private final CommandXboxController m_streamdeck = new CommandXboxController(2);
   
   // Command Init.
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
@@ -199,25 +202,24 @@ public class RobotContainer {
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
 
    m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
-
-    //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
-   
-   // m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
+   m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+   m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
 
 //Starting config
     driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
 
 
-    //m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+    
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
    
-
-    // m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
-    // m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
-    m_manipulatorController.povRight().whileTrue(new RunClimb( m_Shoulder));
+    m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
+    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
+    m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
+    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));//actuactor forward
+   
 
     
     Optional<Alliance> ally = DriverStation.getAlliance();
@@ -276,8 +278,8 @@ public class RobotContainer {
    */
   public void resetEncoders(){
     m_elevator.resetEncoders();
-    //m_climber.resetEncoders();
-    //m_climber.openClimber();
+    m_climber.resetEncoders();
+    //m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }

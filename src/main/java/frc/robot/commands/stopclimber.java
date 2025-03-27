@@ -4,27 +4,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShoulderPID;
 import frc.robot.subsystems.climber;
 
-public class testClimberPID extends Command {
+public class stopclimber extends Command {
     private climber climber;
     
-    public testClimberPID(climber _climber){
+    public stopclimber(climber _climber){
         addRequirements(_climber);
        
         climber = _climber;
     }
     public void initialize(){}
     public void execute(){
-        climber.setClimber(-0.2);
+        climber.setClimber(0);
       
     }
     public boolean isFinished(){
         return false;
     }
-    public void end(boolean interrupted){
+    public void end(){
         //climber.openClimber();
-        if(interrupted){
-            climber.setClimber(0.0);
-        }
         
     }
 }
