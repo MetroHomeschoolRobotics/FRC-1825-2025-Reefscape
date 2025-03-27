@@ -71,7 +71,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
-    private final Vision FrontCamera = new Vision("Camera_Yellow", Constants.CameraPositions.frontLeftTranslation);
+    private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+    private final Vision FrontRightCamera = new Vision("FrontRightCamera", Constants.CameraPositions.frontRightTranslation);
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -342,7 +343,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        addVisionPose(FrontCamera);
+        addVisionPose(FrontLeftCamera);
+        addVisionPose(FrontRightCamera);
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());

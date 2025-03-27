@@ -78,7 +78,15 @@ public final class Constants {
                                                               Units.degreesToRadians(0),
                                                               Units.degreesToRadians(10),
                                                               Units.degreesToRadians(-30)));
-    public static final Transform3d backTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
+                                                              
+    public static final Transform3d frontRightTranslation = new Transform3d(
+                                                            Units.inchesToMeters(11.147131),
+                                                            Units.inchesToMeters(-11.404959),
+                                                            Units.inchesToMeters(9.321816), 
+                                                            new Rotation3d(
+                                                              Units.degreesToRadians(0),
+                                                              Units.degreesToRadians(10),
+                                                              Units.degreesToRadians(30)));
     public static final Transform3d leftTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
     public static final Transform3d rightTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
   }

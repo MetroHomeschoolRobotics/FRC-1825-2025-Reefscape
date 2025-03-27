@@ -30,6 +30,7 @@ import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
 import frc.robot.commands.PIDToPose;
+import frc.robot.commands.RaiseElevator;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
@@ -93,8 +94,8 @@ public class RobotContainer {
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
 
-  private final climber m_climber = new climber();
-  private final ClimbPiston m_piston = new ClimbPiston();
+  // private final climber m_climber = new climber();
+  // private final ClimbPiston m_piston = new ClimbPiston();
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -197,7 +198,7 @@ public class RobotContainer {
     m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
 
-   // m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
+   m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
 
     //m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
    
@@ -214,8 +215,8 @@ public class RobotContainer {
 
    
 
-    m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
-    m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
+    // m_manipulatorController.povLeft().whileTrue(new testClimberPID(m_climber));
+    // m_manipulatorController.povDown().whileTrue(new RunClimbPiston(m_piston));
     m_manipulatorController.povRight().whileTrue(new RunClimb( m_Shoulder));
 
     
@@ -284,8 +285,9 @@ public class RobotContainer {
 
     private void createAutoChooser() {
         // Create the named commands
-        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
-        NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
+        NamedCommands.registerCommand("PreScoreCommand", new SetShoulderAngle(m_Shoulder, -8));
+        NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
+        NamedCommands.registerCommand("Score", new Score(m_elevator, m_Shoulder, m_intake, 4));
         NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
         NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
         NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
@@ -293,17 +295,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
         NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
         NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
+        NamedCommands.registerCommand("L4Elevator", new RaiseElevator(m_elevator));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-        autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
-        autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
-        autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
+        // autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
+        // autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
+        // autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-        autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
+        // autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
         autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
-        autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("TestAuto"));
+        autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
