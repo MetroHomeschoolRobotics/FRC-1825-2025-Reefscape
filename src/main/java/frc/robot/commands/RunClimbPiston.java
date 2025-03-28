@@ -22,10 +22,12 @@ public class RunClimbPiston extends Command {
     public void end(boolean interrupted){
         if(interrupted){
             piston.RunPiston(0);
+        }else{
+            piston.RunPiston(0);
         }
         
     }
     public boolean isFinished(){
-        return false;
+        return piston.getEncoder()>144;
     }
 }

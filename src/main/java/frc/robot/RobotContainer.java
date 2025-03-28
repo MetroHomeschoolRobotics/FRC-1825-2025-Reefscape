@@ -32,6 +32,7 @@ import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
 import frc.robot.commands.PIDToPose;
+import frc.robot.commands.RaiseElevator;
 import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunClimb;
@@ -97,7 +98,7 @@ public class RobotContainer {
   private final ShoulderPID m_Shoulder = new ShoulderPID();
 
  private final climber m_climber = new climber();
-private final ClimbPiston m_piston = new ClimbPiston();
+//private final ClimbPiston m_piston = new ClimbPiston();
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -213,11 +214,11 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
-   
-    m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
-    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
-    m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
-    m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));//actuactor forward
+    // m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder,-34.6).andThen(new RaiseElevator(m_elevator,-129)));
+    // m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
+    // m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
+    // m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
+    // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston).andThen(new SetShoulderAngle(m_Shoulder,-46.5)));//actuactor forward
    
 
     

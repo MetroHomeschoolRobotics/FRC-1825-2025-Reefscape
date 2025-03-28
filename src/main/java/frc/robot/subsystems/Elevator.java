@@ -22,7 +22,7 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.01, 0, 0);
+    private PIDController pid = new PIDController(.008, 0, 0);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
     //
     private double desiredposition = 0;

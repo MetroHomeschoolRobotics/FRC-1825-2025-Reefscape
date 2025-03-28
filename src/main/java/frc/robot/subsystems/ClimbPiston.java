@@ -24,5 +24,6 @@ public class ClimbPiston extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putNumber("pistonEncoder", getEncoder());
         SmartDashboard.putNumber("actuator current", piston.getOutputCurrent());
+        //132 all the way down
     }
 }
