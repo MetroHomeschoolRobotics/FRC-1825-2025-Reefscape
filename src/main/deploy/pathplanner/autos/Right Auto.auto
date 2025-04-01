@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderAngleToL4"
+                  "name": "PreScoreCommand"
                 }
               }
             ]
@@ -40,7 +40,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "name": "Score"
                       }
                     }
                   ]
@@ -99,7 +99,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderAngleToL4"
+                  "name": "PreScoreCommand"
                 }
               }
             ]
@@ -122,7 +122,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "name": "Score"
                       }
                     }
                   ]
@@ -181,7 +181,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderAngleToL4"
+                  "name": "PreScoreCommand"
                 }
               }
             ]
@@ -204,7 +204,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "name": "Score"
                       }
                     }
                   ]
@@ -263,7 +263,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShoulderAngleToL4"
+                  "name": "PreScoreCommand"
                 }
               }
             ]
@@ -286,7 +286,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "name": "Score"
                       }
                     }
                   ]

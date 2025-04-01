@@ -2,11 +2,13 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -71,7 +73,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
-    private final Vision FrontCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+    private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+    private final Vision FrontRightCamera = new Vision("FrontRightCamera", Constants.CameraPositions.frontRightTranslation);
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -342,7 +345,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        addVisionPose(FrontCamera);
+        addVisionPose(FrontLeftCamera);
+        addVisionPose(FrontRightCamera);
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
@@ -356,17 +360,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addVisionPose(Vision camera) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
         try {
-            PhotonTrackedTarget bestTarget = camera.getBestTarget();
-            // if(camera.getApriltagDistance() <= 3){
-                if(camera.hasTargets() && bestTarget != null){
-                    if(cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && bestTarget.getPoseAmbiguity() < 0.3) {
-                    Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
-                    addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
+            List<PhotonPipelineResult> targets = camera.getAllUnreadResults();
 
+            if(!targets.isEmpty()){
+                PhotonPipelineResult target = targets.get(targets.size()-1);
+
+                if(target.hasTargets() && target.getBestTarget() != null) {
+                    if(cameraPoseEstimator != null && cameraPoseEstimator.isPresent() && target.getBestTarget().getPoseAmbiguity() < 0.2) {
+                        Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
+
+                        addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
                     }
                 }
-            // }
+            }
             
            
         } catch(Error resultingError) {}
