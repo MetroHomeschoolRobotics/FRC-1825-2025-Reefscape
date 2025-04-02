@@ -14,7 +14,7 @@ public class testClimberPID extends Command {
     }
     public void initialize(){}
     public void execute(){
-        climber.setClimber(-0.2);
+        climber.setClimber(-0.3);
       
     }
     public boolean isFinished(){
@@ -22,9 +22,9 @@ public class testClimberPID extends Command {
     }
     public void end(boolean interrupted){
         //climber.openClimber();
-        if(interrupted){
-            climber.setClimber(0.0);
-        }
+        // if(interrupted){
+        //     climber.setClimber(0.0);
+        // }
         
     }
 }
