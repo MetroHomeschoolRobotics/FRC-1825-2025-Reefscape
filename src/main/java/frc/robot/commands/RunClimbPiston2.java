@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ClimbPiston;
 
-public class RunClimbPiston extends Command {
+public class RunClimbPiston2 extends Command {
     private ClimbPiston piston;
     private CommandXboxController xbox;
 
-    public RunClimbPiston(ClimbPiston _Piston){
+    public RunClimbPiston2(ClimbPiston _Piston){
         addRequirements(_Piston);
         piston = _Piston;
         
@@ -28,6 +28,6 @@ public class RunClimbPiston extends Command {
         
     }
     public boolean isFinished(){
-        return piston.getEncoder()>60;
+        return piston.getEncoder()>144;
     }
 }

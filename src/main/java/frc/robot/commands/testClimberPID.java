@@ -22,9 +22,9 @@ public class testClimberPID extends Command {
     }
     public void end(boolean interrupted){
         //climber.openClimber();
-        if(interrupted){
-            climber.setClimber(0.0);
-        }
+        // if(interrupted){
+        //     climber.setClimber(0.0);
+        // }
         
     }
 }

@@ -38,8 +38,8 @@ public class climber extends SubsystemBase {
     SmartDashboard.putBoolean("At setpoint", atSetpoint());
     SmartDashboard.putNumber("climber pid pos", pid.getSetpoint());
 
-    double output = pid.calculate(climber.getEncoder().getPosition());
-    SmartDashboard.putNumber("climber", output);
+    //double output = pid.calculate(climber.getEncoder().getPosition());
+    //SmartDashboard.putNumber("climber", output);
     //climber.set(output);
     //if(climber.getEncoder().getPosition()>=18 || climber.getEncoder().getPosition()<=0){
       //  stopClimber();
