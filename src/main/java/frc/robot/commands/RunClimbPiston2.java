@@ -28,6 +28,6 @@ public class RunClimbPiston2 extends Command {
         
     }
     public boolean isFinished(){
-        return piston.getEncoder()>144;
+        return piston.getEncoder()>138;
     }
 }

@@ -38,6 +38,9 @@ public class SetShoulderAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(shoulder.getSetpoint()<-50){
+      return shoulder.climbingCloseEnough();
+    }
     return shoulder.atSetpoint();
   }
 }
