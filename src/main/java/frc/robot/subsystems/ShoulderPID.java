@@ -36,6 +36,9 @@ public class ShoulderPID extends SubsystemBase {
     }
 
   }
+  public boolean climbingCloseEnough(){
+    return getAbsoluteAngle()<-50;
+  }
   public void runDirectly(double speed){
     if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -58 && speed>0)) {
       wristMotor1.set(speed);
