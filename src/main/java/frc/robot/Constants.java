@@ -134,8 +134,8 @@ public final class Constants {
     }
     
     public static class RedAlliance{
-      public static final Pose2d reefA = new Pose2d(14.25468407, 3.849290216, new Rotation2d(Units.degreesToRadians(180)));
-      public static final Pose2d reefB = new Pose2d(14.25368407, 4.2246333, new Rotation2d(Units.degreesToRadians(180))); 
+      public static final Pose2d reefA = new Pose2d(14.24, 3.840, new Rotation2d(Units.degreesToRadians(180)));  //14.25468407, 3.849290216, new Rotation2d(Units.degreesToRadians(180)
+      public static final Pose2d reefB = new Pose2d(14.24, 4.185, new Rotation2d(Units.degreesToRadians(180))); // 14.25368407, 4.2246333, new Rotation2d(Units.degreesToRadians(180) 
 
       public static final Pose2d reefC = new Pose2d(13.78666223, 4.9852731, new Rotation2d(Units.degreesToRadians(-120))); // X far from L
       public static final Pose2d reefD = new Pose2d(13.4887708, 5.1766442, new Rotation2d(Units.degreesToRadians(-120))); 

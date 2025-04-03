@@ -371,7 +371,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         Pose3d cameraPose = cameraPoseEstimator.get().estimatedPose;
 
                         // if the apriltag is too far, throw its results away
-                        //if(camera.getApriltagDistance(getRobotPose(), target.getBestTarget().getFiducialId()) > 3) {
+                        //if(camera.getApriltagDistance(getRobotPose(), target.getBestTarget().getFiducialId()) > 3) {// TODO test distance tracking
                             addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
                         //}
                     }

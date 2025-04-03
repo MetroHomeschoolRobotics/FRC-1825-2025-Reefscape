@@ -21,6 +21,7 @@ import frc.robot.commands.Score;
 import frc.robot.commands.SetShoulderAngle;
 import frc.robot.commands.ShiftCoralForward;
 import frc.robot.commands.StaggerMotors;
+import frc.robot.commands.TeleopToBranchPID;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
@@ -153,7 +154,9 @@ private final ClimbPiston m_piston = new ClimbPiston();
         //     point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
         // ));
 
-        // reset the field-centric heading on left bumper press
+        driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
+
+        // reset the field-centric heading on left bumper press\\
         driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
@@ -168,21 +171,24 @@ private final ClimbPiston m_piston = new ClimbPiston();
         // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
 
     } else {
-        // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> drive.withVelocityX(-driverXbox.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                                                .withVelocityY(-driverXbox.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                                                .withRotationalRate(-driverXbox.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+      drivetrain.setDefaultCommand(
+        // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
+                                            .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
+                                            .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        )
+    );
 
-        // Puts the wheels in an x
-        driverXbox.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    // Puts the wheels in an x
+    // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
-        // reset the field-centric heading on left bumper press
-        driverXbox.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    // points the wheels without driving
+    // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+    //     point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
+    // ));
+
+    // reset the field-centric heading on left bumper press
+    driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
     }
         
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
@@ -191,7 +197,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
     driverXbox.leftBumper().whileTrue(new DriveToBranch("L", drivetrain));
     driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
-    driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
+    //driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
     
 
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
