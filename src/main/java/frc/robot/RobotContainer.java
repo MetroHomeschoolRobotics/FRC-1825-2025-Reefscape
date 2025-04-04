@@ -22,6 +22,7 @@ import frc.robot.commands.SetShoulderAngle;
 import frc.robot.commands.ShiftCoralForward;
 import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.TeleopToBranchPID;
+import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
@@ -221,6 +222,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
+    m_streamdeck.y().whileTrue(new ToggleActuatorSoftLimits(m_piston).andThen(new RunClimbPistonBackwards(m_piston)));
     m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder,-34.6).andThen(new RaiseElevator(m_elevator,-115)));
     m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
     m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
