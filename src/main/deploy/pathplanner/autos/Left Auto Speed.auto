@@ -19,13 +19,13 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "Right To F Speed"
+                              "pathName": "Left To I Speed"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "PIDToBranchR"
+                              "name": "PIDToBranchL"
                             }
                           }
                         ]
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "F To RightLoad Speed"
+                        "pathName": "I to LeftLoad speed"
                       }
                     },
                     {
@@ -127,13 +127,13 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "RightLoad To D Speed"
+                              "pathName": "LeftLoad To K speed"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "PIDToBranchR"
+                              "name": "PIDToBranchL"
                             }
                           }
                         ]
@@ -180,7 +180,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "D To RightLoad speed"
+                        "pathName": "K To LeftLoad Speed"
                       }
                     },
                     {

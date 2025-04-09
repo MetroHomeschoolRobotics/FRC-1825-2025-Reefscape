@@ -225,7 +225,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
     m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
     m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
-    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder,-52).andThen(new RunClimbPiston(m_piston)).andThen(new SetShoulderAngle(m_Shoulder,-46)).andThen(new RunClimbPiston2(m_piston)));//actuactor forward
+    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder,-54).andThen(new RunClimbPiston(m_piston)).andThen(new SetShoulderAngle(m_Shoulder,-46)).andThen(new RunClimbPiston2(m_piston)));//actuactor forward
    
 
     
@@ -313,7 +313,8 @@ private final ClimbPiston m_piston = new ClimbPiston();
         // autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-        // autoChooser.addOption("RightAutoJustDriving", drivetrain.getAutonomousCommand("RightAutoDriving"));
+        autoChooser.addOption("RightAutoSpeed", drivetrain.getAutonomousCommand("Right Auto Speed"));
+        autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left Auto Speed"));
         autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
         autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
 

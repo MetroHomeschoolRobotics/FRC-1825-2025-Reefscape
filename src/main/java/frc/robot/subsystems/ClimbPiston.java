@@ -12,10 +12,12 @@ public class ClimbPiston extends SubsystemBase{
     private SparkMax piston = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);//Motor id
     public ClimbPiston(){}
     public void RunPiston(double speed){
-        if(getEncoder()>20&&speed<0){
+        if(getEncoder()>15&&speed<0){
             piston.set(speed);
         }else if(speed>=0){
             piston.set(speed);
+        } else if(getEncoder()<20&&speed<0){
+            piston.set(0);
         }
         
         //positive speed runs it forward

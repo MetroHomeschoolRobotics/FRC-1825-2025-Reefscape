@@ -345,8 +345,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        addVisionPose(FrontLeftCamera);
-        addVisionPose(FrontRightCamera);
+        addVisionPose(FrontLeftCamera, "Front Left ");
+        addVisionPose(FrontRightCamera, "Front Right ");
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
@@ -357,7 +357,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
     }
 
-    public void addVisionPose(Vision camera) {
+    public void addVisionPose(Vision camera, String cameraName) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
         try {
 
@@ -373,6 +373,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         // if the apriltag is too far, throw its results away
                         //if(camera.getApriltagDistance(getRobotPose(), target.getBestTarget().getFiducialId()) > 3) {// TODO test distance tracking
                             addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
+
+                            SmartDashboard.putNumber(cameraName + "Pose X", cameraPose.toPose2d().getX());
+                            SmartDashboard.putNumber(cameraName + "Pose Y", cameraPose.toPose2d().getY());
+                            SmartDashboard.putNumber(cameraName + "Pose Rotation", cameraPose.toPose2d().getRotation().getDegrees());
                         //}
                     }
                 }
