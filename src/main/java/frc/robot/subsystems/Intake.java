@@ -38,8 +38,8 @@ public class Intake extends SubsystemBase {
       
     }  
     public void scoreBackwards(){
-      intakeMotor1.set(0.2);
-      intakeMotor2.set(0.1);
+      intakeMotor1.set(0.225);
+      intakeMotor2.set(0.2);
     }
     public void setSpeed(double speed) {
       //check inverts

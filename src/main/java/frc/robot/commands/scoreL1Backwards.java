@@ -10,6 +10,7 @@ public class scoreL1Backwards extends Command {
     Elevator elevator;
     ShoulderPID shoulder;
     Intake intake;
+    int timer;
     public scoreL1Backwards(Elevator _elevator, ShoulderPID _shoulder,Intake _intake){
         elevator = _elevator;
         shoulder = _shoulder;
@@ -19,18 +20,20 @@ public class scoreL1Backwards extends Command {
         addRequirements(_intake);
     }
     public void initialize(){
-       
+       timer = 1;
     }
     public void execute(){
+        timer+=1;
         if(elevator.atSetpoint()){
             shoulder.setPID(Constants.fieldConstants.level1Angle);
             if(elevator.atSetpoint()&&shoulder.atSetpoint()){
+                
                 intake.scoreBackwards();
             }
         }
     }
     public boolean isFinished(){
-        return !intake.coralInIntake();
+        return timer>35&&!intake.coralInIntake();
     }
     public void end(boolean interrupted){
         shoulder.setPID(-33);
