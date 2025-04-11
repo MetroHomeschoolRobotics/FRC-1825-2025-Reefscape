@@ -20,6 +20,8 @@ public class ClimbPiston extends SubsystemBase{
             piston.set(speed);
         }else if(speed>=0){
             piston.set(speed);
+        } else if(getEncoder()<20&&speed<0){
+            piston.set(0);
         }
     } else{
         piston.set(speed);

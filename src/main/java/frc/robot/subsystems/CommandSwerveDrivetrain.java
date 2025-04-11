@@ -73,7 +73,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
-    private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+    // private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
     private final Vision FrontRightCamera = new Vision("FrontRightCamera", Constants.CameraPositions.frontRightTranslation);
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
@@ -345,8 +345,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        addVisionPose(FrontLeftCamera);
-        addVisionPose(FrontRightCamera);
+        // addVisionPose(FrontLeftCamera, "Front Left ");
+        addVisionPose(FrontRightCamera, "Front Right ");
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());
@@ -357,7 +357,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         //SmartDashboard.putNumber("Linear acceleration", this.getPigeon2().getAccelerationY().getValueAsDouble());
     }
 
-    public void addVisionPose(Vision camera) {
+    public void addVisionPose(Vision camera, String cameraName) {
         Optional<EstimatedRobotPose> cameraPoseEstimator = camera.getVisionBasedPose();
         try {
 
@@ -373,6 +373,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         // if the apriltag is too far, throw its results away
                         //if(camera.getApriltagDistance(getRobotPose(), target.getBestTarget().getFiducialId()) > 3) {// TODO test distance tracking
                             addVisionMeasurement(cameraPose.toPose2d(), Timer.getFPGATimestamp());
+
+                            SmartDashboard.putNumber(cameraName + "Pose X", cameraPose.toPose2d().getX());
+                            SmartDashboard.putNumber(cameraName + "Pose Y", cameraPose.toPose2d().getY());
+                            SmartDashboard.putNumber(cameraName + "Pose Rotation", cameraPose.toPose2d().getRotation().getDegrees());
                         //}
                     }
                 }
