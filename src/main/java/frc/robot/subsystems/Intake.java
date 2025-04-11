@@ -37,7 +37,10 @@ public class Intake extends SubsystemBase {
       return !beambreak.get();
       
     }  
-  
+    public void scoreBackwards(){
+      intakeMotor1.set(0.2);
+      intakeMotor2.set(0.1);
+    }
     public void setSpeed(double speed) {
       //check inverts
       intakeMotor1.set(speed);

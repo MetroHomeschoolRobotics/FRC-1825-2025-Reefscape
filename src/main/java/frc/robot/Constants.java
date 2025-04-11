@@ -46,10 +46,10 @@ public final class Constants {
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 0.7;
+    public static final double level4Angle = 1;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
-    public static final double level1Angle = 1;
+    public static final double level1Angle = -53;
 
     public static final double UpperAlgaeAngle = 2; 
     public static final double UpperAlgaeHeight = -139;
@@ -75,7 +75,7 @@ public final class Constants {
                                                             Units.inchesToMeters(11.404959), // 11.29
                                                             Units.inchesToMeters(9.321819), 
                                                             new Rotation3d(
-                                                              Units.degreesToRadians(0),
+                                                              Units.degreesToRadians(5.592),
                                                               Units.degreesToRadians(10),
                                                               Units.degreesToRadians(-30)));
                                                               
@@ -84,7 +84,7 @@ public final class Constants {
                                                             Units.inchesToMeters(-11.404959), // -11.29
                                                             Units.inchesToMeters(9.321816), 
                                                             new Rotation3d(
-                                                              Units.degreesToRadians(0),
+                                                              Units.degreesToRadians(-5.592),
                                                               Units.degreesToRadians(10),
                                                               Units.degreesToRadians(30)));
                                                               

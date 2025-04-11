@@ -24,6 +24,7 @@ import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.TeleopToBranchPID;
 import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
+import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.RunDeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.stopclimber;
@@ -207,8 +208,9 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
-    m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunOuttakeSideways(m_intake)));
-
+   // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
+    m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
+    
    m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
    m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
