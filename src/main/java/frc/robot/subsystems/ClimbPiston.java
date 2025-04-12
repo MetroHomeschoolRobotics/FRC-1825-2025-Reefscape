@@ -15,7 +15,7 @@ public class ClimbPiston extends SubsystemBase{
     private boolean softLimitsOn = true;
     public ClimbPiston(){}
     public void RunPiston(double speed){
-    if(softLimitsOn){
+    
         if(getEncoder()>20&&speed<0){
             piston.set(speed);
         }else if(speed>=0){
@@ -23,9 +23,7 @@ public class ClimbPiston extends SubsystemBase{
         } else if(getEncoder()<20&&speed<0){
             piston.set(0);
         }
-    } else{
-        piston.set(speed);
-    }
+   
         
         
         //positive speed runs it forward
