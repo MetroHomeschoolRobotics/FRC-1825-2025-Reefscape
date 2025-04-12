@@ -17,19 +17,16 @@ public class RunClimbPistonBackwards extends Command {
     public void initialize(){}
 
     public void execute(){
-        if(piston.isSoftLimitsOn()){
-            piston.RunPiston(-1);
-        }else{
+       
+        
             piston.RunPiston(-0.3);
-        }
+        
         
     }
     public void end(boolean interrupted){
         if(interrupted){
             piston.RunPiston(0);
-            if(piston.isSoftLimitsOn() == false){
-                piston.toggleSoftLimits();
-            }
+        
         }
         
     }
