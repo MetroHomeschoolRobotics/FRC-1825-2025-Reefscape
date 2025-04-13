@@ -13,9 +13,7 @@ public class ToggleActuatorSoftLimits extends Command {
         piston = _Piston;
         
     }
-    public void initialize(){
-        piston.toggleSoftLimits();
-    }
+    public void initialize(){}
     public void execute(){
 
     }
