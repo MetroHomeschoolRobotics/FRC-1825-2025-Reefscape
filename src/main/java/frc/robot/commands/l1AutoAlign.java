@@ -36,7 +36,8 @@ public class l1AutoAlign extends Command {
             }
 
         }
-        drivetrain.driveToPose(closestFace, 2, 2,180,360);
+        System.out.println(closestFace);
+        drivetrain.driveToPose(closestFace, 2, 2,270,360).schedule();
     }
     public void execute(){}
     public void end(boolean interrupted){}

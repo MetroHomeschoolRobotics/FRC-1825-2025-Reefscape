@@ -188,21 +188,21 @@ public final class Constants {
       public static final Pose2d red14 = new Pose2d(15.941, 7.436, new Rotation2d(Units.degreesToRadians(-126)));
     }
     public static class redL1Positions{
-      public static final Pose2d redA = new Pose2d(14.372,4.153,new Rotation2d(Units.degreesToRadians(40)));
-      public static final Pose2d redB = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d redC = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d redD = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d redE = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d redF = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
+      public static final Pose2d redA = new Pose2d(14.464,3.977,new Rotation2d(Units.degreesToRadians(28.9)));
+      public static final Pose2d redB = new Pose2d(13.719,2.773,new Rotation2d(Units.degreesToRadians(-32.9)));
+      public static final Pose2d redC = new Pose2d(12.315,2.822,new Rotation2d(Units.degreesToRadians(-92.9)));
+      public static final Pose2d redD = new Pose2d(11.654,4.074,new Rotation2d(Units.degreesToRadians(-152.9)));
+      public static final Pose2d redE = new Pose2d(12.399,5.255,new Rotation2d(Units.degreesToRadians(148.9)));
+      public static final Pose2d redF = new Pose2d(13.803,5.206,new Rotation2d(Units.degreesToRadians(88.9)));
       
     }
     public static class blueL1Positions{
-      public static final Pose2d blueA = new Pose2d(3.269,3.84,new Rotation2d(Units.degreesToRadians(-140)));
-      public static final Pose2d blueB = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d blueC = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d blueD = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d blueE = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
-      public static final Pose2d blueF = new Pose2d(1000,1000,new Rotation2d(Units.degreesToRadians(0)));
+      public static final Pose2d blueA = new Pose2d(3.085,3.977,new Rotation2d(Units.degreesToRadians(-152.9)));
+      public static final Pose2d blueB = new Pose2d(3.745,5.218,new Rotation2d(Units.degreesToRadians(148.9)));
+      public static final Pose2d blueC = new Pose2d(5.15,5.267,new Rotation2d(Units.degreesToRadians(88.9)));
+      public static final Pose2d blueD = new Pose2d(5.894,4.074,new Rotation2d(Units.degreesToRadians(28.9)));
+      public static final Pose2d blueE = new Pose2d(5.234,2.834,new Rotation2d(Units.degreesToRadians(-32.9)));
+      public static final Pose2d blueF = new Pose2d(3.829,2.785,new Rotation2d(Units.degreesToRadians(-92.9)));
       
     }
 
