@@ -16,6 +16,7 @@ public class ClimbPiston extends SubsystemBase{
     public ClimbPiston(){}
     public void RunPiston(double speed){
     
+    
         if(getEncoder()>20&&speed<0){
             piston.set(speed);
         }else if(speed>=0){
@@ -23,7 +24,7 @@ public class ClimbPiston extends SubsystemBase{
         } else if(getEncoder()<20&&speed<0){
             piston.set(0);
         }
-    
+   
         
         
         //positive speed runs it forward

@@ -24,6 +24,7 @@ import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.TeleopToBranchPID;
 import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
+import frc.robot.commands.l1AutoAlign;
 import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.RunDeAlgae;
@@ -201,6 +202,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
     driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     driverXbox.y().whileTrue(drivetrain.applyRequest(() -> brake));
+    driverXbox.a().whileTrue(new l1AutoAlign(drivetrain));
     //driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
     
 
@@ -218,7 +220,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
 
 //Starting config
-    driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
+    //driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
 
 
