@@ -40,8 +40,8 @@ public class RunElevator extends Command {
         
         
        
-        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<15*2.54)
-        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<15*2.54)){
+        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<12*2.54)
+        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<12*2.54)){
             isLegal = true;
             elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         }else{

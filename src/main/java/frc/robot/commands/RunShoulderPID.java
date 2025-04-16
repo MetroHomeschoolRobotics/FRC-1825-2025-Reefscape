@@ -31,8 +31,8 @@ public class RunShoulderPID extends Command {
     if(shoulder.getClimb() == true){
       shoulder.runDirectly(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
     }else{
-      if((Math.cos(Math.toRadians(-shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<15*2.54)
-        && (Math.cos(Math.toRadians(shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<15*2.54)){
+      if((Math.cos(Math.toRadians(-shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<12*2.54)
+        && (Math.cos(Math.toRadians(shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<12*2.54)){
           shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
             
         }else{
