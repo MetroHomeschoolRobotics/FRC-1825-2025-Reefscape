@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.262602459016393,
-        "y": 3.000051229508196
+        "x": 5.279,
+        "y": 3.037
       },
       "prevControl": {
-        "x": 5.711102459016392,
-        "y": 2.951301229508196
+        "x": 5.504570838374555,
+        "y": 2.646299847229362
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef F"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

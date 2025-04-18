@@ -19,13 +19,26 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "Left To I Speed"
+                              "pathName": "Right To F Speed"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AngleToL4"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Score"
+                              "name": "L4Elevator"
                             }
                           }
                         ]
@@ -47,13 +60,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "I to LeftLoad speed"
+                        "pathName": "F To RightLoad Speed"
                       }
                     },
                     {
                       "type": "sequential",
                       "data": {
                         "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.05
+                            }
+                          },
                           {
                             "type": "named",
                             "data": {
@@ -96,13 +115,32 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "LeftLoad To K speed"
+                              "pathName": "RightLoad To D Speed"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.5
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Score"
+                              "name": "AngleToL4"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "L4Elevator"
                             }
                           }
                         ]
@@ -124,13 +162,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "K To LeftLoad Speed"
+                        "pathName": "D To RightLoad speed"
                       }
                     },
                     {
                       "type": "sequential",
                       "data": {
                         "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.05
+                            }
+                          },
                           {
                             "type": "named",
                             "data": {
@@ -173,13 +217,32 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "LeftLoad To L Speed"
+                              "pathName": "RightLoad To C Speed"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.5
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Score"
+                              "name": "AngleToL4"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "L4Elevator"
                             }
                           }
                         ]

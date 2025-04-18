@@ -88,10 +88,10 @@ public class PIDToPose extends Command {
     
             
 
-    SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
-    SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
-    SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
-    SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
+    // SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
+    // SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
+    // SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
+    // SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
     
             
     swerveCommand.execute();
@@ -109,6 +109,6 @@ public class PIDToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint() || timer >= 1.5;// || drivetrain.getState().Speeds.vxMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.vyMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.omegaRadiansPerSecond <= 0.001;
+    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint() || timer >= 2;// || drivetrain.getState().Speeds.vxMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.vyMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.omegaRadiansPerSecond <= 0.001;
   }
 }

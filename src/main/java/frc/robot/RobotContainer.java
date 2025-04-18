@@ -228,12 +228,12 @@ private final ClimbPiston m_piston = new ClimbPiston();
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
     m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
 
-    
+    m_streamdeck.b().whileTrue(new RunClimbPiston2(m_piston));
     m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder,-34.6).andThen(new RaiseElevator(m_elevator,-115)));
     m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
     m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
     m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
-    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder,-54).andThen(new RunClimbPiston(m_piston)).andThen(new SetShoulderAngle(m_Shoulder,-46)).andThen(new RunClimbPiston2(m_piston)));//actuactor forward
+    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder,-54).andThen(new RunClimbPiston(m_piston)).andThen(new SetShoulderAngle(m_Shoulder,-47.5)).andThen(new RunClimbPiston2(m_piston)));//actuactor forward
    
 
     

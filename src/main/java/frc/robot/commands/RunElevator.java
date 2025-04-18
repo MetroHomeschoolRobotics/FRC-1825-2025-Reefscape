@@ -40,8 +40,8 @@ public class RunElevator extends Command {
         
         
        
-        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<12*2.54)
-        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<12*2.54)){
+        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<70*2.54)
+        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<70*2.54)){
             isLegal = true;
             elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
         }else{
@@ -56,7 +56,7 @@ public class RunElevator extends Command {
             // }
             
         }
-        SmartDashboard.putBoolean("elevator legal", isLegal );
+        //SmartDashboard.putBoolean("elevator legal", isLegal );
         //SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }
 

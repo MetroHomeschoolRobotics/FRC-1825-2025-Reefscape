@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "shortStraight from middle"
@@ -14,12 +20,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "PIDToBranchL"
-                }
-              },
               {
                 "type": "named",
                 "data": {

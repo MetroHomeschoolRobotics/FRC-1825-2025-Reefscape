@@ -25,26 +25,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "PIDToBranchR"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AngleToL4"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "L4Elevator"
+                              "name": "Score"
                             }
                           }
                         ]
@@ -127,32 +108,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "PIDToBranchR"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AngleToL4"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "L4Elevator"
+                              "name": "Score"
                             }
                           }
                         ]
@@ -230,12 +186,6 @@
                             "type": "path",
                             "data": {
                               "pathName": "RightLoad To C Speed"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "PIDToBranchL"
                             }
                           }
                         ]

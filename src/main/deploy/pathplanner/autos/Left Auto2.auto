@@ -34,13 +34,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "PIDToBranchL"
+                        "name": "Score"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Score"
+                        "name": "PIDToBranchL"
                       }
                     }
                   ]
@@ -113,12 +113,6 @@
                 "type": "parallel",
                 "data": {
                   "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "PIDToBranchL"
-                      }
-                    },
                     {
                       "type": "named",
                       "data": {
@@ -198,12 +192,6 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "PIDToBranchR"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
                         "name": "Score"
                       }
                     }
@@ -274,22 +262,9 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "PIDToBranchR"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Score"
-                      }
-                    }
-                  ]
+                  "name": "Score"
                 }
               },
               {

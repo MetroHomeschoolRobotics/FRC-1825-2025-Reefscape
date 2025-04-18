@@ -89,10 +89,10 @@ public class TeleopPIDToPose extends Command {
     
             
 
-    SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
-    SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
-    SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
-    SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
+    // SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
+    // SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
+    // SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
+    // SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
     
             
     swerveCommand.execute();

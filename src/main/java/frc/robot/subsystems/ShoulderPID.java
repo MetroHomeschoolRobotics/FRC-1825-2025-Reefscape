@@ -88,12 +88,17 @@ public class ShoulderPID extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Absolute Angle", getAbsoluteAngle());
-    SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
-    SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
+    // SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
+    // SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
+    double output;
     if(getClimb()==false){
-      double output = pid.calculate(getAbsoluteAngle());
+      
+        output = pid.calculate(getAbsoluteAngle());
     
-    SmartDashboard.putNumber("shoulder output ", -output);
+      
+        
+    
+    //SmartDashboard.putNumber("shoulder output ", -output);
     wristMotor1.set(-output);
     }
     

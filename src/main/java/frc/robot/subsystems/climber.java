@@ -34,9 +34,9 @@ public class climber extends SubsystemBase {
         
     }
    public void periodic(){
-    SmartDashboard.putNumber("climber encoder",climber.getEncoder().getPosition());
-    SmartDashboard.putBoolean("At setpoint", atSetpoint());
-    SmartDashboard.putNumber("climber pid pos", pid.getSetpoint());
+    // SmartDashboard.putNumber("climber encoder",climber.getEncoder().getPosition());
+    // SmartDashboard.putBoolean("At setpoint", atSetpoint());
+    // SmartDashboard.putNumber("climber pid pos", pid.getSetpoint());
 
     //double output = pid.calculate(climber.getEncoder().getPosition());
     //SmartDashboard.putNumber("climber", output);
