@@ -7,7 +7,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 7.0
           }
         },
         {
@@ -23,22 +23,48 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Score"
+                  "name": "PIDToBranchL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Outtake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RetractElevator"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "XWheels"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Outtake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RetractElevator"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

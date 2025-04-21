@@ -302,9 +302,10 @@ private final ClimbPiston m_piston = new ClimbPiston();
 
     private void createAutoChooser() {
         // Create the named commands
-        NamedCommands.registerCommand("PreScoreCommand", new SetShoulderAngle(m_Shoulder, -8));
+        NamedCommands.registerCommand("XWheels", drivetrain.applyRequest(() -> brake));
+        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
         NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
-        NamedCommands.registerCommand("Score", new Score(m_elevator, m_Shoulder, m_intake, 4));
+        NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
         NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
         NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
         NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
@@ -312,7 +313,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
         NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
         NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
         NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
-        NamedCommands.registerCommand("L4Elevator", new RaiseElevator(m_elevator,Constants.fieldConstants.level4Height));
+        NamedCommands.registerCommand("justL4Elevator", new RaiseElevator(m_elevator,Constants.fieldConstants.level4Height));
         
         // Default is no auto
         autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
@@ -321,10 +322,10 @@ private final ClimbPiston m_piston = new ClimbPiston();
         // autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
         autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
         autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-        autoChooser.addOption("RightAutoSpeed", drivetrain.getAutonomousCommand("Right Auto Speed"));
-        autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left Auto Speed"));
+        //autoChooser.addOption("RightAutoSpeed", drivetrain.getAutonomousCommand("Right Auto Speed"));
+        //autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left Auto Speed"));
         autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
-        autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
+        //autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

@@ -57,7 +57,7 @@ public class PIDToPose extends Command {
     thetaPID.enableContinuousInput(-180, 180);
     xPID.setTolerance(0.03);
     yPID.setTolerance(0.03);
-    thetaPID.setTolerance(3);
+    thetaPID.setTolerance(1);
 
     timer = 0;
   }
@@ -88,10 +88,10 @@ public class PIDToPose extends Command {
     
             
 
-    // SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
-    // SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
-    // SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
-    // SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
+    SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
+     SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
+     SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
+     SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
     
             
     swerveCommand.execute();
@@ -104,6 +104,15 @@ public class PIDToPose extends Command {
   @Override
   public void end(boolean interrupted) {
     swerveCommand.cancel();
+    
+    swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(0 * MaxSpeed) // Drive forward with negative Y (forward)
+    .withVelocityY(0 * MaxSpeed) // Drive left with negative X (left)
+    .withRotationalRate(0 * MaxAngularRate) // Drive counterclockwise with negative X (left)
+    );
+    
+    swerveCommand.schedule();
+    swerveCommand.cancel();
+    
   }
 
   // Returns true when the command should end.

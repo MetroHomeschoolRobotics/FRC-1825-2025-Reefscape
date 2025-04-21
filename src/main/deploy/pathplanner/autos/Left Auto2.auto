@@ -17,45 +17,72 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreScoreCommand"
+                  "name": "ShoulderAngleToL4"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Score"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "PIDToBranchL"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ElevatorToL4"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "race",
                       "data": {
-                        "name": "PIDToBranchL"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "XWheels"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "Outtake"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "RetractElevator"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Outtake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractElevator"
                 }
               }
             ]
@@ -99,39 +126,72 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreScoreCommand"
+                  "name": "ShoulderAngleToL4"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Score"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "PIDToBranchL"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ElevatorToL4"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "XWheels"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "Outtake"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "RetractElevator"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Outtake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractElevator"
                 }
               }
             ]
@@ -175,7 +235,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreScoreCommand"
+                  "name": "ShoulderAngleToL4"
                 }
               }
             ]
@@ -192,7 +252,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Score"
+                        "name": "PIDToBranchR"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ElevatorToL4"
                       }
                     }
                   ]
@@ -233,6 +299,44 @@
           }
         },
         {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PIDToBranchR"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ElevatorToL4"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Outtake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RetractElevator"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Intake"
@@ -251,32 +355,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreScoreCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Score"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Outtake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractElevator"
+                  "name": "ShoulderAngleToL4"
                 }
               }
             ]
