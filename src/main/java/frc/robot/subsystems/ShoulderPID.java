@@ -23,7 +23,10 @@ public class ShoulderPID extends SubsystemBase {
   private double desiredposition = 0;
   
 
-  /** Creates a new Shoulder. */
+  /** Creates a new Shoulder.
+   * <p>
+   * Controls the Shoulder motors with a PID
+   */
   public ShoulderPID() {
     pid.setTolerance(0.75);
     setClimb(false);

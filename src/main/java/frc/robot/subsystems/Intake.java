@@ -21,7 +21,10 @@ public class Intake extends SubsystemBase {
    
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
   
-    /** Creates a new Intake. */
+    /** Creates a new Intake.
+     * <p>
+     * Controls the intake motors and reads intake sensors
+     */
     public Intake() {
      // intakeMotor2.configure(
        //     config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);

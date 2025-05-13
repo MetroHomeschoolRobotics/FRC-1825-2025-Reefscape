@@ -36,8 +36,11 @@ public class Elevator extends SubsystemBase {
     //90% sure those are the right motor objects(they were not)(they are now)
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
-    
-
+    /**
+     * Creates a new elevator
+     * <p>
+     * Controls the elevator motors and reads the elevator sensors
+     */
     public Elevator(){
         
         resetEncoders();
