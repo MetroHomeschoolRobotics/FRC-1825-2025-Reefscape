@@ -31,7 +31,7 @@ public final class Constants {
 
   public static class elevatorConstants {
     public static final double elevatorGearRatio = 7.75;//62/8
-    public static final double elevatorConversion=(207-93.66)/20.16;//elevator max to floor - elevator min to floor / encoder val at max height
+    public static final double elevatorConversion=(207-93.66)/18.11;//elevator max to floor - elevator min to floor / encoder val at max height
     public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on elevator in cm
   }
 
@@ -106,6 +106,8 @@ public final class Constants {
 
     public static final int deAlgaeMotorId = 14;
     public static final int climberMotorId = 15;
+
+    public static final int elevatorBeambreakID = 1;
 
   }
 

@@ -59,6 +59,8 @@ import java.util.Optional;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -120,12 +122,13 @@ private final ClimbPiston m_piston = new ClimbPiston();
 
   // Auto Chooser
   public final SendableChooser<Command> autoChooser = new SendableChooser<>();
-
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     createAutoChooser();
     configureBindings();
+   // DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
   }
 
   /**
