@@ -20,7 +20,14 @@ public class l1AutoAlign extends Command {
     private PIDToPose pidToPose;
 
     private Pose2d [] L1Poses = Constants.FieldSetpoints.L1Poses;
-
+    /**
+     * Create a new L1AutoAlign command.
+     * Which will choose the nearest L1 face
+     * and continually command the drive train to drive
+     * to it until the command is no longer scheduled
+     * 
+     * @param _drivetrain The drivetrain object
+     */
     public l1AutoAlign(CommandSwerveDrivetrain _drivetrain){
         addRequirements(_drivetrain);
         drivetrain = _drivetrain;

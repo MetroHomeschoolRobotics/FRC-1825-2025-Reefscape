@@ -79,14 +79,18 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
 
-  // public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
+  // public final Boolean developerMode = true; 
+  // TODO finalize the programming and change this developer mode var
 
   // drive constants
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
   //  TODO check this
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
+
+  // The robot's subsystems and commands are defined here.
+
+  // Setting up bindings for necessary control of the swerve drive platform
   // Creates a drive object that will be used to create drive commands later on
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() 
     .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a deadband, this will apply to all request to the drive object
@@ -100,7 +104,6 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  // The robot's subsystems and commands are defined here...
 
   // Create all the subsystems for the code
   private final Intake m_intake = new Intake();
@@ -118,6 +121,7 @@ public class RobotContainer {
   private final CommandXboxController m_streamdeck = new CommandXboxController(2);
 
   // Command Init. These are commands that never end so that will always be running
+  // Therefore they start at robot init, instead of being bound to a button
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
 
@@ -164,9 +168,6 @@ public class RobotContainer {
 
       // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
 
-      // reset the field-centric heading on left bumper press
-    driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
       // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
       // Constants.FieldSetpoints.RedAlliance.reefA));
       // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
@@ -190,12 +191,14 @@ public class RobotContainer {
       // -driverXbox.getLeftX()))
       // ));
 
-      // reset the field-centric heading on left bumper press
-    driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+    //Sets the command that subsystems will run if nothing else is scheduled
+    //These will be overridden when something else is scheduled in these subsystems
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator, runElevator);
 
+    // reset the field-centric heading on left bumper press
+    driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
     driverXbox.leftBumper().whileTrue(new DriveToBranch("L", drivetrain));
     driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
@@ -242,69 +245,7 @@ public class RobotContainer {
 
     Optional<Alliance> ally = DriverStation.getAlliance();
 
-    // if (ally.isPresent()) {
-
-    // if (ally.get() == Alliance.Red) {
-    // //left facing the whatever reef it goes to
-    // m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefK,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefI,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefG,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefE,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefC,
-    // 2, 2,180,360));
-    // //right facing whatever reef it goes to
-    // m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefB,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefJ,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefH,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefF,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefD,
-    // 2, 2,180,360));
-    // }
-
-    // if (ally.get() == Alliance.Blue) {
-    // //left facing the whatever reef it goes to
-    // m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefA,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefK,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefI,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefG,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefE,
-    // 2, 2,180,360));
-    // m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefC,
-    // 2, 2,180,360));
-    // //right facing whatever reef it goes to
-    // m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefB,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefL,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefJ,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefH,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefF,
-    // 2, 2,180,360));
-    // m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefD,
-    // 2, 2,180,360));
-    // }
-
   }
-
-  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

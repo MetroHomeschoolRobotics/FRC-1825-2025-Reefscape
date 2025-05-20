@@ -7,7 +7,12 @@ public class RunIntakeBackwards extends Command {
 
     private Intake intake;
     
-
+    /**
+     * Runs the intake backwards.
+     * Does not reference the beambreak
+     * 
+     * @param _intake The intake subsystem object
+     */
     public RunIntakeBackwards(Intake _intake){
         addRequirements(_intake);
         

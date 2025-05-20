@@ -31,7 +31,13 @@ public class DriveToBranch extends Command {
 
   private PIDToPose pidToPose;
 
-  /** Creates a new DriveToBranch. */
+  /** Creates a new DriveToBranch command. 
+   *  Which will choose the nearest branch to drive to
+   *  and continually command the drivetrain to drive to it
+   *  until the command is no longer scheduled.
+   * @param _LOrRBranch Whether you want to drive to the nearest Left or Right branch
+   * @param _drivetrain The drivetrain object
+  */
   public DriveToBranch(String _LOrRBranch, CommandSwerveDrivetrain _drivetrain) {
     drivetrain = _drivetrain;
     LeftOrRightBranch = _LOrRBranch;

@@ -19,17 +19,14 @@ import com.revrobotics.spark.SparkLowLevel;
 //78 cm high at base
 //190 cm high at apex
 public class Elevator extends SubsystemBase {
-    
-    
-    
+
     private PIDController pid = new PIDController(.008, 0, 0);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
-    //
     private double desiredposition = 0;
     private double highestGetDistance;
-    private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
-    private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
-    
+    private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1,SparkLowLevel.MotorType.kBrushless);
+    private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2,SparkLowLevel.MotorType.kBrushless);
+
     //private DigitalInput beambreak = new DigitalInput(1);
     
     
