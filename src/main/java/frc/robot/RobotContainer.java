@@ -27,7 +27,7 @@ import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
 import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
-import frc.robot.commands.RunDeAlgae;
+import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.stopclimber;
 import frc.robot.commands.testClimberPID;
@@ -81,47 +81,55 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
 
-  public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
+  // public final Boolean developerMode = true; 
+  // TODO finalize the programming and change this developer mode var
 
   // drive constants
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity TODO check this
+  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+  //  TODO check this
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
 
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+  // The robot's subsystems and commands are defined here.
+
+  // Setting up bindings for necessary control of the swerve drive platform
+  // Creates a drive object that will be used to create drive commands later on
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric() 
+    .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a deadband, this will apply to all request to the drive object
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+  // Create a brake command that can be used later
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+  // private final SwerveRequest.PointWheelsAt point = new
+  // SwerveRequest.PointWheelsAt(); // Cool idea, doesn't work yet
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
 
-  // The robot's subsystems and commands are defined here...
-  
+  // Create all the subsystems for the code
   private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
+  private final climber m_climber = new climber();
+  private final ClimbPiston m_piston = new ClimbPiston();
+  private final Telemetry logger = new Telemetry(MaxSpeed);  // Pose Stuffs
 
- private final climber m_climber = new climber();
-private final ClimbPiston m_piston = new ClimbPiston();
-  
+  // Create the objects for the controllers
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
   private final CommandXboxController m_streamdeck = new CommandXboxController(2);
-  
-  // Command Init.
-  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController,m_Shoulder);
-  private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController,m_elevator);
- 
-  // Pose Stuffs
-  private final Telemetry logger = new Telemetry(MaxSpeed);
+
+  // Command Init. These are commands that never end so that will always be running
+  // Therefore they start at robot init, instead of being bound to a button
+  private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
+  private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
 
   // Auto Chooser
   public final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -135,208 +143,165 @@ private final ClimbPiston m_piston = new ClimbPiston();
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link CommandXboxController Xbox}
+   * / {@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    if(developerMode){
-            
-        // Note that X is defined as forward according to WPILib convention, TODO Create an angle based turn system
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
-                                                .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
-                                                .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
-
-        // Puts the wheels in an x
-        //driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
-
-        // points the wheels without driving
-        // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
-        // ));
-
-        //driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
-
-        // reset the field-centric heading on left bumper press\\
-        driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-        // driverXbox.y().whileTrue(new PIDToPose(drivetrain, Constants.FieldSetpoints.RedAlliance.reefA));
-        //driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
-
-        // Sysid buttons
-        // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
-        // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
-
-    } else {
-      drivetrain.setDefaultCommand(
-        // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
-                                            .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
-                                            .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        )
+    // TODO Create an angle based turn system
+    // Note that X is defined as forward according to WPILib convention,
+    // and Y is defined as to the left according to WPILib convention.
+    // Drivetrain will execute this command periodically
+    drivetrain.setDefaultCommand(
+      drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
+        .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
+        .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+      )
     );
 
-    // Puts the wheels in an x
-    // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+      // Puts the wheels in an x
+      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
-    // points the wheels without driving
-    // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-    //     point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(), -driverXbox.getLeftX()))
-    // ));
+      // points the wheels without driving
+      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
+      // -driverXbox.getLeftX()))
+      // ));
+
+      // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
+
+      // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
+      // Constants.FieldSetpoints.RedAlliance.reefA));
+      // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
+      // 2, 2,180,360));
+
+      // Sysid buttons
+      // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+      // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+      // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+      // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+      // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
+      // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
+
+
+      // Puts the wheels in an x
+      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+
+      // points the wheels without driving
+      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
+      // -driverXbox.getLeftX()))
+      // ));
+
+
+    //Sets the command that subsystems will run if nothing else is scheduled
+    //These will be overridden when something else is scheduled in these subsystems
+    CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
+    CommandScheduler.getInstance().setDefaultCommand(m_elevator, runElevator);
 
     // reset the field-centric heading on left bumper press
     driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-    }
-        
-    CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
-    CommandScheduler.getInstance().setDefaultCommand(m_elevator,runElevator);
-
     driverXbox.leftBumper().whileTrue(new DriveToBranch("L", drivetrain));
     driverXbox.rightBumper().whileTrue(new DriveToBranch("R", drivetrain));
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     driverXbox.y().whileTrue(drivetrain.applyRequest(() -> brake));
     driverXbox.a().whileTrue(new l1AutoAlign(drivetrain));
-    //driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
-    
+    // driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
+    // Starting config
+    // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
+
+    // Manipulator non-scoring commands
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new StaggerMotors(m_intake));
-
-    m_manipulatorController.y().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 4).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
-    m_manipulatorController.x().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 3).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
-    m_manipulatorController.b().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 2).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
-   // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
-    m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
-    
-   m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
-   m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
-   m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
-
-//Starting config
-    //driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
-
-
-
-    
+    m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
+    m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
     m_manipulatorController.rightTrigger().whileTrue(new RunIntakeBackwards(m_intake));
-    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder,m_elevator));
+    m_manipulatorController.leftTrigger().whileTrue(new shoulderToIntake(m_Shoulder, m_elevator));
 
+    // These are all the manipulator scoring commands, for each level
+    m_manipulatorController.y().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 4)
+        .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    m_manipulatorController.x().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 3)
+        .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 2)
+        .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+    // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
+    m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
+
+
+
+    // These are all the streamdeck button commands, only used for climbing
     m_streamdeck.b().whileTrue(new RunClimbPiston2(m_piston));
-    m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder,-34.6).andThen(new RaiseElevator(m_elevator,-115)));
-    m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));//retract actuator, if this ratchets ignore
-    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));//claws to cage
-    m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));//claws backwards, if this ratchets ignore
-    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder,-54).andThen(new RunClimbPiston(m_piston)).andThen(new SetShoulderAngle(m_Shoulder,-47.5)).andThen(new RunClimbPiston2(m_piston)));//actuactor forward
-   
+    m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder, -34.6).andThen(new RaiseElevator(m_elevator, -115)));
+    m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));// retract actuator, if this ratchets ignore
+    m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));// claws to cage
+    m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));// claws backwards, if this ratchets ignore
+    m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder, -54).andThen(new RunClimbPiston(m_piston))
+        .andThen(new SetShoulderAngle(m_Shoulder, -47.5)).andThen(new RunClimbPiston2(m_piston)));// actuactor forward
+    // m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
+    // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
+    // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
 
-    
+
     Optional<Alliance> ally = DriverStation.getAlliance();
 
- // m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
-    //m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
-   // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
-
-// if (ally.isPresent()) {
- 
-
-//     if (ally.get() == Alliance.Red) {
-//       //left facing the whatever reef it goes to
-//        m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefA, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefK, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefI, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefG, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefE, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefC, 2, 2,180,360));
-//       //right facing whatever reef it goes to
-//       m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefB, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefJ, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefH, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefF, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefD, 2, 2,180,360));
-//     }
- 
-
-//     if (ally.get() == Alliance.Blue) {
-//         //left facing the whatever reef it goes to
-//        m_streamdeck.leftTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefA, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefK, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefI, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefG, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefE, 2, 2,180,360));
-//        m_streamdeck.leftTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefC, 2, 2,180,360));
-//        //right facing whatever reef it goes to
-//       m_streamdeck.rightTrigger().and(m_streamdeck.a()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefB, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.x()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefL, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.leftBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefJ, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.rightBumper()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefH, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.y()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefF, 2, 2,180,360));
-//       m_streamdeck.rightTrigger().and(m_streamdeck.b()).whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.BlueAlliance.reefD, 2, 2,180,360));
-//     }
-
-}
-    
-    
-  // }
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public void resetEncoders(){
+  public void resetEncoders() {
     m_elevator.resetEncoders();
     m_climber.resetEncoders();
-    //m_climber.setClimber(0);
+    // m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
   }
- 
 
-    private void createAutoChooser() {
-        // Create the named commands
-        NamedCommands.registerCommand("XWheels", drivetrain.applyRequest(() -> brake));
-        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
-        NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
-        NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
-        NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
-        NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
-        NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
-        NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
-        NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
-        NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
-        NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
-        NamedCommands.registerCommand("justL4Elevator", new RaiseElevator(m_elevator,Constants.fieldConstants.level4Height));
-        
-        // Default is no auto
-        autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-        // autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
-        // autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
-        // autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
-        autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
-        autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-        //autoChooser.addOption("RightAutoSpeed", drivetrain.getAutonomousCommand("Right Auto Speed"));
-        //autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left Auto Speed"));
-        autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
-        //autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
+  private void createAutoChooser() {
+    // Create the named commands
+    NamedCommands.registerCommand("XWheels", drivetrain.applyRequest(() -> brake));
+    NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
+    NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
+    NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
+    NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
+    NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
+    NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
+    NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
+    NamedCommands.registerCommand("PathfindToF",
+        drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
+    NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
+    NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
+    NamedCommands.registerCommand("justL4Elevator",
+        new RaiseElevator(m_elevator, Constants.fieldConstants.level4Height));
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-    }
+    // Default is no auto
+    autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
+    // autoChooser.addOption("Straight2Meter",
+    // drivetrain.getAutonomousCommand("Straight2Meter"));
+    // autoChooser.addOption("Straight4Meter",
+    // drivetrain.getAutonomousCommand("Straight4Meter"));
+    // autoChooser.addOption("Straight6Meter",
+    // drivetrain.getAutonomousCommand("Straight6Meter"));
+    autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
+    autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
+    // autoChooser.addOption("RightAutoSpeed",
+    // drivetrain.getAutonomousCommand("Right Auto Speed"));
+    // autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left
+    // Auto Speed"));
+    autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
+    // autoChooser.addOption("TestAuto",
+    // drivetrain.getAutonomousCommand("RightAutoJustPath"));
 
-    public Command getAutonomousCommand() {
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
 
+  public Command getAutonomousCommand() {
 
-      
-        return autoChooser.getSelected();
-    }
+    return autoChooser.getSelected();
+  }
 }

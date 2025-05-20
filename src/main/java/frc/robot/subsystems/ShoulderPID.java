@@ -11,8 +11,8 @@ import frc.robot.Constants;
 
 public class ShoulderPID extends SubsystemBase {
 
-    private SparkMax wristMotor1 = new SparkMax(Constants.MotorIDs.wristMotorID1, MotorType.kBrushless);
-    private boolean isClimbing = false;
+  private SparkMax wristMotor1 = new SparkMax(Constants.MotorIDs.wristMotorID1, MotorType.kBrushless);
+  private boolean isClimbing = false;
 
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
   private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
@@ -23,7 +23,10 @@ public class ShoulderPID extends SubsystemBase {
   private double desiredposition = 0;
   
 
-  /** Creates a new Shoulder. */
+  /** Creates a new Shoulder.
+   * <p>
+   * Controls the Shoulder motors with a PID
+   */
   public ShoulderPID() {
     pid.setTolerance(0.75);
     setClimb(false);
@@ -101,7 +104,5 @@ public class ShoulderPID extends SubsystemBase {
     //SmartDashboard.putNumber("shoulder output ", -output);
     wristMotor1.set(-output);
     }
-    
-    //wristMotor2.setVoltage(output*12)
   }
 }
