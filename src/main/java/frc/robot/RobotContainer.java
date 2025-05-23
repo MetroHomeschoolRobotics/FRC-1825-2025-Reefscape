@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.robotToM4;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
@@ -104,6 +105,7 @@ public class RobotContainer {
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
   private final ClimbPiston m_piston = new ClimbPiston();
+  public final robotToM4 m4Comms = new robotToM4();
 
   // Controllers
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
