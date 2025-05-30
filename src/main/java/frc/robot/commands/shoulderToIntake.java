@@ -18,7 +18,12 @@ public class shoulderToIntake extends Command {
   private ShoulderPID shoulder;
   private Elevator elevator;
   
-  /** Creates a new RunShoulder. */
+  /** Creates a new Shoulder to intake command. 
+   * Moves the shoulder and elevator to the intake position.
+   * Ends when both PID loops have finished.
+   * @param _shoulder The shoulder subsystem object
+   * @param _elevator The elevator subsystem object
+  */
   public shoulderToIntake(ShoulderPID _shoulder,Elevator _elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_shoulder);

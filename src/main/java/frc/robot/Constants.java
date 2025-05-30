@@ -30,8 +30,10 @@ public final class Constants {
 
 
   public static class elevatorConstants {
-    public static final double elevatorGearRatio = 7.75;//62/8
-    public static final double elevatorConversion=(207-93.66)/18.11;//elevator max to floor - elevator min to floor / encoder val at max height
+
+    public static final double elevatorGearRatio = 7.75;// 62/8
+    public static final double elevatorConversion=(207-93.66)/20.16;//elevator max to floor - elevator min to floor / encoder val at max height
+
     public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on elevator in cm
   }
 
@@ -71,22 +73,22 @@ public final class Constants {
     
   public static class CameraPositions {
     public static final Transform3d frontLeftTranslation = new Transform3d(
-                                                            Units.inchesToMeters(11.147131),
-                                                            Units.inchesToMeters(11.404959), // 11.29
-                                                            Units.inchesToMeters(9.321819), 
-                                                            new Rotation3d(
-                                                              Units.degreesToRadians(5.592),
-                                                              Units.degreesToRadians(10),
-                                                              Units.degreesToRadians(-29.5305)));
-                                                              
+        Units.inchesToMeters(11.147131),
+        Units.inchesToMeters(11.404959), // 11.29
+        Units.inchesToMeters(9.321819),
+        new Rotation3d(
+            Units.degreesToRadians(5.592),
+            Units.degreesToRadians(10),
+            Units.degreesToRadians(-29.5305)));
+
     public static final Transform3d frontRightTranslation = new Transform3d(
-                                                            Units.inchesToMeters(12.916),
-                                                            Units.inchesToMeters(-11.500), // -11.29
-                                                            Units.inchesToMeters(9.225750),
-                                                            new Rotation3d(
-                                                              Units.degreesToRadians(0),
-                                                              Units.degreesToRadians(0),
-                                                              Units.degreesToRadians(0)));
+        Units.inchesToMeters(12.916),
+        Units.inchesToMeters(-11.500), // -11.29
+        Units.inchesToMeters(9.225750),
+        new Rotation3d(
+            Units.degreesToRadians(0),
+            Units.degreesToRadians(0),
+            Units.degreesToRadians(0)));
                                                               
     public static final Transform3d leftTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
     public static final Transform3d rightTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));

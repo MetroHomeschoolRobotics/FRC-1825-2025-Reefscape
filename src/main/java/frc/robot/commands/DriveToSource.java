@@ -19,7 +19,12 @@ public class DriveToSource extends Command {
 
   private CommandSwerveDrivetrain drivetrain;
 
-  /** Creates a new DriveToSource. */
+  /** Creates a new DriveToSource command. 
+   * Which will choose the nearest source 
+   * slot to drive to and continually command the drivetrain
+   * to drive to it until the command is no longer scheduled
+   * @param _drivetrain The drivetrain object
+  */
   public DriveToSource(CommandSwerveDrivetrain _drivetrain) {
 
     drivetrain = _drivetrain;

@@ -27,6 +27,7 @@ public class Elevator extends SubsystemBase {
     //
     private double desiredposition = 0;
     private double highestGetDistance;
+
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
@@ -36,8 +37,11 @@ public class Elevator extends SubsystemBase {
     //90% sure those are the right motor objects(they were not)(they are now)
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
-    
-
+    /**
+     * Creates a new elevator
+     * <p>
+     * Controls the elevator motors and reads the elevator sensors
+     */
     public Elevator(){
         
         resetEncoders();
