@@ -3,7 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
@@ -27,7 +29,7 @@ import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
 import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
-import frc.robot.commands.RunDeAlgae;
+import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.stopclimber;
 import frc.robot.commands.testClimberPID;
@@ -45,7 +47,7 @@ import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
 import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.Constants.OperatorConstants;
-
+import frc.robot.AutoRoutines;
 import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -58,7 +60,12 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import choreo.auto.AutoFactory;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -78,7 +85,7 @@ import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
-
+  
   public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
 
   // drive constants
@@ -119,15 +126,23 @@ private final ClimbPiston m_piston = new ClimbPiston();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   // Auto Chooser
-  public final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  
+  private final AutoFactory autoFactory;
+  private final AutoRoutines autoRoutines;
+  private final AutoChooser autoChooser = new AutoChooser();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    autoFactory = drivetrain.createAutoFactory();
+        autoRoutines = new AutoRoutines(autoFactory);
+
+        
     createAutoChooser();
     configureBindings();
+    //DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
   }
-
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -215,7 +230,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
    // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
     m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
     
-   m_manipulatorController.povUp().whileTrue(new RunDeAlgae(m_deAlgae));
+   m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
    m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
    m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
 
@@ -301,39 +316,18 @@ private final ClimbPiston m_piston = new ClimbPiston();
  
 
     private void createAutoChooser() {
-        // Create the named commands
-        NamedCommands.registerCommand("XWheels", drivetrain.applyRequest(() -> brake));
-        NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
-        NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
-        NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
-        NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
-        NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
-        NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
-        NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
-        NamedCommands.registerCommand("PathfindToF", drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
-        NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
-        NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
-        NamedCommands.registerCommand("justL4Elevator", new RaiseElevator(m_elevator,Constants.fieldConstants.level4Height));
-        
-        // Default is no auto
-        autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-        // autoChooser.addOption("Straight2Meter", drivetrain.getAutonomousCommand("Straight2Meter"));
-        // autoChooser.addOption("Straight4Meter", drivetrain.getAutonomousCommand("Straight4Meter"));
-        // autoChooser.addOption("Straight6Meter", drivetrain.getAutonomousCommand("Straight6Meter"));
-        autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
-        autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-        //autoChooser.addOption("RightAutoSpeed", drivetrain.getAutonomousCommand("Right Auto Speed"));
-        //autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left Auto Speed"));
-        autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
-        //autoChooser.addOption("TestAuto", drivetrain.getAutonomousCommand("RightAutoJustPath"));
-
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+      //autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
+      NamedCommands.registerCommand("testCommand", new SetShoulderAngle(m_Shoulder, -10));
+      autoChooser.addRoutine("taxi", autoRoutines::taxi);
+      autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
+      
+      SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
 
 
       
-        return autoChooser.getSelected();
+        return autoChooser.selectedCommand();
     }
 }

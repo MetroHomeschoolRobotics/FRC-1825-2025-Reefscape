@@ -89,7 +89,7 @@ public class ShoulderPID extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Absolute Angle", getAbsoluteAngle());
     // SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
-    // SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
+    SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
     double output;
     if(getClimb()==false){
       
