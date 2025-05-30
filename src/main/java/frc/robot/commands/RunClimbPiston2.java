@@ -1,13 +1,12 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ClimbPiston;
 
 public class RunClimbPiston2 extends Command {
     private ClimbPiston piston;
-    private CommandXboxController xbox;
 
     public RunClimbPiston2(ClimbPiston _Piston){
         addRequirements(_Piston);
