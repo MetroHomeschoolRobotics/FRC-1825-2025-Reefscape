@@ -22,15 +22,15 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.008, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
+    private PIDController pid = new PIDController(.0095, 0, 0);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.09, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
-    private DigitalInput beambreak = new DigitalInput(Constants.MotorIDs.elevatorBeambreakID);
+    //private DigitalInput beambreak = new DigitalInput(1);
     
     
     //90% sure those are the right motor objects(they were not)(they are now)
@@ -84,8 +84,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        
-       return beambreak.get();
+        return false;
+       // return beambreak.get();
         
     }
     public void setPID(double setPoint){
@@ -100,10 +100,10 @@ public class Elevator extends SubsystemBase {
         return pid.atSetpoint();
     }
     public void periodic(){
-        // SmartDashboard.putNumber("desiredPos", desiredposition);
+        SmartDashboard.putNumber("desiredPos", pid.getSetpoint());
         // SmartDashboard.putNumber("elevator error", pid.getError());
-        // SmartDashboard.putNumber("elevator distance", getDistance());
-        // SmartDashboard.putNumber("encoderValue", getEncoder());
+        SmartDashboard.putNumber("elevator distance", getDistance());
+         SmartDashboard.putNumber("encoderValue", getEncoder());
         // SmartDashboard.putBoolean("atSetpoint", atSetpoint());
 
         if(getDistance()<highestGetDistance){
@@ -111,7 +111,7 @@ public class Elevator extends SubsystemBase {
         }
         //SmartDashboard.putNumber("highestGetDistance", highestGetDistance);
         double output;
-        if(getDistance()<-98.66){
+        if(pid.getSetpoint()<-98.66){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());
@@ -127,14 +127,16 @@ public class Elevator extends SubsystemBase {
         //     output = -1;
         // }
         MathUtil.clamp(output,-1,0.18);
-        //SmartDashboard.putNumber("pid output", output);
+        SmartDashboard.putNumber("pid output", output);
+
         
         elevatorMotor1.setVoltage(output*12);
         elevatorMotor2.setVoltage(-output*12);
         
         if(isLowest()){
-            resetEncoders();
+            //resetEncoders();
             
         }
     }
 }
+
