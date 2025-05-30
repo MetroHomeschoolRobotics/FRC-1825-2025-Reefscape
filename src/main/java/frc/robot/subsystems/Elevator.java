@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -22,8 +23,8 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.0095, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.11, 0);
+    private PIDController pid = new PIDController(.01, 0.002, 0.001);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.06, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
@@ -31,7 +32,7 @@ public class Elevator extends SubsystemBase {
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
-    //private DigitalInput beambreak = new DigitalInput(1);
+    private DigitalInput beambreak = new DigitalInput(1);
     
     
     //90% sure those are the right motor objects(they were not)(they are now)
@@ -88,8 +89,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        return false;
-       // return beambreak.get();
+        
+       return beambreak.get();
         
     }
     public void setPID(double setPoint){
@@ -136,9 +137,9 @@ public class Elevator extends SubsystemBase {
         
         elevatorMotor1.setVoltage(output*12);
         elevatorMotor2.setVoltage(-output*12);
-        
+        SmartDashboard.putBoolean("isLowest", isLowest());
         if(isLowest()){
-            //resetEncoders();
+            resetEncoders();
             
         }
     }
