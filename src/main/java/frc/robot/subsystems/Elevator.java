@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
     
     
     private PIDController pid = new PIDController(.0095, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.09, 0);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.11, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
@@ -55,7 +55,7 @@ public class Elevator extends SubsystemBase {
 
     public void setSpeed(double speed, double distanceToLimit){
         
-       speed*=1.5;//scalar TO//DO tune this
+       speed*=1.25;//scalar TO//DO tune this
         if(speed <=0 && desiredposition>= Constants.elevatorConstants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
             
             desiredposition += speed;
