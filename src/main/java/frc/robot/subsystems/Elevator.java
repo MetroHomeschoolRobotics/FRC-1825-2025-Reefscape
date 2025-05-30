@@ -19,25 +19,26 @@ import com.revrobotics.spark.SparkLowLevel;
 //78 cm high at base
 //190 cm high at apex
 public class Elevator extends SubsystemBase {
-    
-    
-    
+
     private PIDController pid = new PIDController(.008, 0, 0);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
-    //
     private double desiredposition = 0;
     private double highestGetDistance;
+
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
-    //private DigitalInput beambreak = new DigitalInput(1);
+    private DigitalInput beambreak = new DigitalInput(Constants.MotorIDs.elevatorBeambreakID);
     
     
     //90% sure those are the right motor objects(they were not)(they are now)
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
-    
-
+    /**
+     * Creates a new elevator
+     * <p>
+     * Controls the elevator motors and reads the elevator sensors
+     */
     public Elevator(){
         
         resetEncoders();
@@ -84,8 +85,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        return false;
-       // return beambreak.get();
+        
+       return beambreak.get();
         
     }
     public void setPID(double setPoint){
