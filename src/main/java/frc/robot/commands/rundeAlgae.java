@@ -2,22 +2,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-/**
- * Temporary stub: RunDeAlgae implementation is commented out.
- */
+import frc.robot.subsystems.deAlgae;
+
 public class rundeAlgae extends Command {
-    // --- original implementation commented out below ---
-    /*
-    private final deAlgae m_subsystem;
+    private deAlgae deAlgae;
+    
+    public rundeAlgae(deAlgae _deAlgae){
+        addRequirements(_deAlgae);
+        deAlgae = _deAlgae;
 
-    public RunDeAlgae(deAlgae subsystem) {
-        m_subsystem = subsystem;
-        addRequirements(m_subsystem);
-    }
-
-    @Override
-    public void initialize() {
-        // …
     }
 
     @Override

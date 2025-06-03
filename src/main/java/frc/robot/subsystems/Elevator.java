@@ -1,18 +1,19 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
 
-import com.revrobotics.spark.SparkBase;
+// import com.revrobotics.spark.SparkBase;
 
 
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
+// import com.revrobotics.spark.config.SparkBaseConfig;
+// import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.SparkLowLevel;
 
@@ -22,22 +23,26 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.008, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.05, 0);
+    private PIDController pid = new PIDController(.01, 0.002, 0.001);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.06, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
+
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
-    //private DigitalInput beambreak = new DigitalInput(1);
+    private DigitalInput beambreak = new DigitalInput(1);
     
     
     //90% sure those are the right motor objects(they were not)(they are now)
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
     
-    
-
+    /**
+     * Creates a new elevator
+     * <p>
+     * Controls the elevator motors and reads the elevator sensors
+     */
     public Elevator(){
         
         resetEncoders();
@@ -51,7 +56,7 @@ public class Elevator extends SubsystemBase {
 
     public void setSpeed(double speed, double distanceToLimit){
         
-       speed*=1.5;//scalar TO//DO tune this
+       speed*=1.25;//scalar TO//DO tune this
         if(speed <=0 && desiredposition>= Constants.elevatorConstants.elevatorMaxHeight && distanceToLimit > Constants.distToLimOffset){
             
             desiredposition += speed;
@@ -84,8 +89,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        return false;
-       // return beambreak.get();
+        
+       return beambreak.get();
         
     }
     public void setPID(double setPoint){
@@ -100,10 +105,10 @@ public class Elevator extends SubsystemBase {
         return pid.atSetpoint();
     }
     public void periodic(){
-        // SmartDashboard.putNumber("desiredPos", desiredposition);
+        SmartDashboard.putNumber("desiredPos", pid.getSetpoint());
         // SmartDashboard.putNumber("elevator error", pid.getError());
-        // SmartDashboard.putNumber("elevator distance", getDistance());
-        // SmartDashboard.putNumber("encoderValue", getEncoder());
+        SmartDashboard.putNumber("elevator distance", getDistance());
+         SmartDashboard.putNumber("encoderValue", getEncoder());
         // SmartDashboard.putBoolean("atSetpoint", atSetpoint());
 
         if(getDistance()<highestGetDistance){
@@ -111,7 +116,7 @@ public class Elevator extends SubsystemBase {
         }
         //SmartDashboard.putNumber("highestGetDistance", highestGetDistance);
         double output;
-        if(getDistance()<-98.66){
+        if(pid.getSetpoint()<-98.66){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
         }else{
             output = pid.calculate(getDistance());
@@ -127,14 +132,16 @@ public class Elevator extends SubsystemBase {
         //     output = -1;
         // }
         MathUtil.clamp(output,-1,0.18);
-        //SmartDashboard.putNumber("pid output", output);
+        SmartDashboard.putNumber("pid output", output);
+
         
         elevatorMotor1.setVoltage(output*12);
         elevatorMotor2.setVoltage(-output*12);
-        
+        SmartDashboard.putBoolean("isLowest", isLowest());
         if(isLowest()){
             resetEncoders();
             
         }
     }
 }
+
