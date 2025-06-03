@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.subsystems.robotToM4;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -89,6 +90,8 @@ public class ShoulderPID extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    robotToM4.INSTANCE.setElevatorAngle(getAbsoluteAngle());
+
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Absolute Angle", getAbsoluteAngle());
     // SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
@@ -98,11 +101,7 @@ public class ShoulderPID extends SubsystemBase {
       
         output = pid.calculate(getAbsoluteAngle());
     
-      
-        
-    
     //SmartDashboard.putNumber("shoulder output ", -output);
     wristMotor1.set(-output);
     }
   }
-}

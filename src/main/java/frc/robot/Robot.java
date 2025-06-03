@@ -8,36 +8,42 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import frc.robot.subsystems.Elevator;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
-  
 
+  /*/ RS-232 port for MatrixPortal (9600 baud, 8 data bits, odd parity, 1 stop bit)
+  public final SerialPort rs232Port = new SerialPort(
+      9600,
+      SerialPort.Port.kOnboard,
+      8,
+      SerialPort.Parity.kOdd,
+      SerialPort.StopBits.kOne
+  );
+/*/
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    
+    // Instantiate RobotContainer (button-bindings, auto chooser)
     m_robotContainer = new RobotContainer();
     m_robotContainer.resetEncoders();
+
+    // Warm up Pathfinding
     PathfindingCommand.warmupCommand().schedule();
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run(); 
+    CommandScheduler.getInstance().run();
   }
 
   @Override
   public void disabledInit() {}
-
   @Override
   public void disabledPeriodic() {}
-
   @Override
   public void disabledExit() {}
 
@@ -45,33 +51,27 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
   }
-
   @Override
   public void autonomousPeriodic() {}
-
   @Override
   public void autonomousExit() {}
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
   }
 
   @Override
-  public void teleopPeriodic() {}
-
+  public void teleopPeriodic() {
+    // Transmit framed exactly as the Arduino expects (SERIAL_8O1)
+    // rs232Port.writeString("Hello from Perry!\r\n");
+  }
   @Override
   public void teleopExit() {}
 
@@ -79,13 +79,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
   }
+  @Override public void testPeriodic() {}
+  @Override public void testExit() {}
 
-  @Override
-  public void testPeriodic() {}
-
-  @Override
-  public void testExit() {}
-
-  @Override
-  public void simulationPeriodic() {}
+  @Override public void simulationPeriodic() {}
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.robotToM4;
 import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
@@ -45,12 +46,13 @@ import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
 import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.Constants.OperatorConstants;
-
 import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.SerialPort;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -84,6 +86,9 @@ public class RobotContainer {
   // public final Boolean developerMode = true; 
   // TODO finalize the programming and change this developer mode var
 
+  // RS-232 port on RoboRIO’s onboard serial for MatrixPortal
+  //private final SerialPort rs232Port = new SerialPort(9600, SerialPort.Port.kOnboard);
+
   // drive constants
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -99,12 +104,14 @@ public class RobotContainer {
     .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
   // Create a brake command that can be used later
+
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
   // private final SwerveRequest.PointWheelsAt point = new
   // SwerveRequest.PointWheelsAt(); // Cool idea, doesn't work yet
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
 
 
   // Create all the subsystems for the code
@@ -118,14 +125,17 @@ public class RobotContainer {
 
   // Create the objects for the controllers
   // Replace with CommandPS4Controller or CommandJoystick if needed
+  public final robotToM4 m4Comms = new robotToM4();
   private final CommandXboxController driverXbox = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_manipulatorController = new CommandXboxController(1);
   private final CommandXboxController m_streamdeck = new CommandXboxController(2);
+
 
   // Command Init. These are commands that never end so that will always be running
   // Therefore they start at robot init, instead of being bound to a button
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
+
 
   // Auto Chooser
   public final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -133,9 +143,16 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
+    // Configure autonomous chooser and button bindings
     createAutoChooser();
     configureBindings();
+    new WaitCommand(10)
+      .andThen(Commands.runOnce(() -> {
+       // rs232Port.writeString("Hello from Perry!\r\n");
+      }))
+      .schedule();
+  }    
+
    // DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
   }
 
@@ -206,6 +223,7 @@ public class RobotContainer {
     driverXbox.x().whileTrue(new DriveToSource(drivetrain));
     driverXbox.y().whileTrue(drivetrain.applyRequest(() -> brake));
     driverXbox.a().whileTrue(new l1AutoAlign(drivetrain));
+
     // driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
     // Starting config
     // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
@@ -245,15 +263,23 @@ public class RobotContainer {
     // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
 
 
-    Optional<Alliance> ally = DriverStation.getAlliance();
 
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    // if (ally.isPresent()) {
+    //   if (ally.get() == Alliance.Red) {
+    //     // Red alliance auto bindings…
+    //   }
+    //   if (ally.get() == Alliance.Blue) {
+    //     // Blue alliance auto bindings…
+    //   }
+    // }
+  }
   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
    */
+
   public void resetEncoders() {
     m_elevator.resetEncoders();
     m_climber.resetEncoders();
@@ -305,3 +331,4 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 }
+
