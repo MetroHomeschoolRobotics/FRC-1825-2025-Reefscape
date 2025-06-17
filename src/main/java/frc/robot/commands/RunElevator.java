@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -40,14 +40,14 @@ public class RunElevator extends Command {
         
         
        
-        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<15*2.54)
-        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<15*2.54)){
+        if((Math.cos(Math.toRadians(-angle.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<70*2.54)
+        && (Math.cos(Math.toRadians(angle.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<70*2.54)){
             isLegal = true;
-            elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
+            elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.1), distToLim);
         }else{
             isLegal = false;
             if(xboxController.getRightY()>0){
-                elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.03), distToLim);
+                elevator.setSpeed(MathUtil.applyDeadband(xboxController.getRightY(),0.1), distToLim);
             }
             // if(angle.getAbsoluteAngle()>0){
             //     elevator.setPID(-(16.58+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));
@@ -56,7 +56,7 @@ public class RunElevator extends Command {
             // }
             
         }
-        SmartDashboard.putBoolean("elevator legal", isLegal );
+        //SmartDashboard.putBoolean("elevator legal", isLegal );
         //SmartDashboard.putNumber("elevator.getDistance",xboxController.getRightY());
     }
 

@@ -1,23 +1,33 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.subsystems.deAlgae;
 
-public class RunDeAlgae extends Command {
+public class rundeAlgae extends Command {
     private deAlgae deAlgae;
     
-    public RunDeAlgae(deAlgae _deAlgae){
+    public rundeAlgae(deAlgae _deAlgae){
         addRequirements(_deAlgae);
         deAlgae = _deAlgae;
+
     }
-    public void initialize(){}
-    public void execute(){
-        deAlgae.runDeAlgae();
+
+    @Override
+    public void execute() {
+        m_subsystem.runMotor();
     }
-    public void end(boolean interrupted){
-        deAlgae.stopDeAlgae();
+
+    @Override
+    public void end(boolean interrupted) {
+        m_subsystem.stopMotor();
     }
-    public boolean isFinished(){
+
+    @Override
+    public boolean isFinished() {
         return false;
     }
+    */
+
+    // Nothing here for now.
 }

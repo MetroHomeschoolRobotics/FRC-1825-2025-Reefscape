@@ -7,7 +7,12 @@ public class ShiftCoralForward extends Command {
 
     private Intake intake;
     
-
+    /**
+     * Slowly moves the intake forward
+     * regardless of beambreak status
+     * 
+     * @param _intake The intake subsystem object
+     */
     public ShiftCoralForward(Intake _intake){
         addRequirements(_intake);
         

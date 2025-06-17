@@ -15,14 +15,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PIDToPose extends Command {
+public class TeleopPIDToPose extends Command {
 
   private CommandSwerveDrivetrain drivetrain;
 
@@ -35,16 +34,18 @@ public class PIDToPose extends Command {
 
   private Pose2d destinationPose;
 
-  private PIDController xPID = new PIDController(4, 0, 0.07);
-  private PIDController yPID = new PIDController(4, 0, 0.07);
+  private PIDController xPID = new PIDController(0.8, 0.0, 0.07);
+  private PIDController yPID = new PIDController(0.8, 0.0, 0.07);
   private PIDController thetaPID = new PIDController(0.03, 0, 0);
 
   private Command swerveCommand;
 
   private double timer = 0;
+  
+  private boolean canEnd;
 
   /** Creates a new PIDToPose. */
-  public PIDToPose(CommandSwerveDrivetrain _drivetrain, Pose2d _destinationPose) {
+  public TeleopPIDToPose(CommandSwerveDrivetrain _drivetrain, Pose2d _destinationPose) {
     drivetrain = _drivetrain;
     destinationPose = _destinationPose;
     addRequirements(_drivetrain);
@@ -55,9 +56,9 @@ public class PIDToPose extends Command {
   @Override
   public void initialize() {
     thetaPID.enableContinuousInput(-180, 180);
-    xPID.setTolerance(0.03);
-    yPID.setTolerance(0.03);
-    thetaPID.setTolerance(1);
+    xPID.setTolerance(0.04);
+    yPID.setTolerance(0.04);
+    thetaPID.setTolerance(3);
 
     timer = 0;
   }
@@ -75,23 +76,23 @@ public class PIDToPose extends Command {
 
     // System.out.println(xPIDOutput);
     if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(MathUtil.clamp(xPIDOutput, -0.1, 0.1) * MaxSpeed) // Drive forward with negative Y (forward)
-          .withVelocityY(MathUtil.clamp(yPIDOutput, -0.1, 0.1) * MaxSpeed) // Drive left with negative X (left)
-          .withRotationalRate(MathUtil.clamp(thetaPIDOutput, -0.1, 0.1) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+      swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(MathUtil.clamp(xPIDOutput, -0.4, 0.4) * MaxSpeed) // Drive forward with negative Y (forward)
+          .withVelocityY(MathUtil.clamp(yPIDOutput, -0.4, 0.4) * MaxSpeed) // Drive left with negative X (left)
+          .withRotationalRate(MathUtil.clamp(thetaPIDOutput, -0.4, 0.4) * MaxAngularRate) // Drive counterclockwise with negative X (left)
           );
     } else {
-      swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(MathUtil.clamp(-xPIDOutput, -0.1, 0.1) * MaxSpeed) // Drive forward with negative Y (forward)
-          .withVelocityY(MathUtil.clamp(-yPIDOutput, -0.1, 0.1) * MaxSpeed) // Drive left with negative X (left)
-          .withRotationalRate(MathUtil.clamp(thetaPIDOutput, -0.1, 0.1) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+      swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(MathUtil.clamp(-xPIDOutput, -0.4, 0.4) * MaxSpeed) // Drive forward with negative Y (forward)
+          .withVelocityY(MathUtil.clamp(-yPIDOutput, -0.4, 0.4) * MaxSpeed) // Drive left with negative X (left)
+          .withRotationalRate(MathUtil.clamp(thetaPIDOutput, -0.4, 0.4) * MaxAngularRate) // Drive counterclockwise with negative X (left)
           );
     }
     
             
 
-    SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
-     SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
-     SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
-     SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
+    // SmartDashboard.putNumber("destinationPoseX", destinationPose.getX());
+    // SmartDashboard.putNumber("destinationPoseY", destinationPose.getY());
+    // SmartDashboard.putBoolean("AtXSetpoint", xPID.atSetpoint());
+    // SmartDashboard.putBoolean("AtYSetpoint", yPID.atSetpoint());
     
             
     swerveCommand.execute();
@@ -104,20 +105,11 @@ public class PIDToPose extends Command {
   @Override
   public void end(boolean interrupted) {
     swerveCommand.cancel();
-    
-    swerveCommand = drivetrain.applyRequest(() -> drive.withVelocityX(0 * MaxSpeed) // Drive forward with negative Y (forward)
-    .withVelocityY(0 * MaxSpeed) // Drive left with negative X (left)
-    .withRotationalRate(0 * MaxAngularRate) // Drive counterclockwise with negative X (left)
-    );
-    
-    swerveCommand.schedule();
-    swerveCommand.cancel();
-    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint() || timer >= 2;// || drivetrain.getState().Speeds.vxMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.vyMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.omegaRadiansPerSecond <= 0.001;
+    return xPID.atSetpoint() && yPID.atSetpoint() && thetaPID.atSetpoint();// || timer >= 1.5;// || drivetrain.getState().Speeds.vxMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.vyMetersPerSecond <= 0.001 && drivetrain.getState().Speeds.omegaRadiansPerSecond <= 0.001;
   }
 }

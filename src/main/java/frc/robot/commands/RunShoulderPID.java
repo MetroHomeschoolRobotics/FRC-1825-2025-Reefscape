@@ -31,14 +31,14 @@ public class RunShoulderPID extends Command {
     if(shoulder.getClimb() == true){
       shoulder.runDirectly(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
     }else{
-      if((Math.cos(Math.toRadians(-shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<15*2.54)
-        && (Math.cos(Math.toRadians(shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<15*2.54)){
-          shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+      if((Math.cos(Math.toRadians(-shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-16.58<70*2.54)
+        && (Math.cos(Math.toRadians(shoulder.getAbsoluteAngle()-90))*elevator.getDistance()-49.23<70*2.54)){
+          shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.1));
             
         }else{
             
             if(xboxcontroller.getLeftY()<0){
-                shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+                shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.1));
             }
             // if(angle.getAbsoluteAngle()>0){
             //     elevator.setPID(-(16.58+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));

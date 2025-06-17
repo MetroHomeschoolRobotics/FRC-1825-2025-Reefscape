@@ -11,15 +11,16 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+// import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -49,6 +50,7 @@ public class Vision extends SubsystemBase {
   public List<PhotonPipelineResult> getAllUnreadResults() {
     return camera.getAllUnreadResults();
   }
+  
 
   public PhotonPipelineResult getLatestResult() {
     return camera.getLatestResult(); // TODO remove the depricated function
@@ -58,7 +60,14 @@ public class Vision extends SubsystemBase {
   }
 
   public Boolean hasTargets() {
-    return getLatestResult().hasTargets();
+    if(!getAllUnreadResults().isEmpty()){
+      PhotonPipelineResult target = getAllUnreadResults().get(getAllUnreadResults().size()-1);
+
+      return target.hasTargets();
+    } else {
+      return false;
+    }
+    
   }
 
   public double getYaw() {
@@ -78,13 +87,11 @@ public class Vision extends SubsystemBase {
     return getBestTarget().getBestCameraToTarget();
   }
 
-  public double getApriltagDistance() {
+  public double getApriltagDistance(Pose2d robotPose, int apriltagID) {
     double tagDist = 100000;
     if(hasTargets() && getBestTarget() != null) {
-      double xDir = getRobotTransform().getX();
-      double yDir = getRobotTransform().getY();
 
-      tagDist = Math.sqrt(Math.pow(xDir, 2) + Math.pow(yDir, 2));
+      tagDist = PhotonUtils.getDistanceToPose(robotPose, Constants.FieldSetpoints.aprilTagFieldLayout.getTagPose(apriltagID).get().toPose2d());
       
     }
 

@@ -24,38 +24,65 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "PIDToBranchL"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "PIDToBranchL"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ElevatorToL4"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "race",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "XWheels"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "Outtake"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "RetractElevator"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Outtake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractElevator"
                 }
               }
             ]
@@ -106,38 +133,65 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "PIDToBranchL"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "PIDToBranchL"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ElevatorToL4"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "race",
                       "data": {
-                        "name": "ElevatorToL4"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "XWheels"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "Outtake"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "RetractElevator"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Outtake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractElevator"
                 }
               }
             ]
@@ -245,31 +299,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LeftLoad To J"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShoulderAngleToL4"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -302,6 +331,31 @@
                 "type": "named",
                 "data": {
                   "name": "RetractElevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftLoad To J"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShoulderAngleToL4"
                 }
               }
             ]
