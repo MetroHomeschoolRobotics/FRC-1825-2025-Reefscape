@@ -24,14 +24,14 @@ public class RetractElevator extends Command {
     }
     @Override
     public void initialize(){
-        shoulder.setPID(-8);
+        shoulder.setPID(-10);
     }
 
     @Override
     public void execute(){
         //mayhaps, perchance even
         
-        if(shoulder.getAbsoluteAngle()<=-7){
+        if(shoulder.getAbsoluteAngle()<=-8){
             elevator.setPID(-93.66);
         }
 

@@ -135,7 +135,7 @@ private final ClimbPiston m_piston = new ClimbPiston();
   public RobotContainer() {
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
-        autoRoutines = new AutoRoutines(autoFactory);
+        autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake);
 
         
     createAutoChooser();
