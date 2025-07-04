@@ -27,6 +27,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import choreo.Choreo.TrajectoryLogger;
 import choreo.auto.AutoFactory;
 import choreo.trajectory.SwerveSample;
+import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -371,10 +372,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         return distance;
     }
+    private void log(){
+        DogLog.log("Drive/pose", getRobotPose());
+        
+    }
 
     @Override
     public void periodic() {
-
+        log();
         // TODO find out why field positions is laggy
         // update the field positions
         field.setRobotPose(getRobotPose());

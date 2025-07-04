@@ -41,12 +41,12 @@ public final class Constants {
   
   public static class fieldConstants {
     //reef height in cm(rough, plz adjust)
-    public static final double level4Height = -207.5;// angle: 1.5
-    public static final double level3Height = -146;//angle 2.9
+    public static final double level4Height = -198;// angle: 1.5
+    public static final double level3Height = -142;//angle 2.9
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 0.8;
+    public static final double level4Angle = 0;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
     public static final double level1Angle = -53.5;

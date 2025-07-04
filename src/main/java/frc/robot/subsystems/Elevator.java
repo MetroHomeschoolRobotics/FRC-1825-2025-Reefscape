@@ -7,7 +7,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-
+import dev.doglog.DogLog;
+import frc.robot.RobotContainer;
 import com.revrobotics.spark.SparkBase;
 
 
@@ -22,16 +23,17 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.0095, 0, 0);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.09, 0);
+    private PIDController pid = new PIDController(.023, 0.00, 0.001);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.18, 0);
     //
     private double desiredposition = 0;
     private double highestGetDistance;
     private SparkMax elevatorMotor1 = new SparkMax(Constants.MotorIDs.elevatorDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax elevatorMotor2 = new SparkMax(Constants.MotorIDs.elevatorDeviceID2, SparkLowLevel.MotorType.kBrushless);
     
-    //private DigitalInput beambreak = new DigitalInput(1);
-    
+    private DigitalInput beambreak = new DigitalInput(1);
+    private Boolean beamTriggered = false;
+    private int timer = 0;
     
     //90% sure those are the right motor objects(they were not)(they are now)
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
@@ -46,6 +48,7 @@ public class Elevator extends SubsystemBase {
         //elevatorMotor1.configure(
           //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
         //elevatorMotor1.setInverted(true);
+       
         
     }
 
@@ -84,8 +87,8 @@ public class Elevator extends SubsystemBase {
         elevatorMotor2.getEncoder().setPosition(0);
     }
     public boolean isLowest(){
-        return false;
-       // return beambreak.get();
+        
+       return beambreak.get();
         
     }
     public void setPID(double setPoint){
@@ -99,13 +102,24 @@ public class Elevator extends SubsystemBase {
     public boolean atSetpoint(){
         return pid.atSetpoint();
     }
+
+    private void log(double pidOutput){
+        DogLog.log("Elevator/desiredPos", desiredposition);
+        DogLog.log("Elevator/distance",getDistance());
+        DogLog.log("Elevator/atSetpoint",atSetpoint());
+        DogLog.log("Elevator/motor1Speed", elevatorMotor1.get());
+        DogLog.log("Elevator/motor1RPM", elevatorMotor1.getEncoder().getVelocity());
+        DogLog.log("Elevator/isLowest",isLowest());
+        DogLog.log("Elevator/pidOutput", pidOutput);
+    }
     public void periodic(){
         SmartDashboard.putNumber("desiredPos", pid.getSetpoint());
         // SmartDashboard.putNumber("elevator error", pid.getError());
         SmartDashboard.putNumber("elevator distance", getDistance());
          SmartDashboard.putNumber("encoderValue", getEncoder());
         // SmartDashboard.putBoolean("atSetpoint", atSetpoint());
-
+        SmartDashboard.putNumber("motor1 speed", elevatorMotor1.get());
+        SmartDashboard.putNumber("motor1 rpm", elevatorMotor1.getEncoder().getVelocity());
         if(getDistance()<highestGetDistance){
             highestGetDistance = getDistance();
         }
@@ -126,16 +140,39 @@ public class Elevator extends SubsystemBase {
         // }else if(output<-1){
         //     output = -1;
         // }
-        MathUtil.clamp(output,-1,0.18);
+        //if(pid.getError()<15 && pid.getError()>-15){
+            //MathUtil.clamp(output,-0.05,0.03);
+        //}else{
+           output= MathUtil.clamp(output,-0.99,0.3);
+       // }
+       
         SmartDashboard.putNumber("pid output", output);
 
         
-        elevatorMotor1.setVoltage(output*12);
-        elevatorMotor2.setVoltage(-output*12);
+        elevatorMotor1.set(output);
+        elevatorMotor2.set(-output);
+        SmartDashboard.putBoolean("isLowest", isLowest());
         
-        if(isLowest()){
-            //resetEncoders();
+        if(isLowest() &&timer == 10 && beamTriggered == false ){
+            //if(beamTriggered ==false){
+                resetEncoders();
+                timer = 0;
+                beamTriggered = true;
+           // }
             
-        }
+           // beamTriggered = true;
+        //}else{
+           // beamTriggered = false;
+       }else if(isLowest()){
+        timer +=1;
+       }else{
+        timer = 0;
+        beamTriggered = false;
+       }
+
+       if(RobotContainer.developerMode == true){
+        log(output);
+       }
     }
+
 }

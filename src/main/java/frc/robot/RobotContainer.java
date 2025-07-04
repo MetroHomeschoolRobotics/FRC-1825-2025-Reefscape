@@ -86,7 +86,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
   
-  public final Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
+  public final static Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
 
   // drive constants
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -135,12 +135,17 @@ private final ClimbPiston m_piston = new ClimbPiston();
   public RobotContainer() {
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
-        autoRoutines = new AutoRoutines(autoFactory);
+        autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake);
 
         
     createAutoChooser();
     configureBindings();
-    //DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+    DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+    if(developerMode ==false){
+      DogLog.setEnabled(false);
+    }
+    
+    
   }
   
   /**
