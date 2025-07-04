@@ -15,19 +15,18 @@ public class rundeAlgae extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.runMotor();
+        deAlgae.runDeAlgae();
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.stopMotor();
+        deAlgae.stopDeAlgae();
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-    */
 
     // Nothing here for now.
 }
