@@ -55,6 +55,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import static edu.wpi.first.units.Units.*;
@@ -151,7 +152,9 @@ public class RobotContainer {
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer() { 
+    DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withCaptureNt(true));
+    DogLog.setPdh(new PowerDistribution());
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
         autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake);
@@ -159,7 +162,7 @@ public class RobotContainer {
         
     createAutoChooser();
     configureBindings();
-    //DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+
 
     new WaitCommand(10)
       .andThen(Commands.runOnce(() -> {
