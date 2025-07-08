@@ -160,13 +160,13 @@ public class RobotContainer {
     createAutoChooser();
     configureBindings();
     //DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
-  }
 
     new WaitCommand(10)
       .andThen(Commands.runOnce(() -> {
        // rs232Port.writeString("Hello from Perry!\r\n");
       }))
       .schedule();
+}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
