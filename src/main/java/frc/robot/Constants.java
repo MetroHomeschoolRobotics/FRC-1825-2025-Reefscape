@@ -31,8 +31,8 @@ public final class Constants {
 
   public static class elevatorConstants {
 
-    public static final double elevatorGearRatio = 7.75;// 62/8
-    public static final double elevatorConversion=(207-93.66)/20.16;//elevator max to floor - elevator min to floor / encoder val at max height
+    public static final double elevatorGearRatio = 7.75;//62/8
+    public static final double elevatorConversion=(207-93.66)/18.11;//elevator max to floor - elevator min to floor / encoder val at max height
 
     public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on elevator in cm
   }
@@ -43,12 +43,12 @@ public final class Constants {
   
   public static class fieldConstants {
     //reef height in cm(rough, plz adjust)
-    public static final double level4Height = -207.5;// angle: 1.5
-    public static final double level3Height = -146;//angle 2.9
+    public static final double level4Height = -198;// angle: 1.5
+    public static final double level3Height = -142;//angle 2.9
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 0.8;
+    public static final double level4Angle = 0;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
     public static final double level1Angle = -53.5;
