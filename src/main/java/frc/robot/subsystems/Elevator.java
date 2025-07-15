@@ -1,14 +1,4 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Constants;
-import com.revrobotics.spark.SparkMax;
-
 // import com.revrobotics.spark.SparkBase;
 
 
@@ -16,6 +6,15 @@ import com.revrobotics.spark.SparkMax;
 // import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants;
 
 //78 cm high at base
 //190 cm high at apex
@@ -25,7 +24,6 @@ public class Elevator extends SubsystemBase {
     
 
     private PIDController pid = new PIDController(.030, 0.00, 0.001);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.15, 0);
 
     //
     private double desiredposition = 0;
@@ -109,46 +107,32 @@ public class Elevator extends SubsystemBase {
         return pid.atSetpoint();
     }
     public void periodic(){
-        SmartDashboard.putNumber("desiredPos", pid.getSetpoint());
+        double output;
+        double ModifiedOutput;
+        output = pid.calculate(getDistance());
+        // Custom feedforward that modifies based on the angle of the shoulder
+        if(pid.getSetpoint()<-98.66){
+            ModifiedOutput = output-0.17*Math.cos(Math.toRadians(ShoulderPID.getAbsoluteAngle()));
+        }else{
+            ModifiedOutput = output;
+        }
+        ModifiedOutput= MathUtil.clamp(ModifiedOutput,-0.99,0.3);
+        elevatorMotor1.set(ModifiedOutput);
+        elevatorMotor2.set(-ModifiedOutput);
+
+        SmartDashboard.putNumber("elevator Desired Pos", pid.getSetpoint());
         // SmartDashboard.putNumber("elevator error", pid.getError());
-        SmartDashboard.putNumber("elevator distance", getDistance());
-         SmartDashboard.putNumber("encoderValue", getEncoder());
+        SmartDashboard.putNumber("elevator Distance", getDistance());
+         SmartDashboard.putNumber("elevator Encoder Value", getEncoder());
         // SmartDashboard.putBoolean("atSetpoint", atSetpoint());
         SmartDashboard.putNumber("motor1 speed", elevatorMotor1.get());
         SmartDashboard.putNumber("motor1 rpm", elevatorMotor1.getEncoder().getVelocity());
         if(getDistance()<highestGetDistance){
             highestGetDistance = getDistance();
         }
-        //SmartDashboard.putNumber("highestGetDistance", highestGetDistance);
-        double output;
-        if(pid.getSetpoint()<-98.66){
-            output = pid.calculate(getDistance())-feedforward.calculate(0);
-        }else{
-            output = pid.calculate(getDistance());
-        }
-        
-        // if(output>0.18){
-        //     output=0.18;
-        // }
-
-        // if(output>1){
-        //     output=1;
-        // }else if(output<-1){
-        //     output = -1;
-        // }
-
-        //if(pid.getError()<15 && pid.getError()>-15){
-            //MathUtil.clamp(output,-0.05,0.03);
-        //}else{
-           output= MathUtil.clamp(output,-0.99,0.3);
-       // }
-       
-        SmartDashboard.putNumber("pid output", output);
+        SmartDashboard.putNumber("Elevator pid output", output);
+        SmartDashboard.putNumber("Modified Elevator pid output", ModifiedOutput);
         SmartDashboard.putNumber("Elevator Error", desiredposition-getDistance());
-
-        
-        elevatorMotor1.set(output);
-        elevatorMotor2.set(-output);
         SmartDashboard.putBoolean("isLowest", isLowest());
         
         if(isLowest() &&timer == 10 && beamTriggered == false ){

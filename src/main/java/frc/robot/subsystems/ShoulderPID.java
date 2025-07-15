@@ -16,57 +16,57 @@ public class ShoulderPID extends SubsystemBase {
   private boolean isClimbing = false;
 
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
-  private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
+  private static CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
+    
+    private PIDController pid = new PIDController(0.035, 0, 0.00);
+    
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
+    private double desiredposition = 0;
+    
   
-  private PIDController pid = new PIDController(0.035, 0, 0.00);
-  
-  private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
-  private double desiredposition = 0;
-  
-
-  /** Creates a new Shoulder.
-   * <p>
-   * Controls the Shoulder motors with a PID
-   */
-  public ShoulderPID() {
-    pid.setTolerance(0.75);
-    setClimb(false);
-  }
-  
-  public void incrementPID(double speed) {
-     if ((desiredposition<=8 && speed >0) || (desiredposition >= -60 && speed<0)) {
-      desiredposition+=speed;
-      pid.setSetpoint(desiredposition);
+    /** Creates a new Shoulder.
+     * <p>
+     * Controls the Shoulder motors with a PID
+     */
+    public ShoulderPID() {
+      pid.setTolerance(0.75);
+      setClimb(false);
     }
-
-  }
-  public boolean climbingCloseEnough(){
-    return getAbsoluteAngle()<-50;
-  }
-
-  public void runDirectly(double speed){
-    if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -58 && speed>0)) {
-      wristMotor1.set(speed);
-      //wristMotor2.set(-speed);
-    }else{
-      wristMotor1.set(0);
-      //wristMotor2.set(0);
-    }
-  }
-  public void setPID(double value){
-  
-        desiredposition = value;
+    
+    public void incrementPID(double speed) {
+       if ((desiredposition<=8 && speed >0) || (desiredposition >= -60 && speed<0)) {
+        desiredposition+=speed;
         pid.setSetpoint(desiredposition);
-      
-  }
-  public double getSetpoint(){
-    return pid.getSetpoint();
-  }
-  public double getAbsoluteAngle() {
-    //-141.4 straight up
-    //-130 forward
-    //-177 back
-    double output =rotationCANcoder.getAbsolutePosition().getValueAsDouble()*360+142.9;
+      }
+  
+    }
+    public boolean climbingCloseEnough(){
+      return getAbsoluteAngle()<-50;
+    }
+  
+    public void runDirectly(double speed){
+      if ((getAbsoluteAngle()<=8 && speed <0) || (getAbsoluteAngle() >= -58 && speed>0)) {
+        wristMotor1.set(speed);
+        //wristMotor2.set(-speed);
+      }else{
+        wristMotor1.set(0);
+        //wristMotor2.set(0);
+      }
+    }
+    public void setPID(double value){
+    
+          desiredposition = value;
+          pid.setSetpoint(desiredposition);
+        
+    }
+    public double getSetpoint(){
+      return pid.getSetpoint();
+    }
+    public static double getAbsoluteAngle() {
+      //-141.4 straight up
+      //-130 forward
+      //-177 back
+      double output = rotationCANcoder.getAbsolutePosition().getValueAsDouble()*360+142.9;
     if(output>180){
       output-=360;
     }
