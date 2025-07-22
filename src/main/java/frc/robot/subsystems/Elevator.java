@@ -28,7 +28,8 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
     
     // private PIDController pid = new PIDController(.030, 0.00, 0.001);
-    private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), .031*12,-0.001*12,0,0,0);
+    private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 0.132,-0.053,0.022,0.022,0.022);
+    // private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 1,0,0,0,0);
     private Matrix<N1,N5> errorHistory = MatBuilder.fill(Nat.N1(), Nat.N5(), 0,0,0,0,0);
     private double elevatorSetPoint = 0;
     private double elevatorTolerance = 20;
