@@ -154,7 +154,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() { 
     DogLog.setOptions(new DogLogOptions().withCaptureDs(true).withCaptureNt(true));
-    DogLog.setPdh(new PowerDistribution());
+    // DogLog.setPdh(new PowerDistribution());
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
         autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake);
@@ -271,13 +271,13 @@ public class RobotContainer {
 
 
     // These are all the streamdeck button commands, only used for climbing
-    m_streamdeck.b().whileTrue(new RunClimbPiston2(m_piston));
+/*     m_streamdeck.b().whileTrue(new RunClimbPiston2(m_piston));
     m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder, -34.6).andThen(new RaiseElevator(m_elevator, -115)));
     m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));// retract actuator, if this ratchets ignore
     m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));// claws to cage
     m_streamdeck.povRight().whileTrue(new ClimberMotorBackwards(m_climber));// claws backwards, if this ratchets ignore
     m_streamdeck.povDown().whileTrue(new SetShoulderAngle(m_Shoulder, -54).andThen(new RunClimbPiston(m_piston))
-        .andThen(new SetShoulderAngle(m_Shoulder, -47.5)).andThen(new RunClimbPiston2(m_piston)));// actuactor forward
+        .andThen(new SetShoulderAngle(m_Shoulder, -47.5)).andThen(new RunClimbPiston2(m_piston)));// actuactor forward */
     // m_streamdeck.povLeft().whileTrue(new testClimberPID(m_climber));
     // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
     // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));

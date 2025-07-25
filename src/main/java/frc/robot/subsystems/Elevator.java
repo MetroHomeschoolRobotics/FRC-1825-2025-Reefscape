@@ -14,9 +14,7 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N4;
-import edu.wpi.first.math.numbers.N5;
+import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,9 +26,10 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
     
     // private PIDController pid = new PIDController(.030, 0.00, 0.001);
-    private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 0.132,-0.053,0.022,0.022,0.022);
+    private int a = 50;
+    private Matrix<N16, N1> PIDMatrix = MatBuilder.fill(Nat.N16(), Nat.N1(), 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 2/a, 2/a, 1.5/a, 1/a, 1/a, 0.66/a);
     // private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 1,0,0,0,0);
-    private Matrix<N1,N5> errorHistory = MatBuilder.fill(Nat.N1(), Nat.N5(), 0,0,0,0,0);
+    private Matrix<N1,N16> errorHistory = MatBuilder.fill(Nat.N1(), Nat.N16(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     private double elevatorSetPoint = 0;
     private double elevatorTolerance = 20;
     
@@ -130,9 +129,9 @@ public class Elevator extends SubsystemBase {
         double output;
         double ModifiedOutput;
         // output = pid.calculate(getDistance());
-        Matrix<N1, N5> helperMatrix = new Matrix<>(new SimpleMatrix(1, 5));
+        Matrix<N1, N16> helperMatrix = new Matrix<>(new SimpleMatrix(1, 16));
         helperMatrix.set(0, 0, elevatorSetPoint - getDistance());
-        Matrix<N1, N4> slice = errorHistory.block(0, 0, 1, 4);
+        Matrix<N1, N15> slice = errorHistory.block(1, 15, 0, 0);
         helperMatrix.getStorage().insertIntoThis(0, 1, slice.getStorage());
         errorHistory = helperMatrix;
 
@@ -143,7 +142,8 @@ public class Elevator extends SubsystemBase {
 
         // Custom feedforward that modifies based on the angle of the shoulder
         if(elevatorSetPoint<-98.66){
-            ModifiedOutput = output-0.17*Math.cos(Math.toRadians(ShoulderPID.getAbsoluteAngle()));
+            ModifiedOutput = output-0.06*Math.cos(Math.toRadians(ShoulderPID.getAbsoluteAngle()));
+            // ModifiedOutput = output;
         }else{
             ModifiedOutput = output;
         }
