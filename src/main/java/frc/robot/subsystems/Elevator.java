@@ -25,11 +25,12 @@ import frc.robot.Constants;
 //190 cm high at apex
 public class Elevator extends SubsystemBase {
     
+    private double a = 0.5;
     // private PIDController pid = new PIDController(.030, 0.00, 0.001);
-    private int a = 50;
-    private Matrix<N16, N1> PIDMatrix = MatBuilder.fill(Nat.N16(), Nat.N1(), 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 3/a, 2/a, 2/a, 1.5/a, 1/a, 1/a, 0.66/a);
-    // private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 1,0,0,0,0);
-    private Matrix<N1,N16> errorHistory = MatBuilder.fill(Nat.N1(), Nat.N16(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(),0.24*a, 0.09*a, 0.09*a, 0.09*a, -0.15*a);
+    //private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(),0.24, -0.15, 0.09, 0.09, 0.09);
+    // private Matrix<N5, N1> PIDMatrix = MatBuilder.fill(Nat.N5(), Nat.N1(), 0.96,-0.6,0,0,0);
+    private Matrix<N1,N5> errorHistory = MatBuilder.fill(Nat.N1(), Nat.N5(), 0, 0, 0, 0, 0);
     private double elevatorSetPoint = 0;
     private double elevatorTolerance = 20;
     
@@ -129,9 +130,9 @@ public class Elevator extends SubsystemBase {
         double output;
         double ModifiedOutput;
         // output = pid.calculate(getDistance());
-        Matrix<N1, N16> helperMatrix = new Matrix<>(new SimpleMatrix(1, 16));
+        Matrix<N1, N5> helperMatrix = new Matrix<>(new SimpleMatrix(1, 5));
         helperMatrix.set(0, 0, elevatorSetPoint - getDistance());
-        Matrix<N1, N15> slice = errorHistory.block(1, 15, 0, 0);
+        Matrix<N1, N4> slice = errorHistory.block(1, 4, 0, 0);
         helperMatrix.getStorage().insertIntoThis(0, 1, slice.getStorage());
         errorHistory = helperMatrix;
 
@@ -142,7 +143,7 @@ public class Elevator extends SubsystemBase {
 
         // Custom feedforward that modifies based on the angle of the shoulder
         if(elevatorSetPoint<-98.66){
-            ModifiedOutput = output-0.06*Math.cos(Math.toRadians(ShoulderPID.getAbsoluteAngle()));
+            ModifiedOutput = output-0.12*Math.cos(Math.toRadians(ShoulderPID.getAbsoluteAngle()));
             // ModifiedOutput = output;
         }else{
             ModifiedOutput = output;
