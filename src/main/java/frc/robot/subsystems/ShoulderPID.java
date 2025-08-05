@@ -18,7 +18,7 @@ public class ShoulderPID extends SubsystemBase {
     private boolean isClimbing = false;
 
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
-  private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
+  private static CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   
   private PIDController pid = new PIDController(0.035, 0, 0.00);
   
@@ -52,6 +52,7 @@ public class ShoulderPID extends SubsystemBase {
       //wristMotor2.set(0);
     }
   }
+//PID
   public void setPID(double value){
   
         desiredposition = value;
@@ -61,7 +62,7 @@ public class ShoulderPID extends SubsystemBase {
   public double getSetpoint(){
     return pid.getSetpoint();
   }
-  public double getAbsoluteAngle() {
+  public static double getAbsoluteAngle() {
     //-141.4 straight up
     //-130 forward
     //-177 back

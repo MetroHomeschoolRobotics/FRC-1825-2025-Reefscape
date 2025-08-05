@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.023, 0.00, 0.001);
+    private PIDController pid = new PIDController(.03, 0.00, 0.001);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.18, 0);
     //
     private double desiredposition = 0;
@@ -91,6 +91,7 @@ public class Elevator extends SubsystemBase {
        return beambreak.get();
         
     }
+//PID
     public void setPID(double setPoint){
         desiredposition = setPoint;
         pid.setSetpoint(desiredposition);
@@ -127,6 +128,8 @@ public class Elevator extends SubsystemBase {
         double output;
         if(pid.getSetpoint()<-98.66){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
+           //output = pid.calculate(getDistance())-(0.1+0.07*Math.cos(ShoulderPID.getAbsoluteAngle()));
+  
         }else{
             output = pid.calculate(getDistance());
         }
