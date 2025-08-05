@@ -38,7 +38,7 @@ public class RunShoulderPID extends Command {
         }else{
             
             if(xboxcontroller.getLeftY()<0){
-                shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.03));
+                shoulder.incrementPID(-MathUtil.applyDeadband(xboxcontroller.getLeftY(),0.1));
             }
             // if(angle.getAbsoluteAngle()>0){
             //     elevator.setPID(-(16.58+18*2.54)/Math.toRadians(angle.getAbsoluteAngle()-90));

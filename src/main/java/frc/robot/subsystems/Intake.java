@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
+// import com.revrobotics.spark.SparkBase;
+// import com.revrobotics.spark.config.SparkBaseConfig;
+// import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel;
 
 
@@ -14,23 +14,27 @@ import com.revrobotics.spark.SparkLowLevel;
 
 
 public class Intake extends SubsystemBase {
-    
+
+    //Define the motors and sensors that will be used in this subsystem
     private SparkMax intakeMotor1 = new SparkMax(Constants.MotorIDs.intakeDeviceID1, SparkLowLevel.MotorType.kBrushless);
     private SparkMax intakeMotor2 = new SparkMax(Constants.MotorIDs.intakeDeviceID2, SparkLowLevel.MotorType.kBrushless);
     private DigitalInput beambreak = new DigitalInput(0);
    
     //private SparkBaseConfig config = new SparkMaxConfig().inverted(true);
   
-    /** Creates a new Intake. */
+    /** Creates a new Intake.
+     * <p>
+     * Controls the intake motors and reads intake sensors
+     */
     public Intake() {
      // intakeMotor2.configure(
-       //     config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+     //     config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     }
     
     @Override
     public void periodic() {
-      SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
       // This method will be called once per scheduler run
+      SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
     }
   
     public Boolean coralInIntake() {
@@ -55,13 +59,12 @@ public class Intake extends SubsystemBase {
       intakeMotor1.set(0);
       intakeMotor2.set(speed);
     }
+
     public double getDistance() {
-        return intakeMotor1.getEncoder().getPosition();
-        
-        //I have no idea if we are using this
-        
+      return intakeMotor1.getEncoder().getPosition();
+      // I have no idea if we are using this
     }
-  
+
     public double getSpeed() {
       return intakeMotor1.getEncoder().getVelocity();
         
