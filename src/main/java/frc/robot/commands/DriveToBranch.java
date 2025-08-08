@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 // import frc.robot.Constants.FieldSetpoints;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.robotToM4;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToBranch extends Command {
@@ -51,6 +52,7 @@ public class DriveToBranch extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    robotToM4.changeMode("SCOREPRE");
     if(LeftOrRightBranch == "L") {
       // find the closest left reef branch
       for(Pose2d branches : leftBranches) {

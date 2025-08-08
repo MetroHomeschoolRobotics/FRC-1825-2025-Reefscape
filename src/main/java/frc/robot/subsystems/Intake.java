@@ -35,6 +35,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
       // This method will be called once per scheduler run
       SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
+      robotToM4.setIntakeBeamBreak(coralInIntake());
     }
   
     public Boolean coralInIntake() {

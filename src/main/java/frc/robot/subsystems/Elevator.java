@@ -182,7 +182,7 @@ public class Elevator extends SubsystemBase {
         timer = 0;
         beamTriggered = false;
        }
-
+       robotToM4.setElevatorBeamBreak(isLowest());
        if(RobotContainer.developerMode == true){
         log(output);
        }

@@ -6,6 +6,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.robotToM4;
 
 public class Score extends Command {
     Elevator elevator;
@@ -24,6 +25,7 @@ public class Score extends Command {
     }
     @Override
     public void initialize(){
+        robotToM4.changeMode("SCOREACTIVE");
         shoulder.setPID(-5);
         if(level == 4 || level == 3){
             shoulder.setPID(-8);

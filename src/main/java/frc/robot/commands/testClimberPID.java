@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 // import frc.robot.subsystems.ShoulderPID;
 import frc.robot.subsystems.climber;
+import frc.robot.subsystems.robotToM4;
 
 public class testClimberPID extends Command {
     private climber climber;
@@ -21,6 +22,7 @@ public class testClimberPID extends Command {
         return false;
     }
     public void end(boolean interrupted){
+        robotToM4.changeMode("CLIMBACTIVE");
         //climber.openClimber();
         // if(interrupted){
         //     climber.setClimber(0.0);

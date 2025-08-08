@@ -386,6 +386,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // update the field positions
         field.setRobotPose(getRobotPose());
 
+// Matrix FMS because i didnt know where else to put it lol
+ robotToM4.setFMSConnected(DriverStation.isFMSAttached());
+//
+
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
