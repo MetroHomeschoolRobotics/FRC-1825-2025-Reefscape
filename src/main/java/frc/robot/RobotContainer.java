@@ -151,7 +151,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
-        autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake);
+        autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake,drivetrain);
 
         
     createAutoChooser();
@@ -304,8 +304,10 @@ public class RobotContainer {
     private void createAutoChooser() {
       //autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
       NamedCommands.registerCommand("testCommand", new SetShoulderAngle(m_Shoulder, -10));
-      autoChooser.addRoutine("taxi", autoRoutines::taxi);
-      autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
+      autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
+      autoChooser.addRoutine("Right", autoRoutines::Right);
+      autoChooser.addRoutine("Left", autoRoutines::Left);
+      //autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
       
       SmartDashboard.putData("Auto Chooser", autoChooser);
     }

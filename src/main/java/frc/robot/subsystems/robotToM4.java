@@ -67,7 +67,7 @@ public class robotToM4 extends SubsystemBase {
         
         public static void changeMode(String mode){
           currentMode = Mode.valueOf(mode);
-          if(Mode.valueOf(mode)==Mode.INTAKECOMPLETE || Mode.valueOf(mode) ==Mode.SCORECOMPLETE){
+          if(completeFlag==false &&(Mode.valueOf(mode)==Mode.INTAKECOMPLETE || Mode.valueOf(mode) ==Mode.SCORECOMPLETE)){
             completeFlag = true;
         savedCycleCounter = cycleCounter;
           }
@@ -89,7 +89,7 @@ public class robotToM4 extends SubsystemBase {
 
     switch (currentMode) {
       case STARTUP:
-        sendData("hello world");
+        sendData("0 1,1,1,1");
         break;
 
       case SENSOR_DEBUG:

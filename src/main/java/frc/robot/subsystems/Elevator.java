@@ -25,7 +25,7 @@ public class Elevator extends SubsystemBase {
     
     
     
-    private PIDController pid = new PIDController(.023, 0.00, 0.001);
+    private PIDController pid = new PIDController(.0329, 0.00, 0.00066);
     private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.18, 0);
 
     //

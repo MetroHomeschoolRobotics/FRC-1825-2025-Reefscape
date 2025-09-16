@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
     // Instantiate RobotContainer (button-bindings, auto chooser)
     m_robotContainer = new RobotContainer();
     m_robotContainer.resetEncoders();
-
+    robotToM4.changeMode("STARTUP");
     // Warm up Pathfinding
     PathfindingCommand.warmupCommand().schedule();
   }
