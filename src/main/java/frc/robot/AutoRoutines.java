@@ -5,15 +5,19 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToBranchAuto;
 import frc.robot.commands.DriveToSource;
 import frc.robot.commands.RetractElevator;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.Score;
 import frc.robot.commands.StaggerMotors;
+import frc.robot.commands.printDebug;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.autoCommands.ShoulderToIntake;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -80,8 +84,11 @@ public class AutoRoutines {
         final AutoRoutine routine = m_factory.newRoutine("taxi");
         final AutoTrajectory taxi = routine.trajectory("LeftToI");
         routine.active().onTrue(
-            taxi.resetOdometry().andThen(taxi.cmd()).andThen(new ParallelRaceGroup(new DriveToBranch("L", m_drivetrain),new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder))))
-            
+            //taxi.resetOdometry().andThen(taxi.cmd()).andThen(new printDebug()).andThen( new DriveToBranch("R",m_drivetrain)).andThen(new printDebug()).andThen(new Score(m_elevator, m_shoulder, m_intake, 4)).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator,m_shoulder))
+            taxi.resetOdometry().andThen(taxi.cmd()).andThen( 
+                new SequentialCommandGroup(
+                    new DriveToBranchAuto("R", m_drivetrain,m_elevator,m_shoulder,m_intake).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),new printDebug()))
+                    
             //taxi.resetOdometry().andThen( Commands.waitSeconds(0)).andThen(taxi.cmd()).andThen(new DriveToBranch("L", m_drivetrain)).alongWith(new SequentialCommandGroup(Commands.waitSeconds(1.2),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
                     );
         return routine;
@@ -92,12 +99,12 @@ public class AutoRoutines {
         final AutoTrajectory StartToI = routine.trajectory("LeftToI");
         final AutoTrajectory IToSource = routine.trajectory("LeftIToSource");
         final AutoTrajectory SourceToK = routine.trajectory("LeftSourceToK");
-       ;
+       
         
        //parallel race group fixes everything?
         routine.active().onTrue(
             StartToI.resetOdometry()
-                .andThen(StartToI.cmd()).andThen(new ParallelRaceGroup(new DriveToBranch("L", m_drivetrain),( new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
+                .andThen(StartToI.cmd()).andThen(new ParallelDeadlineGroup( new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)),new DriveToBranch("R", m_drivetrain)))
                 .andThen(IToSource.cmd()).andThen(new DriveToSource( m_drivetrain)).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(SourceToK.cmd()).andThen(new DriveToBranch("L", m_drivetrain))
                 .andThen(new SequentialCommandGroup(Commands.waitSeconds(0),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
         );
