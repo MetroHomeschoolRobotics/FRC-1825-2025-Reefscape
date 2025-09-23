@@ -3,17 +3,45 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.Optional;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
-import frc.robot.subsystems.robotToM4;
-import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Shoulder;
-import frc.robot.subsystems.ShoulderPID;
-// import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.climber;
-import frc.robot.subsystems.deAlgae;
-import frc.robot.subsystems.Elevator;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimberMotorBackwards;
+import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToSource;
+import frc.robot.commands.LowerAlgaePreset;
+// import frc.robot.commands.PIDToPose;
+import frc.robot.commands.RaiseElevator;
+// import frc.robot.commands.ResetElevatorEncoders;
+import frc.robot.commands.RetractElevator;
+// import frc.robot.commands.RunClimb;
+import frc.robot.commands.RunClimbPiston;
+import frc.robot.commands.RunClimbPiston2;
+import frc.robot.commands.RunClimbPistonBackwards;
+import frc.robot.commands.RunElevator;
 // import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
@@ -28,65 +56,23 @@ import frc.robot.commands.StaggerMotors;
 // import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
+import frc.robot.commands.rundeAlgae;
 // import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
-import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 // import frc.robot.commands.stopclimber;
 import frc.robot.commands.testClimberPID;
-import frc.robot.commands.ClimberMotorBackwards;
-import frc.robot.commands.DriveToBranch;
-import frc.robot.commands.DriveToBranchPID;
-import frc.robot.commands.LowerAlgaePreset;
-import frc.robot.commands.DriveToSource;
-// import frc.robot.commands.PIDToPose;
-import frc.robot.commands.RaiseElevator;
-// import frc.robot.commands.ResetElevatorEncoders;
-import frc.robot.commands.RetractElevator;
-// import frc.robot.commands.RunClimb;
-import frc.robot.commands.RunClimbPiston;
-import frc.robot.commands.RunClimbPiston2;
-import frc.robot.commands.RunClimbPistonBackwards;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.AutoRoutines;
-import frc.robot.commands.RunElevator;
-
-import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.SerialPort;
-
-import static edu.wpi.first.units.Units.*;
-
-import java.util.Optional;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.pathplanner.lib.auto.NamedCommands;
-
-import choreo.auto.AutoFactory;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import dev.doglog.DogLog;
-import dev.doglog.DogLogOptions;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-// import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.ShoulderPID;
+// import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.climber;
+import frc.robot.subsystems.deAlgae;
+import frc.robot.subsystems.robotToM4;
 
 public class RobotContainer {
   
@@ -177,12 +163,28 @@ public class RobotContainer {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
     // Drivetrain will execute this command periodically
-    drivetrain.setDefaultCommand(
+
+      drivetrain.setDefaultCommand(
       drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
         .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
         .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
       )
     );
+    
+    /*drivetrain.setDefaultCommand(
+            Commands.run(
+                () -> {
+                    if (DriverStation.isTeleopEnabled()) {
+                        drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed)
+                            .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed)
+                            .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate)
+                        );
+                    }
+                },
+                drivetrain // This tells the command that it requires the drivetrain subsystem
+            )
+        ); */
+//Code from Gemini don't blame me
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));

@@ -8,6 +8,7 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
     robotToM4.changeMode("STARTUP");
     // Warm up Pathfinding
     PathfindingCommand.warmupCommand().schedule();
+    LiveWindow.enableAllTelemetry();
   }
 
   @Override
