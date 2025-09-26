@@ -96,8 +96,8 @@ public class DriveToBranchAuto extends Command {
   }
   @Override
   public boolean isFinished() {
-    //return (Math.abs(drivetrain.distanceToPose(closestBranch)) <= 0.000);
-    return false;
+    return true;
+    
   }
   // Called once the command ends or is interrupted.
   @Override

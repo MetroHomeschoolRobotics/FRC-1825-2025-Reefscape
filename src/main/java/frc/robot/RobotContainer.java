@@ -30,6 +30,7 @@ import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
 // import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
+import frc.robot.commands.setDriveDefaultCommand;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 // import frc.robot.commands.stopclimber;
@@ -63,6 +64,7 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import choreo.auto.AutoFactory;
 
@@ -72,6 +74,7 @@ import dev.doglog.DogLogOptions;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.Sendable;
 // import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -157,6 +160,8 @@ public class RobotContainer {
     createAutoChooser();
     configureBindings();
     DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+    
+    SmartDashboard.putData("Command_Scheduler", CommandScheduler.getInstance());
     if(developerMode ==false){
       DogLog.setEnabled(false);
     }
@@ -177,12 +182,16 @@ public class RobotContainer {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
     // Drivetrain will execute this command periodically
-    drivetrain.setDefaultCommand(
-      drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
-        .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
-        .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
-      )
-    );
+
+    //mmm Spaghetti my favorite
+    //--------------
+    // drivetrain.setDefaultCommand(
+    //   drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
+    //     .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
+    //     .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+    //   )
+    // );
+    //---------------
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -218,7 +227,7 @@ public class RobotContainer {
       // -driverXbox.getLeftX()))
       // ));
 
-
+    
     //Sets the command that subsystems will run if nothing else is scheduled
     //These will be overridden when something else is scheduled in these subsystems
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
@@ -298,6 +307,14 @@ public class RobotContainer {
     // m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
+  
+  }
+  public void clearDriveDefaultCommand(){
+    drivetrain.setDefaultCommand(null);
+  }
+  public void setDriveDefaultCommand(){
+    //PathfindingCommand.warmupCommand().schedule();
+   CommandScheduler.getInstance().schedule(new setDriveDefaultCommand(drivetrain, driverXbox, drive));
   }
  
 

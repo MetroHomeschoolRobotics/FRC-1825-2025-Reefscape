@@ -382,6 +382,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void periodic() {
         log();
+        
         // TODO find out why field positions is laggy
         // update the field positions
         field.setRobotPose(getRobotPose());

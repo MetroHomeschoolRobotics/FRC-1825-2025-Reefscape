@@ -87,7 +87,8 @@ public class AutoRoutines {
             //taxi.resetOdometry().andThen(taxi.cmd()).andThen(new printDebug()).andThen( new DriveToBranch("R",m_drivetrain)).andThen(new printDebug()).andThen(new Score(m_elevator, m_shoulder, m_intake, 4)).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator,m_shoulder))
             taxi.resetOdometry().andThen(taxi.cmd()).andThen( 
                 new SequentialCommandGroup(
-                    new DriveToBranchAuto("R", m_drivetrain,m_elevator,m_shoulder,m_intake).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),new printDebug()))
+                    new DriveToBranchAuto("R", m_drivetrain,m_elevator,m_shoulder,m_intake).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),new printDebug()),new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4),new RunOuttake(m_intake), new RetractElevator(m_elevator, m_shoulder))
+                    )
                     
             //taxi.resetOdometry().andThen( Commands.waitSeconds(0)).andThen(taxi.cmd()).andThen(new DriveToBranch("L", m_drivetrain)).alongWith(new SequentialCommandGroup(Commands.waitSeconds(1.2),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
                     );
