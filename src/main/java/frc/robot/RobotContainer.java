@@ -56,6 +56,7 @@ import frc.robot.commands.StaggerMotors;
 // import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
+import frc.robot.commands.runDriveTrain;
 import frc.robot.commands.rundeAlgae;
 // import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
@@ -113,6 +114,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.runDriveTrain;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
@@ -176,6 +178,7 @@ public class RobotContainer {
   // Therefore they start at robot init, instead of being bound to a button
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
+  private final runDriveTrain runDriveTrain = new runDriveTrain(drivetrain, driverXbox);
 
 
   // Auto Chooser
@@ -217,12 +220,12 @@ public class RobotContainer {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
     // Drivetrain will execute this command periodically
-    drivetrain.setDefaultCommand(
+    /*drivetrain.setDefaultCommand(
       drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
         .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
         .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
       )
-    );
+    ); */
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -263,6 +266,7 @@ public class RobotContainer {
     //These will be overridden when something else is scheduled in these subsystems
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator, runElevator);
+    CommandScheduler.getInstance().setDefaultCommand(drivetrain, runDriveTrain);
 
     // reset the field-centric heading on left bumper press
     driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
