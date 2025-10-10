@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import frc.robot.subsystems.robotToM4;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import dev.doglog.DogLog;
+
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -16,9 +19,9 @@ public class ShoulderPID extends SubsystemBase {
   private boolean isClimbing = false;
 
  // private SparkMax wristMotor2 = new SparkMax(Constants.wristMotorID2, MotorType.kBrushless);
-  private CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
+  private static CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   
-  private PIDController pid = new PIDController(0.035, 0, 0);
+  private PIDController pid = new PIDController(0.0375, 0, 0.0008);
   
   private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
@@ -53,6 +56,7 @@ public class ShoulderPID extends SubsystemBase {
       //wristMotor2.set(0);
     }
   }
+//PID
   public void setPID(double value){
   
         desiredposition = value;
@@ -62,7 +66,7 @@ public class ShoulderPID extends SubsystemBase {
   public double getSetpoint(){
     return pid.getSetpoint();
   }
-  public double getAbsoluteAngle() {
+  public static double getAbsoluteAngle() {
     //-141.4 straight up
     //-130 forward
     //-177 back
@@ -88,6 +92,11 @@ public class ShoulderPID extends SubsystemBase {
     //   pid.setP(0.04);
     // }
   }
+  private void log(double output){
+    DogLog.log("Shoulder/Angle", getAbsoluteAngle());
+    DogLog.log("Shoulder/Setpoint", pid.getSetpoint());
+    DogLog.log("Shoulder/PIDOutput",output);
+  }
   @Override
   public void periodic() {
     robotToM4.INSTANCE.setElevatorAngle(getAbsoluteAngle());
@@ -95,7 +104,7 @@ public class ShoulderPID extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Absolute Angle", getAbsoluteAngle());
     // SmartDashboard.putNumber("ShoulderPid DesiredPos", desiredposition);
-    // SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
+    SmartDashboard.putNumber("shoulderPID actualSetpoint",pid.getSetpoint());
     double output;
     if(getClimb()==false){
       
@@ -103,6 +112,7 @@ public class ShoulderPID extends SubsystemBase {
     
     //SmartDashboard.putNumber("shoulder output ", -output);
     wristMotor1.set(-output);
+    log(-output);
     }
   }
 }

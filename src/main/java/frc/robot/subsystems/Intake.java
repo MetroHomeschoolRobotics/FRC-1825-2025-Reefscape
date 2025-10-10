@@ -35,6 +35,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
       // This method will be called once per scheduler run
       SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
+      robotToM4.setIntakeBeamBreak(coralInIntake());
 
       // Update the robot-to-MatrixPortal communications with the current state of the intake beam break.
       // The matrix expects 1 when a piece is present (beam broken) and 0 otherwise.  By

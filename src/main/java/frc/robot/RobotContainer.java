@@ -3,15 +3,45 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import frc.robot.subsystems.robotToM4;
-import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Shoulder;
-import frc.robot.subsystems.ShoulderPID;
-// import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.climber;
-import frc.robot.subsystems.deAlgae;
-import frc.robot.subsystems.Elevator;
+import java.util.Optional;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimberMotorBackwards;
+import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToSource;
+import frc.robot.commands.LowerAlgaePreset;
+// import frc.robot.commands.PIDToPose;
+import frc.robot.commands.RaiseElevator;
+// import frc.robot.commands.ResetElevatorEncoders;
+import frc.robot.commands.RetractElevator;
+// import frc.robot.commands.RunClimb;
+import frc.robot.commands.RunClimbPiston;
+import frc.robot.commands.RunClimbPiston2;
+import frc.robot.commands.RunClimbPistonBackwards;
+import frc.robot.commands.RunElevator;
 // import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
@@ -26,8 +56,11 @@ import frc.robot.commands.StaggerMotors;
 // import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
+import frc.robot.commands.runDriveTrain;
+import frc.robot.commands.rundeAlgae;
 // import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
+import frc.robot.commands.setDriveDefaultCommand;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 // import frc.robot.commands.stopclimber;
@@ -46,6 +79,7 @@ import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
 import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.AutoRoutines;
 import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -60,6 +94,9 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import choreo.auto.AutoFactory;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
@@ -77,18 +114,23 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.runDriveTrain;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.ShoulderPID;
+// import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.climber;
+import frc.robot.subsystems.deAlgae;
+import frc.robot.subsystems.robotToM4;
 
 public class RobotContainer {
-
-  // public final Boolean developerMode = true; 
-  // TODO finalize the programming and change this developer mode var
-
-  // RS-232 port on RoboRIO’s onboard serial for MatrixPortal
-  //private final SerialPort rs232Port = new SerialPort(9600, SerialPort.Port.kOnboard);
+  
+  public final static Boolean developerMode = true; // TODO finalize the programming and change this developer mode var
 
   // drive constants
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -136,26 +178,35 @@ public class RobotContainer {
   // Therefore they start at robot init, instead of being bound to a button
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
+  private final runDriveTrain runDriveTrain = new runDriveTrain(drivetrain, driverXbox);
 
 
   // Auto Chooser
-  public final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  
+  private final AutoFactory autoFactory;
+  private final AutoRoutines autoRoutines;
+  private final AutoChooser autoChooser = new AutoChooser();
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure autonomous chooser and button bindings
+    // Configure the trigger bindings
+    autoFactory = drivetrain.createAutoFactory();
+        autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake,drivetrain);
+
+        
     createAutoChooser();
     configureBindings();
-    new WaitCommand(10)
-      .andThen(Commands.runOnce(() -> {
-       // rs232Port.writeString("Hello from Perry!\r\n");
-      }))
-      .schedule();
-  }    
-
-   // DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
-
+    DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+    
+    SmartDashboard.putData("Command_Scheduler", CommandScheduler.getInstance());
+    if(developerMode ==false){
+      DogLog.setEnabled(false);
+    }
+    
+    
+  }
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -169,12 +220,12 @@ public class RobotContainer {
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
     // Drivetrain will execute this command periodically
-    drivetrain.setDefaultCommand(
+    /*drivetrain.setDefaultCommand(
       drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
         .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
         .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
       )
-    );
+    ); */
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -210,11 +261,12 @@ public class RobotContainer {
       // -driverXbox.getLeftX()))
       // ));
 
-
+    
     //Sets the command that subsystems will run if nothing else is scheduled
     //These will be overridden when something else is scheduled in these subsystems
     CommandScheduler.getInstance().setDefaultCommand(m_Shoulder, runShoulder);
     CommandScheduler.getInstance().setDefaultCommand(m_elevator, runElevator);
+    CommandScheduler.getInstance().setDefaultCommand(drivetrain, runDriveTrain);
 
     // reset the field-centric heading on left bumper press
     driverXbox.povUp().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -247,6 +299,11 @@ public class RobotContainer {
         .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
     // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
     m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
+    
+   m_manipulatorController.povUp().whileTrue(new rundeAlgae(m_deAlgae));
+   m_manipulatorController.povRight().whileTrue(new UpperAlgaePreset(m_elevator, m_Shoulder));
+   m_manipulatorController.povLeft().whileTrue(new LowerAlgaePreset(m_elevator, m_Shoulder));
+
 
 
 
@@ -285,49 +342,34 @@ public class RobotContainer {
     // m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
+  
   }
-
-  private void createAutoChooser() {
-    // Create the named commands
-    NamedCommands.registerCommand("XWheels", drivetrain.applyRequest(() -> brake));
-    NamedCommands.registerCommand("ShoulderAngleToL4", new SetShoulderAngle(m_Shoulder, -8));
-    NamedCommands.registerCommand("AngleToL4", new SetShoulderAngle(m_Shoulder, Constants.fieldConstants.level4Angle));
-    NamedCommands.registerCommand("ElevatorToL4", new Score(m_elevator, m_Shoulder, m_intake, 4));
-    NamedCommands.registerCommand("Outtake", new RunOuttake(m_intake));
-    NamedCommands.registerCommand("Intake", new StaggerMotors(m_intake));
-    NamedCommands.registerCommand("RetractElevator", new RetractElevator(m_elevator, m_Shoulder));
-    NamedCommands.registerCommand("ShoulderToLoadingAngle", new shoulderToIntake(m_Shoulder, m_elevator));
-    NamedCommands.registerCommand("PathfindToF",
-        drivetrain.driveToPose(new Pose2d(5.285, 3.030, new Rotation2d(120)), 2, 2, 180, 360));
-    NamedCommands.registerCommand("PIDToBranchL", new DriveToBranchPID(drivetrain, "L"));
-    NamedCommands.registerCommand("PIDToBranchR", new DriveToBranchPID(drivetrain, "R"));
-    NamedCommands.registerCommand("justL4Elevator",
-        new RaiseElevator(m_elevator, Constants.fieldConstants.level4Height));
-
-    // Default is no auto
-    autoChooser.setDefaultOption("No Auto", new WaitCommand(15));
-    // autoChooser.addOption("Straight2Meter",
-    // drivetrain.getAutonomousCommand("Straight2Meter"));
-    // autoChooser.addOption("Straight4Meter",
-    // drivetrain.getAutonomousCommand("Straight4Meter"));
-    // autoChooser.addOption("Straight6Meter",
-    // drivetrain.getAutonomousCommand("Straight6Meter"));
-    autoChooser.addOption("LeftAuto", drivetrain.getAutonomousCommand("Left Auto2"));
-    autoChooser.addOption("RightAuto", drivetrain.getAutonomousCommand("Right Auto"));
-    // autoChooser.addOption("RightAutoSpeed",
-    // drivetrain.getAutonomousCommand("Right Auto Speed"));
-    // autoChooser.addOption("LeftAutoSpeed", drivetrain.getAutonomousCommand("Left
-    // Auto Speed"));
-    autoChooser.addOption("Middle Auto", drivetrain.getAutonomousCommand("ShortStraightFromMiddle"));
-    // autoChooser.addOption("TestAuto",
-    // drivetrain.getAutonomousCommand("RightAutoJustPath"));
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+  public void clearDriveDefaultCommand(){
+    drivetrain.setDefaultCommand(null);
   }
-
-  public Command getAutonomousCommand() {
-
-    return autoChooser.getSelected();
+  public void setDriveDefaultCommand(){
+    //PathfindingCommand.warmupCommand().schedule();
+   CommandScheduler.getInstance().schedule(new setDriveDefaultCommand(drivetrain, driverXbox, drive));
   }
+ 
+
+    private void createAutoChooser() {
+      //autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
+      NamedCommands.registerCommand("testCommand", new SetShoulderAngle(m_Shoulder, -10));
+      autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
+      autoChooser.addRoutine("Right", autoRoutines::Right);
+      autoChooser.addRoutine("Left", autoRoutines::Left);
+      //autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
+      
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+
+    public Command getAutonomousCommand() {
+
+
+      
+        return autoChooser.selectedCommand();
+    }
+
 }
 

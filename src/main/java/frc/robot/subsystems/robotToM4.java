@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +63,6 @@ public class robotToM4 extends SubsystemBase {
       rs232Port.write(bytes, bytes.length);
     }
   }
-
   @Override
   public void periodic() {
     // ---- Debounce PIECE ----
@@ -94,5 +94,11 @@ public class robotToM4 extends SubsystemBase {
       sendCounter = 0;
       sendLine(line);
     }
+
+    
+    if(cycleCounter == savedCycleCounter+50&& completeFlag==true){
+      changeMode("DRIVING");
+      completeFlag = false;
+    }    
   }
 }
