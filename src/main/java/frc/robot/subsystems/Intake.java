@@ -36,6 +36,15 @@ public class Intake extends SubsystemBase {
       // This method will be called once per scheduler run
       SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
       robotToM4.setIntakeBeamBreak(coralInIntake());
+
+      // Update the robot-to-MatrixPortal communications with the current state of the intake beam break.
+      // The matrix expects 1 when a piece is present (beam broken) and 0 otherwise.  By
+      // passing this boolean directly, the robotToM4 subsystem can assemble the checklist
+      // message every cycle.
+      frc.robot.subsystems.robotToM4 m4 = frc.robot.subsystems.robotToM4.INSTANCE;
+      if (m4 != null) {
+        m4.setIntakeBeamBreak(coralInIntake());
+      }
     }
   
     public Boolean coralInIntake() {

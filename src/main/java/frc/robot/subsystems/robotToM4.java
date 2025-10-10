@@ -3,147 +3,96 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.DriverStation;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Centralized serial-to-MatrixPortal subsystem with automatic mode cycling.
+ * Minimal, steady-cadence RS-232 transmitter for MatrixPortal.
+ * - kOnboard, 9600 8-N-1
+ * - Sends every ~100ms (5 loops @ ~20ms loop time)
+ * - Debounce = 5 loops (~100ms)
+ * - CRLF line termination to please Arduino line readers
+ * Message format: "<case> <piece>,<elev>,<angle>,<fms>\r\n"
  */
 public class robotToM4 extends SubsystemBase {
-  // Singleton instance
   public static robotToM4 INSTANCE;
 
-  private final  SerialPort rs232Port;
-  
-    // Stored variables
-    private static double elevatorAngle;
-      private static boolean elevatorBeamBreak;
-      private static boolean intakeBeamBreak;
-      private static boolean visionReceive;
-      private static boolean fmsConnected;
-      //private double fieldPosition;
-    private static final int AUTOCASE = 1;
-    private static final int TELEOPCASE = 2;
-    
-      // Modes for what to send
-      public enum Mode { STARTUP, SENSOR_DEBUG, ROBOT_CLIMB, WAIT, AUTO, DRIVING,
-     INTAKEPRE,INTAKEACTIVE,INTAKECOMPLETE,SCOREPRE,SCOREACTIVE,SCORECOMPLETE,CLIMBPRE,CLIMBACTIVE,CLIMBCOMPLETE, DISABLED }
-      private static Mode currentMode = Mode.STARTUP;
-          
-            // Cycle counter
-            private static  int cycleCounter = 0;
-          
-            // Timers for AUTO and TELEOP (unused in cycling but kept)
-            private static int autoCountdown = 15;
-            private static int teleopCountdown = 2 * 60 + 15;
-          
-            private static boolean completeFlag = false;
-            private static int savedCycleCounter;
-            public robotToM4() {
-              INSTANCE = this;
-              rs232Port = new SerialPort(
-                9600,
-                SerialPort.Port.kOnboard,
-                8,
-                SerialPort.Parity.kOdd,
-                SerialPort.StopBits.kOne
-              );
-            }
-          
-            /**
-             * Setters for incoming data
-             */
-            public static void setElevatorAngle(double angle) { elevatorAngle = angle; }
-          public static void setElevatorBeamBreak(boolean triggered) { elevatorBeamBreak = triggered; }
-          public static void setIntakeBeamBreak(boolean triggered) { intakeBeamBreak = triggered; }
-          public static void setVisionReceive(boolean detected) { visionReceive = detected; }
-          public static void setFMSConnected(boolean connected){ fmsConnected = connected;}
-          //public void setFieldPosition(double position) { this.fieldPosition = position; }
-        
-          /**
-           * Send a string of values to the MatrixPortal.
-           */
-          public void sendData(String data) {
-            rs232Port.writeString(data + "\n");
-        }
-        
-        public static void changeMode(String mode){
-          currentMode = Mode.valueOf(mode);
-          if(completeFlag==false &&(Mode.valueOf(mode)==Mode.INTAKECOMPLETE || Mode.valueOf(mode) ==Mode.SCORECOMPLETE)){
-            completeFlag = true;
-        savedCycleCounter = cycleCounter;
-          }
+  private final SerialPort rs232Port;
+
+  // Inputs from subsystems (updated via setters)
+  private double  elevatorAngle;
+  private boolean elevatorBeamBreak;
+  private boolean intakeBeamBreak;
+  private boolean visionReceive; // reserved
+
+  // Golden angle for ANGLE box
+  private static final double ANGLE_TARGET_DEGREES = -27.0;
+
+  // Debounce (loops of ~20ms)
+  private static final int SENSOR_DEBOUNCE_CYCLES = 5;
+
+  private int pieceHigh = 0, pieceLow = 0, pieceState = 0;
+  private int elevHigh  = 0, elevLow  = 0, elevState  = 0;
+  private int angHigh   = 0, angLow   = 0, angState   = 0;
+
+  // Steady transmission rate: every 5 loops ≈ 100ms
+  private static final int MESSAGE_SEND_INTERVAL_CYCLES = 5;
+  private int sendCounter = 0;
+
+  public robotToM4() {
+    INSTANCE = this;
+    rs232Port = new SerialPort(
+      9600,
+      SerialPort.Port.kOnboard,
+      8,
+      SerialPort.Parity.kNone,
+      SerialPort.StopBits.kOne
+    );
   }
-  private String sensorValues(){
-    return (elevatorBeamBreak ? "1" : "0") + "," +
-    (intakeBeamBreak ? "1" : "0")+","+(fmsConnected ? "1" : "0");
-  }
-  public static int m4CycleCounter(){
-    return cycleCounter;
+
+  // ---- Setters (call from subsystems/RobotContainer) ----
+  public void setElevatorAngle(double angle)          { this.elevatorAngle = angle; }
+  public void setElevatorBeamBreak(boolean triggered) { this.elevatorBeamBreak = triggered; }
+  public void setIntakeBeamBreak(boolean triggered)   { this.intakeBeamBreak = triggered; }
+  public void setVisionReceive(boolean detected)      { this.visionReceive   = detected; }
+
+  private void sendLine(String line) {
+    if (rs232Port != null) {
+      // Use CRLF to make Arduino "read line" code happier
+      byte[] bytes = (line + "\r\n").getBytes(StandardCharsets.US_ASCII);
+      rs232Port.write(bytes, bytes.length);
+    }
   }
   @Override
   public void periodic() {
-    // Advance cycle counter and determine mode based on cycles
-    cycleCounter++;
-    // Mode[] modes = Mode.values();
-    // int index = (cycleCounter / 200) % modes.length;
-    // currentMode = modes[index];
+    // ---- Debounce PIECE ----
+    if (intakeBeamBreak) { if (++pieceHigh >= SENSOR_DEBOUNCE_CYCLES) { pieceState = 1; pieceHigh = SENSOR_DEBOUNCE_CYCLES; } pieceLow = 0; }
+    else { if (++pieceLow >= SENSOR_DEBOUNCE_CYCLES) { pieceState = 0; pieceLow = SENSOR_DEBOUNCE_CYCLES; } pieceHigh = 0; }
 
-    switch (currentMode) {
-      case STARTUP:
-        sendData("0 1,1,1,1");
-        break;
+    // ---- Debounce ELEV ----
+    if (elevatorBeamBreak) { if (++elevHigh >= SENSOR_DEBOUNCE_CYCLES) { elevState = 1; elevHigh = SENSOR_DEBOUNCE_CYCLES; } elevLow = 0; }
+    else { if (++elevLow >= SENSOR_DEBOUNCE_CYCLES) { elevState = 0; elevLow = SENSOR_DEBOUNCE_CYCLES; } elevHigh = 0; }
 
-      case SENSOR_DEBUG:
-        sendData(
-          (elevatorBeamBreak ? "1" : "0") + "," +
-          (intakeBeamBreak ? "1" : "0") + "," +
-          (visionReceive ? "1" : "0")
-        );
-        break;
+    // ---- Debounce ANGLE ----
+    boolean angleInRange = Math.abs(elevatorAngle - ANGLE_TARGET_DEGREES) <= 1.0;
+    if (angleInRange) { if (++angHigh >= SENSOR_DEBOUNCE_CYCLES) { angState = 1; angHigh = SENSOR_DEBOUNCE_CYCLES; } angLow = 0; }
+    else { if (++angLow >= SENSOR_DEBOUNCE_CYCLES) { angState = 0; angLow = SENSOR_DEBOUNCE_CYCLES; } angHigh = 0; }
 
-      case ROBOT_CLIMB:
-        sendData(Integer.toString((int)Math.round(elevatorAngle)));
-        break;
+    // ---- Decide case ----
+    final int matrixCase =
+        !DriverStation.isEnabled()          ? 0 :
+        DriverStation.isAutonomousEnabled() ? 1 : 2;
 
-      case WAIT:
-        sendData("wait");
-        break;
+    // ---- FMS/DS presence ----
+    final int fms = (DriverStation.isFMSAttached() || DriverStation.isDSAttached()) ? 1 : 0;
 
-      case AUTO:
-        sendData(Integer.toString(AUTOCASE));
-        break;
+    // ---- Build one compact line ----
+    final String line = matrixCase + " " + pieceState + "," + elevState + "," + angState + "," + fms;
 
-      case DRIVING:
-        sendData(Integer.toString(TELEOPCASE)+" 0");
-        break;
-      case INTAKEPRE:
-        sendData(Integer.toString(TELEOPCASE)+" 1,0");
-      case INTAKEACTIVE:
-        sendData(Integer.toString(TELEOPCASE)+" 1,1");
-        break;
-      case INTAKECOMPLETE:
-        sendData(Integer.toString(TELEOPCASE)+" 1,2");
-        break;
-      case SCOREPRE:
-        sendData(Integer.toString(TELEOPCASE)+" 2,0");
-        break;
-      case SCOREACTIVE:
-        sendData(Integer.toString(TELEOPCASE)+" 2,1");
-        break;
-      case SCORECOMPLETE:
-        sendData(Integer.toString(TELEOPCASE)+" 2,2");
-        break;
-      case CLIMBPRE:
-        sendData(Integer.toString(TELEOPCASE)+ "3,0");
-        break;
-      case CLIMBACTIVE:
-        sendData(Integer.toString(TELEOPCASE)+ "3,1");
-        break;
-      case CLIMBCOMPLETE:
-        sendData(Integer.toString(TELEOPCASE)+ "3,2");
-        break;
-      case DISABLED:
-        sendData("3");
-        break;
+    // ---- Send at steady cadence ----
+    if (++sendCounter >= MESSAGE_SEND_INTERVAL_CYCLES) {
+      sendCounter = 0;
+      sendLine(line);
     }
 
     

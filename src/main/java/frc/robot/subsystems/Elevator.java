@@ -186,6 +186,16 @@ public class Elevator extends SubsystemBase {
        if(RobotContainer.developerMode == true){
         log(output);
        }
+        }
+
+        // Update the robot-to-MatrixPortal communications with the state of the elevator beam break.
+        // When the elevator is at its lowest position, the beam break should be triggered.  This
+        // boolean (true when the beam is broken) will be recorded in robotToM4, and used
+        // to determine the "ELEV" checklist indicator on the LED matrix.
+        frc.robot.subsystems.robotToM4 m4 = frc.robot.subsystems.robotToM4.INSTANCE;
+        if (m4 != null) {
+            m4.setElevatorBeamBreak(isLowest());
+        }
     }
 
 }

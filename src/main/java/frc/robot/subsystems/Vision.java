@@ -45,6 +45,14 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // SmartDashboard.putNumber("ApriltagDistance", getApriltagDistance());
     // This method will be called once per scheduler run
+
+    // Publish whether the vision system currently sees any targets to the MatrixPortal
+    // communications subsystem.  The matrix can use this value in diagnostic or dynamic
+    // displays.  Here we simply pass along the latest hasTargets() result each cycle.
+    frc.robot.subsystems.robotToM4 m4 = frc.robot.subsystems.robotToM4.INSTANCE;
+    if (m4 != null) {
+      m4.setVisionReceive(hasTargets());
+    }
   }
 
   public List<PhotonPipelineResult> getAllUnreadResults() {
@@ -60,14 +68,16 @@ public class Vision extends SubsystemBase {
   }
 
   public Boolean hasTargets() {
-    if(!getAllUnreadResults().isEmpty()){
-      PhotonPipelineResult target = getAllUnreadResults().get(getAllUnreadResults().size()-1);
-
-      return target.hasTargets();
-    } else {
-      return false;
+    // Safely check unread results first
+    var results = getAllUnreadResults();
+    if (results != null && !results.isEmpty()) {
+      var last = results.get(results.size() - 1);
+      return last != null && last.hasTargets();
     }
-    
+  
+    // Fallback to the latest result (safe even if no new frames)
+    var latest = getLatestResult();
+    return latest != null && latest.hasTargets();
   }
 
   public double getYaw() {
