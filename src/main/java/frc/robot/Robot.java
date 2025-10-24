@@ -4,74 +4,85 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.SignalLogger;
+// import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.robotToM4;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
-  
 
+  /*/ RS-232 port for MatrixPortal (9600 baud, 8 data bits, odd parity, 1 stop bit)
+  public final SerialPort rs232Port = new SerialPort(
+      9600,
+      SerialPort.Port.kOnboard,
+      8,
+      SerialPort.Parity.kOdd,
+      SerialPort.StopBits.kOne
+  );
+/*/
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    
+    // Instantiate RobotContainer (button-bindings, auto chooser)
     m_robotContainer = new RobotContainer();
     m_robotContainer.resetEncoders();
+    robotToM4.changeMode("STARTUP");
+    // Warm up Pathfinding
     PathfindingCommand.warmupCommand().schedule();
+    LiveWindow.enableAllTelemetry();
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run(); 
+    CommandScheduler.getInstance().run();
   }
 
   @Override
-  public void disabledInit() {}
-
+  public void disabledInit() {robotToM4.changeMode("DISABLED");}
   @Override
   public void disabledPeriodic() {}
-
   @Override
   public void disabledExit() {}
 
   @Override
   public void autonomousInit() {
     m_robotContainer.resetEncoders();
+    m_robotContainer.clearDriveDefaultCommand();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    robotToM4.changeMode("AUTO");
   }
-
   @Override
   public void autonomousPeriodic() {}
-
   @Override
   public void autonomousExit() {}
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.setDriveDefaultCommand();
+    robotToM4.changeMode("DRIVING");
   }
 
   @Override
-  public void teleopPeriodic() {}
-
+  public void teleopPeriodic() {
+    // Transmit framed exactly as the Arduino expects (SERIAL_8O1)
+    // rs232Port.writeString("Hello from Perry!\r\n");
+    if(DriverStation.getMatchTime()== 16){
+      robotToM4.changeMode("CLIMBPRE");
+    }
+  }
   @Override
   public void teleopExit() {}
 
@@ -79,13 +90,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
   }
+  @Override public void testPeriodic() {}
+  @Override public void testExit() {}
 
-  @Override
-  public void testPeriodic() {}
-
-  @Override
-  public void testExit() {}
-
-  @Override
-  public void simulationPeriodic() {}
+  @Override public void simulationPeriodic() {}
 }

@@ -1,11 +1,13 @@
 package frc.robot.commands;
-//https://www.chiefdelphi.com/t/how-to-make-a-elevator-go-to-each-level-with-a-button-press-also-homing-system/482214/5
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//https://www.chiefdelphi.com/t/how-to-make-a-elevator-go-to-each-level-with-a-button-press-also-homing-system/482214/5
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.robotToM4;
 
 public class Score extends Command {
     Elevator elevator;
@@ -24,6 +26,8 @@ public class Score extends Command {
     }
     @Override
     public void initialize(){
+        System.out.println("sadness");
+        robotToM4.changeMode("SCOREACTIVE");
         shoulder.setPID(-5);
         if(level == 4 || level == 3){
             shoulder.setPID(-8);
@@ -71,8 +75,10 @@ public class Score extends Command {
         }else if(level==4){
             
             if(shoulder.atSetpoint()){
+                SmartDashboard.putBoolean("step1", isScheduled());
                 elevator.setPID(Constants.fieldConstants.level4Height);
                 if(elevator.getDistance() < -146){
+                    SmartDashboard.putBoolean("step2", isScheduled());
                     shoulder.setPID(Constants.fieldConstants.level4Angle);
                 }
             }
@@ -98,7 +104,7 @@ public class Score extends Command {
     }
     @Override
     public void end(boolean interrupted){
-        
+     System.out.println("quitting time");   
     }
 
 }

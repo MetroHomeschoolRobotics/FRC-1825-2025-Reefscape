@@ -4,16 +4,16 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.lang.reflect.Field;
+// import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+// import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
+// import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -27,6 +27,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import choreo.Choreo.TrajectoryLogger;
 import choreo.auto.AutoFactory;
 import choreo.trajectory.SwerveSample;
+import dev.doglog.DogLog;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.Constants.FieldSetpoints;
+// import frc.robot.Constants.FieldSetpoints;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -81,8 +82,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Swerve request to apply during Pathplanner */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
+
     // private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
     private final Vision FrontRightCamera = new Vision("FrontRightCamera", Constants.CameraPositions.frontRightTranslation);
+
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -371,13 +374,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         return distance;
     }
+    private void log(){
+        DogLog.log("Drive/pose", getRobotPose());
+        
+    }
 
     @Override
     public void periodic() {
-
+        log();
+        
         // TODO find out why field positions is laggy
         // update the field positions
         field.setRobotPose(getRobotPose());
+
+// Matrix FMS because i didnt know where else to put it lol
+ robotToM4.setFMSConnected(DriverStation.isFMSAttached());
+//
 
         /*
          * Periodically try to apply the operator perspective.

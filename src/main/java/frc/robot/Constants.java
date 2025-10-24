@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 
@@ -30,8 +30,10 @@ public final class Constants {
 
 
   public static class elevatorConstants {
+
     public static final double elevatorGearRatio = 7.75;//62/8
     public static final double elevatorConversion=(207-93.66)/18.11;//elevator max to floor - elevator min to floor / encoder val at max height
+
     public static final double elevatorMaxHeight = -208; // highest point on elevator to lowest point on elevator in cm
   }
 
@@ -41,12 +43,12 @@ public final class Constants {
   
   public static class fieldConstants {
     //reef height in cm(rough, plz adjust)
-    public static final double level4Height = -198;// angle: 1.5
+    public static final double level4Height = -204.5;// angle: 1.5
     public static final double level3Height = -142;//angle 2.9
     public static final double level2Height = -108;//angle 3.8
     public static final double level1Height = -93.66;
 
-    public static final double level4Angle = 0;
+    public static final double level4Angle = 0.7;
     public static final double level3Angle = 2.9;
     public static final double level2Angle = 3.8;
     public static final double level1Angle = -53.5;
@@ -71,22 +73,22 @@ public final class Constants {
     
   public static class CameraPositions {
     public static final Transform3d frontLeftTranslation = new Transform3d(
-                                                            Units.inchesToMeters(11.147131),
-                                                            Units.inchesToMeters(11.404959), // 11.29
-                                                            Units.inchesToMeters(9.321819), 
-                                                            new Rotation3d(
-                                                              Units.degreesToRadians(5.592),
-                                                              Units.degreesToRadians(10),
-                                                              Units.degreesToRadians(-29.5305)));
-                                                              
+        Units.inchesToMeters(11.147131),
+        Units.inchesToMeters(11.404959), // 11.29
+        Units.inchesToMeters(9.321819),
+        new Rotation3d(
+            Units.degreesToRadians(5.592),
+            Units.degreesToRadians(10),
+            Units.degreesToRadians(-29.5305)));
+
     public static final Transform3d frontRightTranslation = new Transform3d(
-                                                            Units.inchesToMeters(12.916),
-                                                            Units.inchesToMeters(-11.500), // -11.29
-                                                            Units.inchesToMeters(9.225750),
-                                                            new Rotation3d(
-                                                              Units.degreesToRadians(0),
-                                                              Units.degreesToRadians(0),
-                                                              Units.degreesToRadians(0)));
+        Units.inchesToMeters(12.916),
+        Units.inchesToMeters(-11.500), // -11.29
+        Units.inchesToMeters(9.225750),
+        new Rotation3d(
+            Units.degreesToRadians(0),
+            Units.degreesToRadians(0),
+            Units.degreesToRadians(0)));
                                                               
     public static final Transform3d leftTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
     public static final Transform3d rightTranslation = new Transform3d(0,0,0, new Rotation3d(0,0,0));
@@ -106,6 +108,8 @@ public final class Constants {
 
     public static final int deAlgaeMotorId = 14;
     public static final int climberMotorId = 15;
+
+    public static final int elevatorBeambreakID = 1;
 
   }
 
@@ -134,8 +138,8 @@ public final class Constants {
     }
     
     public static class RedAlliance{
-      public static final Pose2d reefA = new Pose2d(14.31, 3.887, new Rotation2d(Units.degreesToRadians(180)));  //14.25468407, 3.849290216, new Rotation2d(Units.degreesToRadians(180)
-      public static final Pose2d reefB = new Pose2d(14.31, 4.216, new Rotation2d(Units.degreesToRadians(180))); // 14.25368407, 4.2246333, new Rotation2d(Units.degreesToRadians(180) 
+      public static final Pose2d reefA = new Pose2d(14.31, 3.837, new Rotation2d(Units.degreesToRadians(180)));  //14.25468407, 3.849290216, new Rotation2d(Units.degreesToRadians(180)
+      public static final Pose2d reefB = new Pose2d(14.31, 4.166, new Rotation2d(Units.degreesToRadians(180))); // 14.25368407, 4.2246333, new Rotation2d(Units.degreesToRadians(180) 
 
       public static final Pose2d reefC = new Pose2d(13.805, 5.04, new Rotation2d(Units.degreesToRadians(-120))); // X far from L
       public static final Pose2d reefD = new Pose2d(13.52, 5.204, new Rotation2d(Units.degreesToRadians(-120))); 
@@ -146,7 +150,7 @@ public final class Constants {
       public static final Pose2d reefG = new Pose2d(11.808, 4.165, new Rotation2d(Units.degreesToRadians(0))); 
       public static final Pose2d reefH = new Pose2d(11.808, 3.836, new Rotation2d(Units.degreesToRadians(0))); 
 
-      public static final Pose2d reefI = new Pose2d(12.313, 3.012, new Rotation2d(Units.degreesToRadians(60))); // Y same as L
+      public static final Pose2d reefI = new Pose2d(12.285, 3.037, new Rotation2d(Units.degreesToRadians(60))); // Y same as L
       public static final Pose2d reefJ = new Pose2d(12.598, 2.848, new Rotation2d(Units.degreesToRadians(60)));
 
       public static final Pose2d reefK = new Pose2d(13.564, 2.873, new Rotation2d(Units.degreesToRadians(120))); 

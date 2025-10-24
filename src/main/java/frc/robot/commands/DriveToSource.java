@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.robotToM4;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToSource extends Command {
@@ -19,7 +20,12 @@ public class DriveToSource extends Command {
 
   private CommandSwerveDrivetrain drivetrain;
 
-  /** Creates a new DriveToSource. */
+  /** Creates a new DriveToSource command. 
+   * Which will choose the nearest source 
+   * slot to drive to and continually command the drivetrain
+   * to drive to it until the command is no longer scheduled
+   * @param _drivetrain The drivetrain object
+  */
   public DriveToSource(CommandSwerveDrivetrain _drivetrain) {
 
     drivetrain = _drivetrain;
@@ -54,6 +60,7 @@ public class DriveToSource extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    robotToM4.changeMode("INTAKEPRE");
     drivetrain.driveToPose(closestSource, 0, 0, 0, 0).cancel();
   }
 
