@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,8 +23,10 @@ import frc.robot.commands.RunOuttake;
 import frc.robot.commands.Score;
 import frc.robot.commands.StaggerMotors;
 import frc.robot.commands.printDebug;
+import frc.robot.commands.printDebug;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.autoCommands.ShoulderToIntake;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -32,16 +38,19 @@ public class AutoRoutines {
     private final Elevator m_elevator;
     private final Intake m_intake;
     private final CommandSwerveDrivetrain m_drivetrain;
+    
 
    
     
 
     public AutoRoutines(AutoFactory factory, ShoulderPID shoulder, Elevator elevator, Intake intake,CommandSwerveDrivetrain drivetrain) {
+    
         m_factory = factory;
         m_shoulder = shoulder;
         m_elevator = elevator;
         m_intake = intake;
         m_drivetrain = drivetrain;
+        
         
     }
     
@@ -71,6 +80,14 @@ public class AutoRoutines {
         //     taxiWithCommand.resetOdometry(),taxiWithCommand.cmd(),scoreL4Group,
         //     BackwardsAfterTaxi.cmd(),intakeGroup, TaxiAgain.cmd(), scoreL4Group2
         //     );
+        // routine.active().onTrue(
+        //     taxiWithCommand.resetOdometry().andThen(taxiWithCommand.cmd())
+        //     .andThen(new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
+        //     .andThen(BackwardsAfterTaxi.cmd()).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))
+        //     )
+        //     .andThen(TaxiAgain.cmd()).andThen(new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
+        // );
+        //routine.active().onTrue(taxiWithCommand.resetOdometry().andThen(null))
         // routine.active().onTrue(
         //     taxiWithCommand.resetOdometry().andThen(taxiWithCommand.cmd())
         //     .andThen(new SequentialCommandGroup(new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))

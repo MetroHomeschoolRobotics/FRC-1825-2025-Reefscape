@@ -13,8 +13,46 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.Optional;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
+import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimberMotorBackwards;
+import frc.robot.commands.DriveToBranch;
+import frc.robot.commands.DriveToSource;
+import frc.robot.commands.LowerAlgaePreset;
+// import frc.robot.commands.PIDToPose;
+import frc.robot.commands.RaiseElevator;
+// import frc.robot.commands.ResetElevatorEncoders;
+import frc.robot.commands.RetractElevator;
+// import frc.robot.commands.RunClimb;
+import frc.robot.commands.RunClimbPiston;
+import frc.robot.commands.RunClimbPiston2;
+import frc.robot.commands.RunClimbPistonBackwards;
+import frc.robot.commands.RunElevator;
+// import frc.robot.commands.RunIntake;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -47,11 +85,15 @@ import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
 // import frc.robot.commands.RunOuttakeSideways;
 // import frc.robot.commands.RunShoulder;
+// import frc.robot.commands.RunOuttakeSideways;
+// import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
 import frc.robot.commands.SetShoulderAngle;
 import frc.robot.commands.ShiftCoralForward;
 import frc.robot.commands.StaggerMotors;
+// import frc.robot.commands.TeleopToBranchPID;
+// import frc.robot.commands.ToggleActuatorSoftLimits;
 // import frc.robot.commands.TeleopToBranchPID;
 // import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
@@ -60,6 +102,7 @@ import frc.robot.commands.runDriveTrain;
 import frc.robot.commands.rundeAlgae;
 // import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
+import frc.robot.commands.setDriveDefaultCommand;
 import frc.robot.commands.setDriveDefaultCommand;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
@@ -71,9 +114,12 @@ import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
 // import frc.robot.commands.PIDToPose;
+// import frc.robot.commands.PIDToPose;
 import frc.robot.commands.RaiseElevator;
 // import frc.robot.commands.ResetElevatorEncoders;
+// import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
+// import frc.robot.commands.RunClimb;
 // import frc.robot.commands.RunClimb;
 import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
@@ -84,7 +130,10 @@ import frc.robot.commands.RunElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.Filesystem;
+// import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -104,12 +153,14 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 // import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -119,6 +170,14 @@ import frc.robot.commands.runDriveTrain;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.ShoulderPID;
+// import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.climber;
+import frc.robot.subsystems.deAlgae;
+import frc.robot.subsystems.robotToM4;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Shoulder;
@@ -158,6 +217,8 @@ public class RobotContainer {
 
 
   // Create all the subsystems for the code
+
+  // Create all the subsystems for the code
   private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   private final deAlgae m_deAlgae = new deAlgae();
@@ -188,15 +249,26 @@ public class RobotContainer {
   private final AutoChooser autoChooser = new AutoChooser();
 
   
+
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     autoFactory = drivetrain.createAutoFactory();
         autoRoutines = new AutoRoutines(autoFactory,m_Shoulder,m_elevator,m_intake,drivetrain);
+        
 
         
     createAutoChooser();
     configureBindings();
+    DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
+    
+    SmartDashboard.putData("Command_Scheduler", CommandScheduler.getInstance());
+    if(developerMode ==false){
+      DogLog.setEnabled(false);
+    }
+    
+    
     DogLog.setOptions(new DogLogOptions().withCaptureNt(true));
     
     SmartDashboard.putData("Command_Scheduler", CommandScheduler.getInstance());
@@ -211,6 +283,9 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link CommandXboxController Xbox}
+   * / {@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link CommandXboxController Xbox}
    * / {@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4} controllers or
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
@@ -229,7 +304,14 @@ public class RobotContainer {
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+      // Puts the wheels in an x
+      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
+      // points the wheels without driving
+      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
+      // -driverXbox.getLeftX()))
+      // ));
       // points the wheels without driving
       // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
       // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
@@ -237,7 +319,12 @@ public class RobotContainer {
       // ));
 
       // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
+      // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
 
+      // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
+      // Constants.FieldSetpoints.RedAlliance.reefA));
+      // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
+      // 2, 2,180,360));
       // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
       // Constants.FieldSetpoints.RedAlliance.reefA));
       // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
@@ -250,11 +337,25 @@ public class RobotContainer {
       // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
       // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
       // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
+      // Sysid buttons
+      // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+      // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+      // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+      // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+      // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
+      // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
 
 
       // Puts the wheels in an x
       // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
+      // Puts the wheels in an x
+      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
 
+      // points the wheels without driving
+      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
+      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
+      // -driverXbox.getLeftX()))
+      // ));
       // points the wheels without driving
       // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
       // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
@@ -281,6 +382,12 @@ public class RobotContainer {
     // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
 
+    // driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
+    // Starting config
+    // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
+
+
+    // Manipulator non-scoring commands
     // Manipulator non-scoring commands
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new StaggerMotors(m_intake));
@@ -309,6 +416,8 @@ public class RobotContainer {
 
 
     // These are all the streamdeck button commands, only used for climbing
+
+    // These are all the streamdeck button commands, only used for climbing
     m_streamdeck.b().whileTrue(new RunClimbPiston2(m_piston));
     m_streamdeck.a().whileTrue(new SetShoulderAngle(m_Shoulder, -34.6).andThen(new RaiseElevator(m_elevator, -115)));
     m_streamdeck.povUp().whileTrue(new RunClimbPistonBackwards(m_piston));// retract actuator, if this ratchets ignore
@@ -322,6 +431,7 @@ public class RobotContainer {
 
 
 
+
     Optional<Alliance> ally = DriverStation.getAlliance();
     // if (ally.isPresent()) {
     //   if (ally.get() == Alliance.Red) {
@@ -332,6 +442,15 @@ public class RobotContainer {
     //   }
     // }
   }
+    // if (ally.isPresent()) {
+    //   if (ally.get() == Alliance.Red) {
+    //     // Red alliance auto bindings…
+    //   }
+    //   if (ally.get() == Alliance.Blue) {
+    //     // Blue alliance auto bindings…
+    //   }
+    // }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -340,6 +459,7 @@ public class RobotContainer {
   public void resetEncoders() {
     m_elevator.resetEncoders();
     m_climber.resetEncoders();
+    // m_climber.setClimber(0);
     // m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
@@ -361,6 +481,10 @@ public class RobotContainer {
       autoChooser.addRoutine("Right", autoRoutines::Right);
       autoChooser.addRoutine("Left", autoRoutines::Left);
       //autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
+      autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
+      autoChooser.addRoutine("Right", autoRoutines::Right);
+      autoChooser.addRoutine("Left", autoRoutines::Left);
+      //autoChooser.addRoutine("taxiWithCommand", autoRoutines::taxiWithCommand);
       
       SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -372,5 +496,6 @@ public class RobotContainer {
         return autoChooser.selectedCommand();
     }
 
-}
+  }
+
 
