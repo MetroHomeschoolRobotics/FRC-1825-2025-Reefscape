@@ -23,7 +23,7 @@ public class retractClimbClaws extends Command {
     }
     public void end(boolean interrupted){
         robotToM4.changeMode("CLIMBACTIVE");
-        climber.stopClimber();
+        
         //climber.openClimber();
         // if(interrupted){
         //     climber.setClimber(0.0);

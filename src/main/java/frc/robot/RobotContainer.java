@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -240,7 +241,7 @@ public class RobotContainer {
   private final RunElevator runElevator = new RunElevator(m_elevator, m_manipulatorController, m_Shoulder);
   private final RunShoulderPID runShoulder = new RunShoulderPID(m_Shoulder, m_manipulatorController, m_elevator);
   private final runDriveTrain runDriveTrain = new runDriveTrain(drivetrain, driverXbox);
-
+ 
 
   // Auto Chooser
   
@@ -401,10 +402,13 @@ public class RobotContainer {
     // These are all the manipulator scoring commands, for each level
     m_manipulatorController.y().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 4)
         .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+      m_manipulatorController.y().onTrue(new InstantCommand(()->robotToM4.INSTANCE.setScoreLevel(4)));
     m_manipulatorController.x().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 3)
         .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+        m_manipulatorController.x().onTrue(new InstantCommand(()->robotToM4.INSTANCE.setScoreLevel(3)));
     m_manipulatorController.b().whileTrue(new Score(m_elevator, m_Shoulder, m_intake, 2)
         .andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator, m_Shoulder)));
+        m_manipulatorController.b().onTrue(new InstantCommand(()->robotToM4.INSTANCE.setScoreLevel(2)));
     // m_manipulatorController.a().whileTrue(new Score(m_elevator,m_Shoulder,m_intake, 1).andThen(new RunIntakeBackwards(m_intake)));
     m_manipulatorController.a().whileTrue(new scoreL1Backwards(m_elevator, m_Shoulder, m_intake));
     

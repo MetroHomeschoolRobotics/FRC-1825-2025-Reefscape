@@ -103,7 +103,7 @@ public class AutoRoutines {
         final AutoTrajectory taxi = routine.trajectory("taxi");
         routine.active().onTrue(
             //taxi.resetOdometry().andThen(taxi.cmd()).andThen(new printDebug()).andThen( new DriveToBranch("R",m_drivetrain)).andThen(new printDebug()).andThen(new Score(m_elevator, m_shoulder, m_intake, 4)).andThen(new RunOuttake(m_intake)).andThen(new RetractElevator(m_elevator,m_shoulder))
-            taxi.resetOdometry().andThen(Commands.waitSeconds(5)).andThen(taxi.cmd()).andThen(new SequentialCommandGroup( new Score(m_elevator, m_shoulder, m_intake, 4)))
+            taxi.resetOdometry().andThen(Commands.waitSeconds(5)).andThen(taxi.cmd()).andThen(new SequentialCommandGroup( new Score(m_elevator, m_shoulder, m_intake, 4)),new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder))
                     
             //taxi.resetOdometry().andThen( Commands.waitSeconds(0)).andThen(taxi.cmd()).andThen(new DriveToBranch("L", m_drivetrain)).alongWith(new SequentialCommandGroup(Commands.waitSeconds(1.2),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
                     );
@@ -121,7 +121,7 @@ public class AutoRoutines {
         routine.active().onTrue(
             StartToI.resetOdometry()
                 .andThen(StartToI.cmd()).alongWith( new SequentialCommandGroup( Commands.waitSeconds(1.5),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
-                .andThen(IToSource.cmd()).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(new ParallelCommandGroup(SourceToK.cmd(),(new SequentialCommandGroup(Commands.waitSeconds(1.75),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
+                .andThen(IToSource.cmd()).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(new ParallelCommandGroup(SourceToK.cmd(),(new SequentialCommandGroup(Commands.waitSeconds(1.9),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
         );
         return routine;
     }
@@ -133,7 +133,7 @@ public class AutoRoutines {
 
         routine.active().onTrue(
             StartToE.resetOdometry().andThen(StartToE.cmd()).alongWith(new SequentialCommandGroup(Commands.waitSeconds(1.5),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)) ).andThen(
-EToSource.cmd() ).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(new ParallelCommandGroup(SourceToD.cmd(),(new SequentialCommandGroup(Commands.waitSeconds(1.75),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
+EToSource.cmd() ).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(new ParallelCommandGroup(SourceToD.cmd(),(new SequentialCommandGroup(Commands.waitSeconds(1.9),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
         );
         return routine;
     }
