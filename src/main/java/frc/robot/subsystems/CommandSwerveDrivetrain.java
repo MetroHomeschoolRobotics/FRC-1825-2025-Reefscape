@@ -83,7 +83,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
 
-    // private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
+    private final Vision FrontLeftCamera = new Vision("FrontLeftCamera", Constants.CameraPositions.frontLeftTranslation);
     private final Vision FrontRightCamera = new Vision("FrontRightCamera", Constants.CameraPositions.frontRightTranslation);
 
 
@@ -408,9 +408,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        if(FrontLeftCamera.tagOnScreen()&&!FrontRightCamera.tagOnScreen()){
+           addVisionPose(FrontLeftCamera, "Front Left ");
+        }else if(FrontRightCamera.tagOnScreen()&&!FrontLeftCamera.tagOnScreen()){
+           addVisionPose(FrontRightCamera, "Front Right ");
+        }else{
 
-        // addVisionPose(FrontLeftCamera, "Front Left ");
-        addVisionPose(FrontRightCamera, "Front Right ");
+            addVisionPose(FrontRightCamera, "Front Right ");
+            addVisionPose(FrontLeftCamera, "Front Left ");
+       } 
+       
+       
 
         // SmartDashboard outputs
         SmartDashboard.putData("Field", getField2d());

@@ -38,10 +38,6 @@ public class AutoRoutines {
     private final Elevator m_elevator;
     private final Intake m_intake;
     private final CommandSwerveDrivetrain m_drivetrain;
-    
-
-   
-    
 
     public AutoRoutines(AutoFactory factory, ShoulderPID shoulder, Elevator elevator, Intake intake,CommandSwerveDrivetrain drivetrain) {
     
@@ -120,7 +116,8 @@ public class AutoRoutines {
        //parallel race group fixes everything?
         routine.active().onTrue(
             StartToI.resetOdometry()
-                .andThen(StartToI.cmd()).alongWith( new SequentialCommandGroup( Commands.waitSeconds(1.5),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
+                .andThen(StartToI.cmd()).alongWith( new SequentialCommandGroup( Commands.waitSeconds(1.5),
+                new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))
                 .andThen(IToSource.cmd()).andThen(new SequentialCommandGroup(new shoulderToIntake(m_shoulder, m_elevator),new StaggerMotors(m_intake))).andThen(new ParallelCommandGroup(SourceToK.cmd(),(new SequentialCommandGroup(Commands.waitSeconds(1.9),new Score(m_elevator, m_shoulder, m_intake, 4), new RunOuttake(m_intake),new RetractElevator(m_elevator, m_shoulder)))))
         );
         return routine;

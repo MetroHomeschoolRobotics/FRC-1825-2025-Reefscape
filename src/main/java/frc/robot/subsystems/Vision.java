@@ -34,7 +34,7 @@ public class Vision extends SubsystemBase {
 
   private PhotonCamera camera;
   private PhotonPoseEstimator photonPoseEstimator;
-
+ private List<PhotonPipelineResult> results;
   /** Creates a new Vision. */
   public Vision(String cameraName, Transform3d cameraTransform) {
     camera = new PhotonCamera(cameraName);
@@ -46,12 +46,12 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // SmartDashboard.putNumber("ApriltagDistance", getApriltagDistance());
     // This method will be called once per scheduler run
-    
+    results = camera.getAllUnreadResults();
 
   }
 
   public List<PhotonPipelineResult> getAllUnreadResults() {
-    return camera.getAllUnreadResults();
+    return results;
   }
   
 
@@ -89,7 +89,13 @@ public class Vision extends SubsystemBase {
   public Transform3d getRobotTransform() {
     return getBestTarget().getBestCameraToTarget();
   }
-
+public Boolean tagOnScreen(){
+  if(hasTargets()&&getBestTarget()!= null){
+    return true;
+  }else{
+    return false;
+  }
+}
   public double getApriltagDistance(Pose2d robotPose, int apriltagID) {
     double tagDist = 100000;
     if(hasTargets() && getBestTarget() != null) {
@@ -103,7 +109,10 @@ public class Vision extends SubsystemBase {
   }
 
   public double getPoseAmbiguity() {
-    return getBestTarget().getPoseAmbiguity();
+    
+      return getBestTarget().getPoseAmbiguity();
+    
+    
   }
 
   public int getApriltagID() {
