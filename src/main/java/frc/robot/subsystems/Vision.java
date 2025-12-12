@@ -4,10 +4,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,12 +13,9 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-// import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -33,7 +28,7 @@ public class Vision extends SubsystemBase {
 
   private PhotonCamera camera;
   private PhotonPoseEstimator photonPoseEstimator;
-
+ private List<PhotonPipelineResult> results;
   /** Creates a new Vision. */
   public Vision(String cameraName, Transform3d cameraTransform) {
     camera = new PhotonCamera(cameraName);
@@ -45,10 +40,12 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // SmartDashboard.putNumber("ApriltagDistance", getApriltagDistance());
     // This method will be called once per scheduler run
+    results = camera.getAllUnreadResults();
+
   }
 
   public List<PhotonPipelineResult> getAllUnreadResults() {
-    return camera.getAllUnreadResults();
+    return results;
   }
   
 
@@ -86,7 +83,13 @@ public class Vision extends SubsystemBase {
   public Transform3d getRobotTransform() {
     return getBestTarget().getBestCameraToTarget();
   }
-
+public Boolean tagOnScreen(){
+  if(hasTargets()&&getBestTarget()!= null){
+    return true;
+  }else{
+    return false;
+  }
+}
   public double getApriltagDistance(Pose2d robotPose, int apriltagID) {
     double tagDist = 100000;
     if(hasTargets() && getBestTarget() != null) {
@@ -100,7 +103,10 @@ public class Vision extends SubsystemBase {
   }
 
   public double getPoseAmbiguity() {
-    return getBestTarget().getPoseAmbiguity();
+    
+      return getBestTarget().getPoseAmbiguity();
+    
+    
   }
 
   public int getApriltagID() {
@@ -114,7 +120,6 @@ public class Vision extends SubsystemBase {
   public Optional<EstimatedRobotPose> getVisionBasedPose() {
     return photonPoseEstimator.update(getLatestResult());
   }
-
 
 
 }

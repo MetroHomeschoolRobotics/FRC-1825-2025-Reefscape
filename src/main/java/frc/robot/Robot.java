@@ -8,10 +8,13 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.robotToM4;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -30,9 +33,10 @@ public class Robot extends TimedRobot {
     // Instantiate RobotContainer (button-bindings, auto chooser)
     m_robotContainer = new RobotContainer();
     m_robotContainer.resetEncoders();
-
+    robotToM4.changeMode("STARTUP");
     // Warm up Pathfinding
     PathfindingCommand.warmupCommand().schedule();
+    LiveWindow.enableAllTelemetry();
   }
 
   @Override
@@ -41,7 +45,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {robotToM4.changeMode("DISABLED");}
   @Override
   public void disabledPeriodic() {}
   @Override
@@ -50,10 +54,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.resetEncoders();
+    m_robotContainer.clearDriveDefaultCommand();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    robotToM4.changeMode("AUTO");
   }
   @Override
   public void autonomousPeriodic() {}
@@ -65,12 +71,17 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.setDriveDefaultCommand();
+    robotToM4.changeMode("DRIVING");
   }
 
   @Override
   public void teleopPeriodic() {
     // Transmit framed exactly as the Arduino expects (SERIAL_8O1)
     // rs232Port.writeString("Hello from Perry!\r\n");
+    if(DriverStation.getMatchTime()== 16){
+      robotToM4.changeMode("CLIMBPRE");
+    }
   }
   @Override
   public void teleopExit() {}
