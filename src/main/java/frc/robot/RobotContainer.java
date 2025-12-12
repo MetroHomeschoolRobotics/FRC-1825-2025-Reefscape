@@ -13,58 +13,20 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
-import java.util.Optional;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.NamedCommands;
-
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ClimberMotorBackwards;
-import frc.robot.commands.DriveToBranch;
-import frc.robot.commands.DriveToSource;
-import frc.robot.commands.LowerAlgaePreset;
-// import frc.robot.commands.PIDToPose;
-import frc.robot.commands.RaiseElevator;
-// import frc.robot.commands.ResetElevatorEncoders;
-import frc.robot.commands.RetractElevator;
-// import frc.robot.commands.RunClimb;
-import frc.robot.commands.RunClimbPiston;
-import frc.robot.commands.RunClimbPiston2;
-import frc.robot.commands.RunClimbPistonBackwards;
-import frc.robot.commands.RunElevator;
-// import frc.robot.commands.RunIntake;
-import dev.doglog.DogLog;
-import dev.doglog.DogLogOptions;
-import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ClimberMotorBackwards;
 import frc.robot.commands.DriveToBranch;
@@ -76,6 +38,7 @@ import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
 import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.commands.RunElevator;
+
 import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.RunShoulderPID;
@@ -89,48 +52,8 @@ import frc.robot.commands.runDriveTrain;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.setDriveDefaultCommand;
-import frc.robot.commands.setDriveDefaultCommand;
-import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.retractClimbClaws;
-import frc.robot.commands.ClimberMotorBackwards;
-import frc.robot.commands.DriveToBranch;
-import frc.robot.commands.DriveToBranchPID;
-import frc.robot.commands.LowerAlgaePreset;
-import frc.robot.commands.DriveToSource;
-import frc.robot.commands.RaiseElevator;
-import frc.robot.commands.RetractElevator;
-import frc.robot.commands.RunClimbPiston;
-import frc.robot.commands.RunClimbPiston2;
-import frc.robot.commands.RunClimbPistonBackwards;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.AutoRoutines;
-import frc.robot.commands.RunElevator;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.SerialPort;
-import static edu.wpi.first.units.Units.*;
-import java.util.Optional;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.pathplanner.lib.auto.NamedCommands;
-import choreo.auto.AutoFactory;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import dev.doglog.DogLog;
-import dev.doglog.DogLogOptions;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.runDriveTrain;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -140,12 +63,7 @@ import frc.robot.subsystems.ShoulderPID;
 import frc.robot.subsystems.climber;
 import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.robotToM4;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShoulderPID;
-import frc.robot.subsystems.climber;
-import frc.robot.subsystems.deAlgae;
-import frc.robot.subsystems.robotToM4;
+
 
 public class RobotContainer {
   
@@ -278,8 +196,7 @@ public class RobotContainer {
       // -driverXbox.getLeftX()))
       // ));
 
-      // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
-      // driverXbox.y().whileTrue(new TeleopToBranchPID(drivetrain, "L"));
+      
 
       // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
       // Constants.FieldSetpoints.RedAlliance.reefA));

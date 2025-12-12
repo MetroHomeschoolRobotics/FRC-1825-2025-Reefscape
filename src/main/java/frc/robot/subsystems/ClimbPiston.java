@@ -1,13 +1,9 @@
 package frc.robot.subsystems;
 //AKA crud
-
-// import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.Constants.elevatorConstants;
+
 
 public class ClimbPiston extends SubsystemBase {
     private SparkMax piston = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);// Motor id
