@@ -39,6 +39,7 @@ public class Shoulder extends SubsystemBase {
     //-141.4 straight up
     //-130 forward
     //-177 back
+    //TODO move these to constants file
     double output =rotationCANcoder.getAbsolutePosition().getValueAsDouble()*360+142.9;
     if(output>180){
       output-=360;

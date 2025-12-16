@@ -3,7 +3,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import dev.doglog.DogLog;
 import com.revrobotics.spark.SparkMax;
-// import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,8 +18,6 @@ public class ShoulderPID extends SubsystemBase {
   private static CANcoder rotationCANcoder = new CANcoder(Constants.MotorIDs.cancoderID);
   
   private PIDController pid = new PIDController(0.0375, 0, 0.0008);
-  
-  // private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
   
 
@@ -67,6 +64,7 @@ public class ShoulderPID extends SubsystemBase {
     //-141.4 straight up
     //-130 forward
     //-177 back
+    //TODO move these to constants file
     double output =rotationCANcoder.getAbsolutePosition().getValueAsDouble()*360+142.9;
     if(output>180){
       output-=360;

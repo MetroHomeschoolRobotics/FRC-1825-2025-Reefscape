@@ -12,8 +12,6 @@ import frc.robot.RobotContainer;
 
 import com.revrobotics.spark.SparkLowLevel;
 
-//78 cm high at base
-//190 cm high at apex
 public class Elevator extends SubsystemBase {
     
     
@@ -76,7 +74,6 @@ public class Elevator extends SubsystemBase {
     }
 
     public double getDistance(){
-        //113.44 / 20.16 between
         return (-elevatorMotor2.getEncoder().getPosition()*Constants.elevatorConstants.elevatorConversion)-93.66;
         
     }
@@ -93,7 +90,6 @@ public class Elevator extends SubsystemBase {
        return beambreak.get();
         
     }
-//PID
     
     public void setPID(double setPoint){
         desiredposition = setPoint;
@@ -136,22 +132,7 @@ public class Elevator extends SubsystemBase {
         }else{
             output = pid.calculate(getDistance());
         }
-        
-        // if(output>0.18){
-        //     output=0.18;
-        // }
-
-        // if(output>1){
-        //     output=1;
-        // }else if(output<-1){
-        //     output = -1;
-        // }
-
-        //if(pid.getError()<15 && pid.getError()>-15){
-            //MathUtil.clamp(output,-0.05,0.03);
-        //}else{
            output= MathUtil.clamp(output,-0.99,0.3);
-       // }
        
         SmartDashboard.putNumber("pid output", output);
         SmartDashboard.putBoolean("Elevator atsetpoint", atSetpoint());

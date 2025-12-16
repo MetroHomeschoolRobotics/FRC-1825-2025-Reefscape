@@ -6,74 +6,47 @@ package frc.robot;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
+
 import frc.robot.subsystems.robotToM4;
 import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.ShoulderPID;
-// import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.climber;
 import frc.robot.subsystems.deAlgae;
 import frc.robot.subsystems.Elevator;
-// import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeBackwards;
 import frc.robot.commands.RunOuttake;
-// import frc.robot.commands.RunOuttakeSideways;
-// import frc.robot.commands.RunShoulder;
 import frc.robot.commands.RunShoulderPID;
 import frc.robot.commands.Score;
 import frc.robot.commands.SetShoulderAngle;
 import frc.robot.commands.ShiftCoralForward;
 import frc.robot.commands.StaggerMotors;
-// import frc.robot.commands.TeleopToBranchPID;
-// import frc.robot.commands.ToggleActuatorSoftLimits;
 import frc.robot.commands.UpperAlgaePreset;
 import frc.robot.commands.l1AutoAlign;
-// import frc.robot.commands.l1timer;
 import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
-// import frc.robot.commands.stopclimber;
 import frc.robot.commands.ClimberMotorBackwards;
 import frc.robot.commands.DriveToBranch;
-import frc.robot.commands.DriveToBranchPID;
 import frc.robot.commands.LowerAlgaePreset;
 import frc.robot.commands.DriveToSource;
-// import frc.robot.commands.PIDToPose;
 import frc.robot.commands.RaiseElevator;
-// import frc.robot.commands.ResetElevatorEncoders;
 import frc.robot.commands.RetractElevator;
-// import frc.robot.commands.RunClimb;
 import frc.robot.commands.RunClimbPiston;
 import frc.robot.commands.RunClimbPiston2;
 import frc.robot.commands.RunClimbPistonBackwards;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.AutoRoutines;
 import frc.robot.commands.RunElevator;
 
-import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.SerialPort;
-
-import static edu.wpi.first.units.Units.*;
-
-import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -82,42 +55,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ClimberMotorBackwards;
-import frc.robot.commands.DriveToBranch;
-import frc.robot.commands.DriveToSource;
-import frc.robot.commands.LowerAlgaePreset;
-import frc.robot.commands.RaiseElevator;
-import frc.robot.commands.RetractElevator;
-import frc.robot.commands.RunClimbPiston;
-import frc.robot.commands.RunClimbPiston2;
-import frc.robot.commands.RunClimbPistonBackwards;
-import frc.robot.commands.RunElevator;
-
-import frc.robot.commands.RunIntakeBackwards;
-import frc.robot.commands.RunOuttake;
-import frc.robot.commands.RunShoulderPID;
-import frc.robot.commands.Score;
-import frc.robot.commands.SetShoulderAngle;
-import frc.robot.commands.ShiftCoralForward;
-import frc.robot.commands.StaggerMotors;
-import frc.robot.commands.UpperAlgaePreset;
-import frc.robot.commands.l1AutoAlign;
 import frc.robot.commands.runDriveTrain;
-import frc.robot.commands.rundeAlgae;
-import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.setDriveDefaultCommand;
-import frc.robot.commands.shoulderToIntake;
 import frc.robot.commands.retractClimbClaws;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbPiston;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShoulderPID;
-import frc.robot.subsystems.climber;
-import frc.robot.subsystems.deAlgae;
-import frc.robot.subsystems.robotToM4;
 
 
 public class RobotContainer {
@@ -151,14 +94,12 @@ public class RobotContainer {
 
   // Create all the subsystems for the code
 
-  // Create all the subsystems for the code
   private final Intake m_intake = new Intake();
   private final Elevator m_elevator = new Elevator();
   private final deAlgae m_deAlgae = new deAlgae();
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
   private final ClimbPiston m_piston = new ClimbPiston();
-  // private final Telemetry logger = new Telemetry(MaxSpeed);  // Pose Stuffs
 
   // Create the objects for the controllers
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -226,76 +167,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    // TODO Create an angle based turn system
-    // Note that X is defined as forward according to WPILib convention,
-    // and Y is defined as to the left according to WPILib convention.
-    // Drivetrain will execute this command periodically
-    /*drivetrain.setDefaultCommand(
-      drivetrain.applyRequest(() -> drive.withVelocityX(-Math.pow(driverXbox.getLeftY(), 3) * MaxSpeed) // Drive forward with negative Y (forward)
-        .withVelocityY(-Math.pow(driverXbox.getLeftX(), 3) * MaxSpeed) // Drive left with negative X (left)
-        .withRotationalRate(-Math.pow(driverXbox.getRightX(), 3) * MaxAngularRate) // Drive counterclockwise with negative X (left)
-      )
-    ); */
-
-      // Puts the wheels in an x
-      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
-      // Puts the wheels in an x
-      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
-
-      // points the wheels without driving
-      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
-      // -driverXbox.getLeftX()))
-      // ));
-      // points the wheels without driving
-      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
-      // -driverXbox.getLeftX()))
-      // ));
-
-      
-
-      // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
-      // Constants.FieldSetpoints.RedAlliance.reefA));
-      // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
-      // 2, 2,180,360));
-      // driverXbox.y().whileTrue(new PIDToPose(drivetrain,
-      // Constants.FieldSetpoints.RedAlliance.reefA));
-      // driverXbox.y().whileTrue(drivetrain.driveToPose(Constants.FieldSetpoints.RedAlliance.reefL,
-      // 2, 2,180,360));
-
-      // Sysid buttons
-      // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-      // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-      // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-      // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-      // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
-      // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
-      // Sysid buttons
-      // driverXbox.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-      // driverXbox.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-      // driverXbox.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-      // driverXbox.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-      // driverXbox.leftBumper().onTrue(Commands.runOnce(logger::startSignalLogger));
-      // driverXbox.rightBumper().onTrue(Commands.runOnce(logger::stopSignalLogger));
-
-
-      // Puts the wheels in an x
-      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
-      // Puts the wheels in an x
-      // driverXbox.x().whileTrue(drivetrain.applyRequest(() -> brake));
-
-      // points the wheels without driving
-      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
-      // -driverXbox.getLeftX()))
-      // ));
-      // points the wheels without driving
-      // driverXbox.b().whileTrue(drivetrain.applyRequest(() ->
-      // point.withModuleDirection(new Rotation2d(-driverXbox.getLeftY(),
-      // -driverXbox.getLeftX()))
-      // ));
-
     
     //Sets the command that subsystems will run if nothing else is scheduled
     //These will be overridden when something else is scheduled in these subsystems
@@ -311,17 +182,7 @@ public class RobotContainer {
     driverXbox.y().whileTrue(drivetrain.applyRequest(() -> brake));
     driverXbox.a().whileTrue(new l1AutoAlign(drivetrain));
 
-    // driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
-    // Starting config
-    // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
 
-
-    // driverXbox.y().whileTrue(new DriveToBranchPID(drivetrain, "L"));
-    // Starting config
-    // driverXbox.b().whileTrue(new SetShoulderAngle(m_Shoulder, -25));
-
-
-    // Manipulator non-scoring commands
     // Manipulator non-scoring commands
     m_manipulatorController.rightBumper().whileTrue(new ShiftCoralForward(m_intake));
     m_manipulatorController.leftBumper().whileTrue(new StaggerMotors(m_intake));
@@ -366,28 +227,8 @@ public class RobotContainer {
     // m_streamdeck.povDown().whileTrue(new RunClimbPiston(m_piston));
     // m_streamdeck.povRight().whileTrue(new RunClimb( m_Shoulder));
 
-
-
-
-    // Optional<Alliance> ally = DriverStation.getAlliance();
-    // if (ally.isPresent()) {
-    //   if (ally.get() == Alliance.Red) {
-    //     // Red alliance auto bindings…
-    //   }
-    //   if (ally.get() == Alliance.Blue) {
-    //     // Blue alliance auto bindings…
-    //   }
-    // }
   }
-    // if (ally.isPresent()) {
-    //   if (ally.get() == Alliance.Red) {
-    //     // Red alliance auto bindings…
-    //   }
-    //   if (ally.get() == Alliance.Blue) {
-    //     // Blue alliance auto bindings…
-    //   }
-    // }
-  
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -396,7 +237,6 @@ public class RobotContainer {
   public void resetEncoders() {
     m_elevator.resetEncoders();
     m_climber.resetEncoders();
-    // m_climber.setClimber(0);
     // m_climber.setClimber(0);
     m_elevator.setPID(-93.66);
     m_Shoulder.setPID(m_Shoulder.getAbsoluteAngle());
