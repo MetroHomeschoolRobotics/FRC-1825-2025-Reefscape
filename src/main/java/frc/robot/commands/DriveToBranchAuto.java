@@ -4,33 +4,46 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShoulderPID;
+import frc.robot.subsystems.robotToM4;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TeleopToBranchPID extends Command {
+public class DriveToBranchAuto extends Command {
 
   private CommandSwerveDrivetrain drivetrain;
   private String LeftOrRightBranch;
+  // private Elevator elevator;
+  // private ShoulderPID shoulder;
+  // private Intake intake;
 
   private Pose2d closestBranch = new Pose2d(1000, 1000, new Rotation2d());
 
   private Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
   private Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
 
-  private TeleopPIDToPose pidToPose;
+  // private PIDToPose pidToPose;
 
-  /** Creates a new DriveToBranchPID. */
-  public TeleopToBranchPID(CommandSwerveDrivetrain _drivetrain, String _LOrRBranch) {
-
+  /** Creates a new DriveToBranch command. 
+   *  Which will choose the nearest branch to drive to
+   *  and continually command the drivetrain to drive to it
+   *  until the command is no longer scheduled.
+   * @param _LOrRBranch Whether you want to drive to the nearest Left or Right branch
+   * @param _drivetrain The drivetrain object
+  */
+  public DriveToBranchAuto(String _LOrRBranch, CommandSwerveDrivetrain _drivetrain, Elevator _elevator, ShoulderPID _shoulder,Intake _Intake) {
     drivetrain = _drivetrain;
     LeftOrRightBranch = _LOrRBranch;
-
-    
+    // elevator = _elevator;
+    // shoulder = _shoulder;
+    // intake = _Intake;
 
     addRequirements(_drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,6 +52,7 @@ public class TeleopToBranchPID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    robotToM4.changeMode("SCOREPRE");
     if(LeftOrRightBranch == "L") {
       // find the closest left reef branch
       for(Pose2d branches : leftBranches) {
@@ -62,29 +76,30 @@ public class TeleopToBranchPID extends Command {
         }
     }
 
-    pidToPose = new TeleopPIDToPose(drivetrain, closestBranch);
-    
-    pidToPose.initialize();
+
+    drivetrain.driveToPose(closestBranch, 2, 2,180,360).schedule();
+    System.out.println("endofinit");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pidToPose.execute();
-
-    SmartDashboard.putBoolean("AtPose :)", pidToPose.isFinished());
+    System.out.println("BEEp");
   }
-
+  @Override
+  public boolean isFinished() {
+    return true;
+    
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pidToPose.cancel();
-   // System.out.println("AtPose :)");
+    System.out.println("done :)");
+    System.out.println(interrupted);
+     //new printDebug().schedule();;
+     //new SequentialCommandGroup(new Score(elevator, shoulder, intake, 4),new RunOuttake(intake), new RetractElevator(elevator, shoulder)).schedule();
   }
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return pidToPose.isFinished();
-  }
+  
 }

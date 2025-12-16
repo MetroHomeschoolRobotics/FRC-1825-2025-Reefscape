@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-// import com.revrobotics.spark.SparkBase;
-// import com.revrobotics.spark.config.SparkBaseConfig;
-// import com.revrobotics.spark.config.SparkMaxConfig;
+
 import com.revrobotics.spark.SparkLowLevel;
 
 
@@ -35,10 +33,14 @@ public class Intake extends SubsystemBase {
     public void periodic() {
       // This method will be called once per scheduler run
       SmartDashboard.putBoolean("coral in Intake", coralInIntake() );
+      if(frc.robot.subsystems.robotToM4.INSTANCE!=null){
+        frc.robot.subsystems.robotToM4.INSTANCE.setIntakeBeamBreak(coralInIntake());
+      }
     }
   
     public Boolean coralInIntake() {
       return !beambreak.get();
+
       
     }  
     public void scoreBackwards(){

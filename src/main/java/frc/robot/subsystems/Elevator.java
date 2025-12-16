@@ -5,15 +5,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
-
-// import com.revrobotics.spark.SparkBase;
-
-
-// import com.revrobotics.spark.config.SparkBaseConfig;
-// import com.revrobotics.spark.config.SparkMaxConfig;
+import dev.doglog.DogLog;
+import frc.robot.RobotContainer;
 
 import com.revrobotics.spark.SparkLowLevel;
 
@@ -23,9 +18,9 @@ public class Elevator extends SubsystemBase {
     
     
     
-
-    private PIDController pid = new PIDController(.030, 0.00, 0.001);
-    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.15, 0);
+    
+    private PIDController pid = new PIDController(.0329, 0.00, 0.00066);
+    private ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.18, 0);
 
     //
     private double desiredposition = 0;
@@ -55,6 +50,7 @@ public class Elevator extends SubsystemBase {
         //elevatorMotor1.configure(
           //  config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
         //elevatorMotor1.setInverted(true);
+       
         
     }
 
@@ -81,7 +77,7 @@ public class Elevator extends SubsystemBase {
 
     public double getDistance(){
         //113.44 / 20.16 between
-        return (elevatorMotor1.getEncoder().getPosition()*Constants.elevatorConstants.elevatorConversion)-93.66;
+        return (-elevatorMotor2.getEncoder().getPosition()*Constants.elevatorConstants.elevatorConversion)-93.66;
         
     }
     public double getEncoder(){
@@ -97,6 +93,8 @@ public class Elevator extends SubsystemBase {
        return beambreak.get();
         
     }
+//PID
+    
     public void setPID(double setPoint){
         desiredposition = setPoint;
         pid.setSetpoint(desiredposition);
@@ -107,6 +105,16 @@ public class Elevator extends SubsystemBase {
     }
     public boolean atSetpoint(){
         return pid.atSetpoint();
+    }
+
+    private void log(double pidOutput){
+        DogLog.log("Elevator/desiredPos", desiredposition);
+        DogLog.log("Elevator/distance",getDistance());
+        DogLog.log("Elevator/atSetpoint",atSetpoint());
+        DogLog.log("Elevator/motor1Speed", elevatorMotor1.get());
+        DogLog.log("Elevator/motor1RPM", elevatorMotor1.getEncoder().getVelocity());
+        DogLog.log("Elevator/isLowest",isLowest());
+        DogLog.log("Elevator/pidOutput", pidOutput);
     }
     public void periodic(){
         SmartDashboard.putNumber("desiredPos", pid.getSetpoint());
@@ -123,6 +131,8 @@ public class Elevator extends SubsystemBase {
         double output;
         if(pid.getSetpoint()<-98.66){
             output = pid.calculate(getDistance())-feedforward.calculate(0);
+           //output = pid.calculate(getDistance())-(0.1+0.07*Math.cos(ShoulderPID.getAbsoluteAngle()));
+  
         }else{
             output = pid.calculate(getDistance());
         }
@@ -144,6 +154,7 @@ public class Elevator extends SubsystemBase {
        // }
        
         SmartDashboard.putNumber("pid output", output);
+        SmartDashboard.putBoolean("Elevator atsetpoint", atSetpoint());
         SmartDashboard.putNumber("Elevator Error", desiredposition-getDistance());
 
         
@@ -167,6 +178,12 @@ public class Elevator extends SubsystemBase {
        }else{
         timer = 0;
         beamTriggered = false;
+       }
+      if(frc.robot.subsystems.robotToM4.INSTANCE !=null){
+        frc.robot.subsystems.robotToM4.INSTANCE.setElevatorBeamBreak(isLowest());
+      }
+       if(RobotContainer.developerMode == true){
+        log(output);
        }
     }
 
