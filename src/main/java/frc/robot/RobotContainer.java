@@ -36,7 +36,6 @@ import frc.robot.commands.scoreL1Backwards;
 import frc.robot.commands.rundeAlgae;
 import frc.robot.commands.shoulderToIntake;
 // import frc.robot.commands.stopclimber;
-import frc.robot.commands.testClimberPID;
 import frc.robot.commands.ClimberMotorBackwards;
 import frc.robot.commands.DriveToBranch;
 import frc.robot.commands.DriveToBranchPID;
@@ -214,15 +213,6 @@ public class RobotContainer {
     
     
   }
-  
-
-
-    new WaitCommand(10)
-      .andThen(Commands.runOnce(() -> {
-       // rs232Port.writeString("Hello from Perry!\r\n");
-      }))
-      .schedule();
-}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
