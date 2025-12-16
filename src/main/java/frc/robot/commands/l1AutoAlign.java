@@ -9,7 +9,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class l1AutoAlign extends Command {
     private CommandSwerveDrivetrain drivetrain;
     private Pose2d closestFace = new Pose2d(1000, 1000, new Rotation2d(0));
-    private PIDToPose pidToPose;
+    // private PIDToPose pidToPose;
 
     private Pose2d [] L1Poses = Constants.FieldSetpoints.L1Poses;
     /**

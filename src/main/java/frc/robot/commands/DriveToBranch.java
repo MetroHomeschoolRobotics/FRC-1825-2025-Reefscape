@@ -24,7 +24,7 @@ public class DriveToBranch extends Command {
   private Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
   private Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
 
-  private PIDToPose pidToPose;
+  // private PIDToPose pidToPose;
 
   /** Creates a new DriveToBranch command. 
    *  Which will choose the nearest branch to drive to

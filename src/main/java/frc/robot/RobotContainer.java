@@ -7,7 +7,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.util.Optional;
+// import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -17,8 +17,8 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -103,7 +103,7 @@ public class RobotContainer {
   private final ShoulderPID m_Shoulder = new ShoulderPID();
   private final climber m_climber = new climber();
   private final ClimbPiston m_piston = new ClimbPiston();
-  private final Telemetry logger = new Telemetry(MaxSpeed);  // Pose Stuffs
+  // private final Telemetry logger = new Telemetry(MaxSpeed);  // Pose Stuffs
 
   // Create the objects for the controllers
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -312,7 +312,7 @@ public class RobotContainer {
 
 
 
-    Optional<Alliance> ally = DriverStation.getAlliance();
+    // Optional<Alliance> ally = DriverStation.getAlliance();
     // if (ally.isPresent()) {
     //   if (ally.get() == Alliance.Red) {
     //     // Red alliance auto bindings…

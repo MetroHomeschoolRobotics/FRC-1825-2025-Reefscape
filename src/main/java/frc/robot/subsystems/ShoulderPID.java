@@ -3,7 +3,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import dev.doglog.DogLog;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
+// import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +20,7 @@ public class ShoulderPID extends SubsystemBase {
   
   private PIDController pid = new PIDController(0.0375, 0, 0.0008);
   
-  private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
+  // private ElevatorFeedforward feedforward = new ElevatorFeedforward(0, 0.05, 0);
   private double desiredposition = 0;
   
 

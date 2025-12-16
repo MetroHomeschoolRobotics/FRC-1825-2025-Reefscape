@@ -20,16 +20,16 @@ public class DriveToBranchAuto extends Command {
 
   private CommandSwerveDrivetrain drivetrain;
   private String LeftOrRightBranch;
-  private Elevator elevator;
-  private ShoulderPID shoulder;
-  private Intake intake;
+  // private Elevator elevator;
+  // private ShoulderPID shoulder;
+  // private Intake intake;
 
   private Pose2d closestBranch = new Pose2d(1000, 1000, new Rotation2d());
 
   private Pose2d [] leftBranches = Constants.FieldSetpoints.leftReefBranches;
   private Pose2d [] rightBranches = Constants.FieldSetpoints.rightReefBranches;
 
-  private PIDToPose pidToPose;
+  // private PIDToPose pidToPose;
 
   /** Creates a new DriveToBranch command. 
    *  Which will choose the nearest branch to drive to
@@ -41,9 +41,9 @@ public class DriveToBranchAuto extends Command {
   public DriveToBranchAuto(String _LOrRBranch, CommandSwerveDrivetrain _drivetrain, Elevator _elevator, ShoulderPID _shoulder,Intake _Intake) {
     drivetrain = _drivetrain;
     LeftOrRightBranch = _LOrRBranch;
-    elevator = _elevator;
-    shoulder = _shoulder;
-    intake = _Intake;
+    // elevator = _elevator;
+    // shoulder = _shoulder;
+    // intake = _Intake;
 
     addRequirements(_drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.

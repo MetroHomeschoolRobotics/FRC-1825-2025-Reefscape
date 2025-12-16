@@ -21,7 +21,7 @@ public class AutoRoutines {
     private final ShoulderPID m_shoulder;
     private final Elevator m_elevator;
     private final Intake m_intake;
-    private final CommandSwerveDrivetrain m_drivetrain;
+    // private final CommandSwerveDrivetrain m_drivetrain;
 
     public AutoRoutines(AutoFactory factory, ShoulderPID shoulder, Elevator elevator, Intake intake,CommandSwerveDrivetrain drivetrain) {
     
@@ -29,7 +29,7 @@ public class AutoRoutines {
         m_shoulder = shoulder;
         m_elevator = elevator;
         m_intake = intake;
-        m_drivetrain = drivetrain;
+        // m_drivetrain = drivetrain;
         
         
     }
@@ -37,9 +37,9 @@ public class AutoRoutines {
     public AutoRoutine taxiWithCommand(){
         final AutoRoutine routine = m_factory.newRoutine("taxiWithCommand");
         /*Trajectories used in the routine */
-        final AutoTrajectory taxiWithCommand = routine.trajectory("taxiWithCommand");
-        final AutoTrajectory BackwardsAfterTaxi = routine.trajectory("BackwardsAfterTaxi");
-        final AutoTrajectory TaxiAgain = routine.trajectory("TaxiAgain");
+        // final AutoTrajectory taxiWithCommand = routine.trajectory("taxiWithCommand");
+        // final AutoTrajectory BackwardsAfterTaxi = routine.trajectory("BackwardsAfterTaxi");
+        // final AutoTrajectory TaxiAgain = routine.trajectory("TaxiAgain");
         /*Commands to be used in Command Groups */
         //  final shoulderToIntake shoulderToIntake  = new shoulderToIntake(m_shoulder, m_elevator);
         //  final StaggerMotors intake = new StaggerMotors(m_intake);
