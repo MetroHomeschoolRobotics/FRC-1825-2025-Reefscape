@@ -155,6 +155,8 @@ public class Elevator extends SubsystemBase {
        
         SmartDashboard.putNumber("pid output", output);
         SmartDashboard.putBoolean("Elevator atsetpoint", atSetpoint());
+        SmartDashboard.putNumber("Elevator Error", desiredposition-getDistance());
+
         
         elevatorMotor1.set(output);
         elevatorMotor2.set(-output);
